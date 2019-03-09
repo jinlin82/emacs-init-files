@@ -25,20 +25,15 @@
 
 (add-hook 'magit-repolist-mode-hook 'magit-repolist-fetch)
 
-;(add-hook 'magit-status-mode-hook
-	  ;'(lambda ()
-	     ;(call-interactively 'magit-fetch-from-pushremote)))
-
-(defun magit-status-and-fetch ()
-  (interactive)
-  (progn
-    (magit-status)
-    (call-interactively 'magit-fetch-from-pushremote)
-    )
-  )
+;; 增加了 magit-get-push-remote判断，防止在刚创建repo时出错
+(add-hook 'magit-status-mode-hook
+	  '(lambda ()
+	     (if (magit-get-push-remote) 
+	     (call-interactively 'magit-fetch-from-pushremote)
+	     nil)))
 
 (global-set-key (kbd "C-x l") 'magit-list-repositories)
-(global-set-key (kbd "C-x g") 'magit-status-and-fetch)
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;; ------------- Magit-todos ----------------
 ;; bug see https://github.com/alphapapa/magit-todos/issues/72
