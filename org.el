@@ -1,0 +1,744 @@
+(defun init-org ()
+
+;; ===========以下信息适用 org-mode 9.0 以上版本=============================
+;; ----------------必读：特别注意：----------------------
+;; 为了防止emacs使用emacs安装文件夹中的org，把lisp\org文件改名为如lisp\org-9.1.9
+;; 1. 为了与以前的org文件兼容， 修改了 ox-latex.el 中的 “\\” 的转换方式
+;; 2. 为了在beamer生成的tex文件中不包含 latex-header-extra 的内容，修改了 ox-beamer.el 中的 (org-latex-make-preamble info) 部分
+;; 3. 查找 Hacked by Jin Lin 可以找到这些修改的位置
+;; 4. 注意不要使用 ox-latex.elc 和 ox-beamer.elc文件，删除之 或者重新编译
+;; 5. 9.2以后版本中需要增加 (require 'org)
+;; 6.  ;'(org-trello-current-prefix-keybinding "C-c o" nil (org-trello)) 必需注释掉，否则9.2版本会出错
+
+
+;; ===========以下信息适用 org-mode 8.2.10 版本，已打包，并放在 elpa 文件夹中备份===
+;;必读：特别注意：1. 修改了ox-beamer 文件，不包含	latex-header-extra语句，
+;;2. 查找 在ox-beamer.el中查找latex-header-extra，
+;;3. 注意不要使用ox-beamer.elc文件，删除之
+
+;; ======================================================================
+(add-to-list 'load-path "~/.emacs.d/elpa/org-9.2.1/")
+;;(setenv "PATH" (concat "C:\\Worktools\\Bibtex2html;" (getenv "PATH")))
+
+
+
+;;==========================================Org Mode Setup=============================================
+(require 'org-install)
+(require 'org)
+
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-cr" 'remember)
+
+(setq org-log-done t)
+(setq org-latex-tables-booktabs t)
+(setq org-latex-tables-centered t)
+(setq org-hide-emphasis-markers t)
+(setq org-image-actual-width nil)
+
+;;----------------- 设置各级标题样式 ----------------------
+(set-face-attribute 'org-level-1 nil :height 1.1 :bold t :foreground "yellow4")
+(set-face-attribute 'org-level-2 nil :height 1.1 :bold t)
+(set-face-attribute 'org-level-3 nil :height 1.0 :bold t)
+
+(require 'org-bullets)
+(setq org-bullets-bullet-list  '("✸" "●" "○" "◆" "◇" "▹"))
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;;----------------- 设置 auto fill width -----------------
+(add-hook 'org-mode-hook
+          (lambda ()
+            (set-fill-column 80)))
+
+;; org-mode ignore heading when exporting to latex,用于参考文献标题等
+(require 'ox-extra)
+(ox-extras-activate '(ignore-headlines))
+
+;;;-----------------------------------------------------------------------------
+;; How do I make Org-mode open PDF files
+(eval-after-load "org"
+  '(progn
+     ;; .txt files aren't in the list initially, but in case that changes
+     ;; in a future version of org, use if to avoid errors
+     (if (assoc "\\.txt\\'" org-file-apps)
+         (setcdr (assoc "\\.txt\\'" org-file-apps) "notepad.exe %s")
+       (add-to-list 'org-file-apps '("\\.txt\\'" . "notepad.exe %s") t))
+     ;; Change .pdf association directly within the alist
+     (setcdr (assoc "\\.pdf\\'" org-file-apps) "sumatrapdf %s")
+	 (add-to-list 'org-file-apps '("\\.png\\'" . default))))
+
+;;=======================================Org Mode Setup END ===========================================
+
+
+;; ===================================== org babel Setup ========================================
+(setq org-src-fontify-natively t)
+(setq org-src-tab-acts-natively t)         
+(setq org-babel-inline-result-wrap "%s")   ;;Formatting output of inline org-mode source blocks
+
+(defun org-insert-src-block (src-code-type)
+  "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
+  (interactive
+   (let ((src-code-types
+	  '("R" "emacs-lisp" "python" "text" "C" "sh" "java" "js" "clojure" "C++" "css"
+	    "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"
+	    "octave" "oz" "plantuml" "sass" "screen" "sql" "awk" "ditaa"
+	    "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"
+	    "scheme" "sqlite")))
+     (list (ido-completing-read "Source code type: " src-code-types))))
+  (progn
+    (newline)
+    (insert (format "#+BEGIN_SRC %s\n" src-code-type))
+    (newline)
+    (insert "#+END_SRC\n")
+    (previous-line 2)
+    ;;      (org-edit-src-code)
+    ))
+
+(defun org-insert-python-block ()
+  (interactive)
+  (progn
+    (newline)
+    (insert "#+BEGIN_SRC python :eval yes\n")
+    (newline)
+    (insert "\"\"\"END\"\"\"\n")	 
+    (insert "#+END_SRC\n")
+    (previous-line 3)
+    ;;      (org-edit-src-code)
+    ))	  
+
+(define-key org-src-mode-map (kbd "C-c C-'") 'org-edit-src-exit)
+(define-key org-mode-map "\M-ni" 'org-insert-src-block)
+(define-key org-mode-map "\M-ny" 'org-insert-python-block)
+;;  (define-key org-mode-map "\M-ne" 'org-edit-src-code)
+
+; (require 'ob-ipython)       ;;  ob-ipython 与 polymode 冲突
+(require 'ob-mermaid)
+(require 'ob-asymptote)
+(setq ob-mermaid-cli-path "C:/Worktools/node-v10.15.1-win-x86/node_modules/mermaid-filter/node_modules/.bin/mmdc")
+(setq org-plantuml-jar-path "C:/Worktools/plantuml/plantuml.jar")
+(setq org-confirm-babel-evaluate nil)
+
+; ORG source code
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (R . t)  ;byte compiled ob-R.el by calling 【Meta+x】 byte-compile-file <path to org>/ob-R.el
+   (asymptote . t)
+   (python . t)
+   (ipython . t)
+   (sql . t)
+   (plantuml . t)
+   (ditaa . t)
+   (dot . t)
+   ))
+
+(setq org-src-lang-modes
+      (quote
+       (("plantuml" . plantuml)
+	("mermaid" . mermaid)
+	("ipython" . python)
+	("ocaml" . tuareg)
+	("elisp" . emacs-lisp)
+	("ditaa" . artist)
+	("asymptote" . asy)
+	("dot" . graphviz-dot)
+	("sqlite" . sql)
+	("calc" . fundamental)
+	("C" . c)
+	("cpp" . c++)
+	("C++" . c++)
+	("screen" . shell-script)
+	("shell" . sh)
+	("bash" . sh))))
+
+(add-to-list 'org-babel-default-header-args:plantuml 
+	     '(:cmdline . "-charset UTF-8")) 
+
+;;--Code evaluation and security issues
+(defun my-org-confirm-babel-evaluate-R (lang body)
+  (not (string= lang "R"))  ; don't ask for R
+;;  (not (string= lang "asymptote"))  ; don't ask for R
+  )
+
+(require 'org-R)
+
+;; ================================ Org Babel Setup END ======================================
+
+;;====================================== Export =========================================
+(setq org-export-backends (quote (ascii beamer html icalendar latex odt md)))
+
+;;------------------------ html export ---------------------------
+;; 生成的html文件中不包含css 文件的内容，必需和css文件中同一个文件夹中css才起作用
+(setq org-html-with-latex (quote verbatim))  ;; 方便word中mathtype处理latex代码
+(setq org-html-extension "htm") ;; 与 ox-twbs 输出区分
+
+(defun org-html-twbs-export ()
+ (org-twbs-export-to-html)
+    (interactive)
+    (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".html"))
+    (message (concat "Open " (substring (buffer-name) 0 -4) ".html")))
+	
+(define-key org-mode-map "\M-nh" 'org-html-twbs-export)
+
+;;------------------------ latex export ---------------------------
+(setq org-latex-text-markup-alist
+   (quote
+    ((bold . "\\textbf{%s}")
+     (code . verb)
+     (italic . "\\emph{%s}")
+     (strike-through . "\\sout{%s}")
+     (underline . "\\uline{%s}")
+     (verbatim . "\\setlength{\\fboxsep}{0pt}\\colorbox{Periwinkle!20}{\\strut \\texttt{\\ %s\\ }}"))))
+
+;; ==================================== Latex Math =====================================
+(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+;;LaTeX math mode ($…$) font color in org mode
+(setq org-highlight-latex-and-related (quote (latex)))
+
+(setq org-entities-user '(("$" "$" nil " " " " " " " ")))
+(setq org-emphasis-alist (quote (
+				 ("*" bold)
+				 ("/" italic)
+				 ("_" underline)
+				 ("=" org-verbatim verbatim)
+				 ("~" org-code verbatim)
+				 ("+" (:strike-through t))
+				 ("$" math))))
+
+(defun org-emphasize-word (&optional char)
+  (interactive)
+  (unless (region-active-p)
+    (mark-word))
+  (org-emphasize char))
+  
+(defun org-emphasize-math-word ()
+(interactive)
+ (org-emphasize-word ?$)
+ )
+
+(defun org-emphasize-math ()
+(interactive)
+ (org-emphasize ?$)
+ )
+
+(define-key org-mode-map (kbd "M-n M-m") 'org-emphasize-math)
+(define-key org-mode-map (kbd "M-n m") 'org-emphasize-math-word)
+
+(defun replace-regexp-math-delimiter-display(beg end)
+  (interactive "*r")
+  (let ((beg (if (region-active-p)
+                 (region-beginning)
+               (line-beginning-position)))
+        (end (if (region-active-p)
+                 (region-end)
+               (line-end-position))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (save-excursion
+	(goto-char (point-min))
+	
+	(while (search-forward-regexp " \\\\\\]" nil t)
+	  (replace-match "\\\\]" nil nil))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (save-excursion
+	(goto-char (point-min)) 
+	(while 
+	    (search-forward-regexp "\\\\\\[\\([^]]*?\\)\\\\\\]" nil t)
+	  (replace-match " $\\1$ " nil nil))))
+    ))
+
+(defun replace-regexp-math-delimiter-inline(beg end)
+  (interactive "*r")
+  (let ((beg (if (region-active-p)
+                 (region-beginning)
+               (line-beginning-position)))
+        (end (if (region-active-p)
+                 (region-end)
+               (line-end-position))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (save-excursion
+	(goto-char (point-min)) 
+	(while 
+	    (search-forward-regexp "\\$\\([^]]*?\\)\\$" nil t)
+	  (replace-match "\\\\[\\1\\\\]" nil nil))))
+
+    ))	
+
+(define-key org-mode-map (kbd "M-n d") 'replace-regexp-math-delimiter-display)
+(define-key org-mode-map (kbd "M-n M-d") 'replace-regexp-math-delimiter-inline)
+;; =============================== Latex Math END ===================================
+
+;; =================================== Latex Export Packages=========================
+(setq org-latex-default-packages-alist (quote (
+"\\usepackage[BoldFont]{xeCJK}
+\\setCJKmainfont[BoldFont=AdobeHeitiStd-Regular]{AdobeSongStd-Light}
+\\setCJKfamilyfont{song}{AdobeSongStd-Light}
+\\setCJKfamilyfont{hei}{AdobeHeitiStd-Regular}
+\\setCJKfamilyfont{kai}{AdobeKaitiStd-Regular}
+\\setCJKfamilyfont{fs}{Sun Yat-sen Hsingshu}
+
+\\renewcommand{\\contentsname}{\\centerline{\\textcolor{violet}{目 \\ \\ 录}}}    % 将Contents改为目录
+\\renewcommand{\\abstractname}{摘 \\ \\ 要}      % 将Abstract改为摘要
+\\renewcommand{\\refname}{参考文献}            % 将Reference改为参考文献
+\\renewcommand\\tablename{表}
+\\renewcommand\\figurename{图}
+\\renewcommand{\\today}{\\number\\year 年 \\number\\month 月 \\number\\day 日}
+
+\\usepackage[dvipsnames]{xcolor}
+\\PassOptionsToPackage{colorlinks=true,citecolor=blue, urlcolor=blue, linkcolor=violet, bookmarksdepth=4}{hyperref}
+
+\\usepackage{lscape}
+\\usepackage{indentfirst}
+\\usepackage{textcomp}                      % provide many text symbols
+\\usepackage{setspace}                      % 各种间距设置
+
+
+% ---------------------------------Table------------------------------
+\\usepackage{booktabs}
+\\usepackage{array}                         % 提供表格中每一列的宽度及位置支持
+\\usepackage{multirow}
+\\usepackage{rotating}
+\\newcolumntype{L}[1]{>{\\raggedright\\let\\newline\\\\\\arraybackslash\\hspace{0pt}}m{#1}}
+\\newcolumntype{C}[1]{>{\\centering\\let\\newline\\\\\\arraybackslash\\hspace{0pt}}m{#1}}
+\\newcolumntype{R}[1]{>{\\raggedleft\\let\\newline\\\\\\arraybackslash\\hspace{0pt}}m{#1}}
+
+%\\sloppy
+%\\linespread{1.0}                           % 设置行距
+\\setlength{\\parindent}{22pt}
+%\\setlength{\\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+"
+					       ("AUTO" "inputenc" t)
+					       ;; ("T1" "fontenc" nil)  ;;  % [T1] 主要支持东欧等国家重音符, 与下面 consolas 冲突，引入T1目的是与下面upquote=true配合，支持竖引号
+					       ("" "fontenc" nil)
+					       ("" "fixltx2e" nil)
+					       ("" "graphicx" t)
+					       ("" "longtable" nil)
+					       ("" "float" nil)
+					       ("" "wrapfig" nil)
+					       ("" "soul" t)
+					       ("" "textcomp" nil)
+					       ("" "amsmath" t)
+					       ("" "marvosym" t)
+					       ("" "wasysym" t)
+					       ("" "latexsym" t)
+					       ("" "amssymb" t)
+					       ("" "lmodern,bm" t)
+					       ("" "hyperref" nil)
+					       ("" "listings" t)
+					       ("" "tikz" t)
+					       "
+						   
+\\setmonofont{Consolas} % listings 中支持 consolas 字体，必需配合上面usepackage{fontenc} 中不出现[T1]才可以
+
+\\lstset{numbers=left, numberstyle=\\ttfamily\\tiny\\color{Gray}, stepnumber=1, numbersep=8pt,
+  frame=leftline,
+  framexleftmargin=0mm,
+  rulecolor=\\color{CadetBlue},
+  backgroundcolor=\\color{Periwinkle!20},
+  stringstyle=\\color{CadetBlue},
+  flexiblecolumns=false,
+  aboveskip=5pt,
+  belowskip=0pt,
+  language=R,
+  basicstyle=\\ttfamily\\footnotesize,
+  columns=flexible,
+  keepspaces=true,
+  breaklines=true,
+  extendedchars=true,
+  texcl=false,  % 必须设置为false设置为true的时候 R 代码中不能含有多个注释符号 #
+  upquote=true, % 设置 引号为竖引号，但必需配合 上面 fontenc T1 使用，fontenc T1 又不能使用 consolas，所以冲突
+  showstringspaces=false,
+  keywordstyle=\\bfseries,
+  keywordstyle=\\color{Purple},
+  xleftmargin=20pt,
+  xrightmargin=10pt,
+  morecomment=[s]{\\#}{\\#},
+  commentstyle=\\color{OliveGreen!60}\\scriptsize,
+  tabsize=4}
+"
+					       "\\tolerance=1000")))
+;; ============================== Latex Export Packages END =========================
+
+
+;; ================================== Latex Compile =================================
+(setq org-latex-compiler "xelatex")
+(setq org-latex-listings 'listings)
+(setq org-latex-listings-options'( ("numbers" "left") ))
+
+;; 设置org mode to latex 的引擎为 xelatex
+(setq org-latex-pdf-process '("xelatex -interaction nonstopmode -output-directory %o %f" "xelatex -interaction nonstopmode -output-directory %o %f" "xelatex -interaction nonstopmode -output-directory %o %f"))
+(setq org-latex-to-pdf-process '("xelatex -interaction nonstopmode -output-directory %o %f" "xelatex -interaction nonstopmode -output-directory %o %f" "xelatex -interaction nonstopmode -output-directory %o %f"))
+
+
+(defun my-org-setup ()
+  (defun org-latex-utf8-fixbbl ()
+    (org-latex-export-to-latex)
+    (interactive)
+	(if (get-buffer "*Latex-Compile*")
+    (kill-buffer "*Latex-Compile*"))
+    (start-process-shell-command "article-xelatex" "*Latex-Compile*"  (concat "runpdf-org.bat " (substring (buffer-name) 0 -4) ) )
+    (message (concat "runpdf-org.bat " (substring (buffer-name) 0 -4) )))
+
+  (defun org-beamer-utf8-fixbbl ()
+    (org-beamer-export-to-latex)
+    (interactive)
+	(if (get-buffer "*Latex-Compile*")
+	  (kill-buffer "*Latex-Compile*"))  
+;; 注意：1. 由于用于中文作者排序的fixbbl.exe与beamer冲突，故在runbeamer-org.bat中删除了关于fixbbl.exe的功能
+;;       2. 在生成beamer时未使用 natbib 包，如想使用中括号上标引用，可如在生成article中一样，使用natbib语句
+    (start-process-shell-command "beamer-xelatex" "*Latex-Compile*"  (concat "runbeamer-org.bat " (substring (buffer-name) 0 -4) ) )
+    (message (concat "runpdf-org.bat " (substring (buffer-name) 0 -4) )))
+
+  (defun org-view-pdf ()
+    (interactive)
+    (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".pdf"))
+    (message (concat "Open " (substring (buffer-name) 0 -4) ".pdf")))
+	
+  (defun org-view-html ()
+    (interactive)
+    (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".html"))
+    (message (concat "Open " (substring (buffer-name) 0 -4) ".html")))
+
+  (defun org-view-latex ()
+    (interactive)
+    (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".tex"))
+    (message (concat "Open " (substring (buffer-name) 0 -4) ".tex")))
+
+  (define-key org-mode-map "\M-na" 'org-latex-utf8-fixbbl)
+  (define-key org-mode-map "\M-nb" 'org-beamer-utf8-fixbbl)
+  (define-key org-mode-map "\M-n\M-v" 'org-view-pdf)
+  (define-key org-mode-map "\M-n\M-h" 'org-view-html)
+  (define-key org-mode-map "\M-nl" 'org-view-latex)
+  (define-key org-mode-map (kbd "C-c C-;") 'org-toggle-comment)
+)
+  
+(add-hook 'org-mode-hook 'my-org-setup t)
+;; ================================== Latex Compile END =================================
+
+;; ================================ EXPORT with PANDOC ==================================
+(defun org-export-to-markdown-with-pandoc ()
+    (interactive)
+	(save-buffer)
+  (start-process-shell-command "OrgtoMd" "*Pandoc-Compile*"  (concat "pandocOrgMd.bat " (file-name-sans-extension (buffer-name)) ) )
+  (message (concat "export to md with pandoc "  (buffer-name))))
+  
+  ; (define-key org-mode-map "\M-nm" 'org-export-to-markdown-with-pandoc)
+  
+(defun org-export-to-docx-with-pandoc ()
+    (interactive)
+	(save-buffer)
+  (start-process-shell-command "OrgtoDocx" "*Pandoc-Compile*"  (concat "pandocOrgDocx.bat " (file-name-sans-extension (buffer-name)) ) )
+  (message (concat "export to docx with pandoc "  (buffer-name))))
+  
+(define-key org-mode-map "\M-nd" 'org-export-to-docx-with-pandoc)
+;; ================================EXPORT with PANDOC END=================================
+
+
+;; ================================= 中文空格问题处理 ==================================
+;;---- 处理输出html换行会被解析成空格问题---------------------------------
+(defadvice org-html-paragraph (before fsh-org-html-paragraph-advice
+                                      (paragraph contents info) activate)
+  "Join consecutive Chinese lines into a single long line without
+unwanted space when exporting org-mode to html."
+  (let ((fixed-contents)
+        (orig-contents (ad-get-arg 1))
+        (reg-han "[[:multibyte:]]"))
+    (setq fixed-contents (replace-regexp-in-string
+                          (concat "\\(" reg-han "\\) *\n *\\(" reg-han "\\)")
+                          "\\1\\2" orig-contents))
+    (ad-set-arg 1 fixed-contents)
+    ))
+
+;;---- twbs 中文空格问题
+(defadvice org-twbs-paragraph (before fsh-org-twbs-paragraph-advice
+                                      (paragraph contents info) activate)
+  "Join consecutive Chinese lines into a single long line without
+unwanted space when exporting org-mode to odt."
+  (let ((fixed-contents)
+        (orig-contents (ad-get-arg 1))
+        (reg-han "[[:multibyte:]]"))
+    (setq fixed-contents (replace-regexp-in-string
+                          (concat "\\(" reg-han "\\) *\n *\\(" reg-han "\\)")
+                          "\\1\\2" orig-contents))
+    (ad-set-arg 1 fixed-contents)
+    ))	
+
+;;---- 处理输出odt换行会被解析成空格问题----------------------------------
+(defadvice org-odt-paragraph (before fsh-org-odt-paragraph-advice
+                                      (paragraph contents info) activate)
+  "Join consecutive Chinese lines into a single long line without
+unwanted space when exporting org-mode to odt."
+  (let ((fixed-contents)
+        (orig-contents (ad-get-arg 1))
+        (reg-han "[[:multibyte:]]"))
+    (setq fixed-contents (replace-regexp-in-string
+                          (concat "\\(" reg-han "\\) *\n *\\(" reg-han "\\)")
+                          "\\1\\2" orig-contents))
+    (ad-set-arg 1 fixed-contents)
+    ))
+;; ================================ 中文空格问题处理 END ==================================
+
+
+;; ============================== RefTex and  BibTex =================================
+;; 基本设置见 tex.el 中 RefTex and  BibTex 设置部分
+;; 1. bibtex-mode: Emacs自带bib文件mode；2. ebib：类似于JabRef 的bib管理package
+;; 3. reftex-mode(org-reftex-mode): 用于插入文献等交叉引用
+;; 4. helm-bibtex -> org-ref: 类似于 reftex-mode, 但功能更强大
+;; 5. ox-bibtex -> ox-bibtex-chinese: 用于org-mode参考文献输出，特别是html格式的输出
+
+(require 'ox-bibtex) ;; 要出现在 下段代码 使用上标 之前，ox-bibtex 需要bibtex2html.exe 支持
+(require 'ox-bibtex-chinese) ;; 支持 GB7714 样式
+(ox-bibtex-chinese-enable)
+(setq ox-bibtex-chinese-default-bibtex2html-options
+   (quote ("-a" "-nobibsource" "-noabstract" "-nokeywords" "-i" "-nolinks")))
+;; 样式在 ox-bibtex-chinese-default-bibtex-style 变量中设置
+
+;; 在org文件中 增加以下语句
+;;# \bibliography{Bibfile}  % 使用该注释行让 org-ref 找到本地bib文件
+;;#+BIBLIOGRAPHY: Bibfile nil limit:t
+
+
+;; 注意： 在html输出中参考文献引用使用上标, 对来自ox-bibtex.el 原代码进行了hack，具体见ox-bibtex.el文件
+(setq org-ref-completion-library 'org-ref-helm-bibtex)
+(require 'org-ref)
+
+(setq bibtex-completion-additional-search-fields '(journal))
+(setq bibtex-completion-display-formats-internal 
+ (quote ((t . "${=type=:9} ${year:6} ${=key=:15} ${author:26} ${title:*} ${=has-pdf=:2} ${=has-note=:2}${journal:36}"))))
+(setq bibtex-completion-display-formats
+   (quote ((t . "${=type=:9} ${year:6} ${=key=:15} ${author:26} ${title:*} ${=has-pdf=:2} ${=has-note=:2}${journal:36}"))))
+
+;(defun org-mode-reftex-setup ()
+  ;(load-library "reftex")
+  ;(and (buffer-file-name)
+       ;(file-exists-p (buffer-file-name))
+       ;(reftex-parse-all))
+  (define-key org-mode-map (kbd "C-c )") 'reftex-reference)
+  (define-key org-mode-map (kbd "C-c (") 'reftex-label)
+  (define-key org-mode-map (kbd "C-c [") 'org-reftex-citation)
+  (define-key org-mode-map (kbd "C-c ]") 'org-ref-helm-insert-cite-link)
+  ;)
+;(add-hook 'org-mode-hook 'org-mode-reftex-setup)
+
+(org-add-link-type "ebib" 'ebib)
+;; =============================== RefTex and BibTex END ==================================
+
+
+
+;; ==================================== org latex preview setup =======================================
+;;注意: 使用 dvisvgm 程序会使用 latex.exe 编译，速度快，并且svg文件清晰度好，但svg 文件大，公式中中文不能显示
+;;注意: 使用 dvipng 程序会使用 latex.exe 编译，速度快，png 文件小，公式中中文不能显示
+;;注意：使用 imagemagick 程序可以显示公式中的中文，但必需使用 xelatex.exe 编译，速度慢，png清晰度差
+;;注意：由于imagemagick的程序 convert.exe 与 window格式转化程序 convert.exe 同名，故需要处理，否则或出错，
+;;查找convert.exe  evernote中的相关说明. 24.5中 org latex preview失效，24.2没有问题，与org版本无关，不知何种原因
+(setq org-latex-create-formula-image-program 'dvipng) 
+
+(setq org-format-latex-options
+   (quote
+    (:foreground "DeepPink" :background default :scale 2.5 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+		 ("begin" "$1" "$" "$$" "\\(" "\\["))))
+
+(setq org-preview-latex-process-alist
+      (quote
+       ((dvipng :programs
+		("latex" "dvipng")
+		:description "dvi > png" 
+		:message "you need to install the programs: latex and dvipng." 
+		:image-input-type "dvi" 
+		:image-output-type "png" 
+		 :latex-header
+"\\usepackage[dvipsnames]{xcolor}
+\\usepackage[usenames]{color}
+\\usepackage{amsmath}
+\\usepackage[mathscr]{eucal}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+% Package fixltx2e omitted
+\\usepackage{graphicx}
+% Package longtable omitted
+% Package float omitted
+% Package wrapfig omitted
+\\usepackage[normalem]{ulem}
+\\usepackage{textcomp}
+\\usepackage{marvosym}
+\\usepackage{wasysym}
+\\usepackage{latexsym}
+\\usepackage{amssymb}
+\\usepackage{unicode-math}
+% Package amstext omitted
+% Package hyperref omitted"
+		:image-size-adjust (1.0 . 1.0)
+		:latex-compiler ("latex -interaction nonstopmode -output-directory %o %f")
+		:image-converter ("dvipng -fg %F -bg %B -D %D -T tight -o %O %f"))
+	(dvisvgm :programs
+		 ("latex" "dvisvgm")
+		 :description "dvi > svg" 
+		 :message "you need to install the programs: latex and dvisvgm." 
+		 :use-xcolor t 
+		 :image-input-type "dvi" 
+		 :image-output-type "svg" 
+		 :image-size-adjust (4.0 3.5)
+		 :latex-compiler ("latex -interaction nonstopmode -output-directory %o %f")
+		 :image-converter ("dvisvgm %f -n -b min -c %S -o %O"))
+	(imagemagick :programs
+		     ("latex" "convert")
+		     :description "pdf > png" 
+		     :message "you need to install the programs: latex and imagemagick." 
+		     :use-xcolor t 
+		     :image-input-type "pdf" 
+		     :image-output-type "png" 
+		     :image-size-adjust (1.7 . 1.5)
+		     :latex-compiler ("xelatex -interaction nonstopmode -output-directory %o %f")
+		     :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))))
+;; ================================== org latex preview setup END ======================================
+
+
+
+;; =================================== trello ==================================
+;; 注意：Headline 与内容中间不要空行，否则出现问题！！！
+;; 在安卓app中设置后sort by date create(newest first) 乱码
+;; 如何单个head乱码，可试试同步整个buffer
+;; 单个head乱码, 可在description 位置加入中文后同步试试
+(require 'org-trello)
+;(add-hook 'org-mode-hook 'org-trello-mode)
+;; org-trello major mode for all .trello files
+; (add-to-list 'auto-mode-alist '("\\.trello$" . org-mode))
+; (setq org-trello-files (list "C:/Works/Org/trello/main.trello"
+                        ; "C:/Works/Org/trello/doc.org"))
+						
+;;; Automatic org-trello files in emacs
+;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
+(defun my/org-mode-hook-org-trello-mode ()
+      (when (and (buffer-file-name)
+                 (string-match "\\.trello.org$" (buffer-file-name)))
+          (message "Turning on org-trello in %s" (buffer-file-name))
+          (org-trello-mode)))
+		  
+(add-hook 'org-mode-hook #'my/org-mode-hook-org-trello-mode)						
+
+
+;; =================================== Capture ===================================
+;;Capture 不出错要在setq org-agenda-files中设置文件
+(setq org-default-notes-file "C:/Works/Org/notes.org")
+(define-key global-map "\C-cc" 'org-capture)
+
+(defun org-capture-with-prefix-arg ()
+  (interactive)
+  (setq current-prefix-arg '(4)) ; C-u
+  (call-interactively 'org-capture))
+
+(global-set-key (kbd "C-x C-d") 'org-capture-with-prefix-arg)
+
+(setq org-capture-templates
+'(
+  ; ("n" "Notes" entry (file+headline "C:/Works/Org/Notes.org" "Notes")
+   ; "* %?\n %i\n %a")
+  ("t" "Todo" entry (file+headline "C:/Works/Org/Tasks.org" "Tasks")
+   "* TODO %?\n %i\n %a")
+  ("m" "Trello" entry (file "C:/Works/Org/Main.trello.org")
+   "* TODO %?\n %i\n %a" :prepend t)
+  ("w" "Work" checkitem (file+headline "C:/Works/Org/Main.trello.org" "Work Task")
+   "[ ] %?\n %i\n %a")
+  ("i" "Ideas" item (file+headline "C:/Works/Org/Memos.trello.org" "Ideas")
+   " %?\n %i\n %a")
+  ("j" "Journal" entry (file+datetree "C:/Works/Org/journal.org")
+   "* %?\nEntered on %U\n %i\n %a")
+  ("l" "Learning" entry (file+headline "C:/Works/Org/learning/learning.org" "Unorganized")
+   "* %?\n \n %i\n %a")
+))
+
+(setq org-archive-location "C:/Works/org/archive.org::* Completed Tasks From %s")
+
+(defun org-archive-done-tasks ()
+  (interactive)
+  (org-map-entries
+   (lambda ()
+     (org-archive-subtree)
+     (setq org-map-continue-from (outline-previous-heading)))
+   "/DONE" 'file))  ;; if you use 'agenda or 'tree scope instead of 'file, then it will apply to all registered agenda files.
+
+;; =========================== Globle Agenda, TODOs =============================
+(setq org-agenda-files (list "C:/Works/Org/Main.trello.org"
+			     "C:/Works/Org/Memos.trello.org"
+			     "C:/Works/Org/archive.org"
+                             ;"C:/Works/Org/ideas.org"
+			     ;"C:/Works/Org/soft.org"
+			     ;"C:/Works/Org/statmethods.org"
+			     ;"C:/Works/Org/reimburse.org"                             
+                             "C:/Works/Org/journal.org"
+			     ;"C:/Works/Org/notes.org"
+			     ;"C:/Works/Org/funds.org"
+			     "C:/Works/Org/learning/learning.org"
+			     ;"C:/Works/Org/Tasks.org"
+			     ))
+
+(execute-kbd-macro (read-kbd-macro "C-c a n"))
+(org-agenda-goto-today)
+
+
+;; Set refile targets to agenda files
+(setq org-refile-targets '((nil :maxlevel . 2)
+                           (org-agenda-files :maxlevel . 2)))
+(setq org-refile-use-outline-path (quote buffer-name))  ; Refile in a single go
+(setq org-refile-use-outline-path t)
+;; =================================== END =======================================
+
+;; ================================ org-download ================================= 
+(require 'org-download)
+(setq-default org-download-image-dir "./images")
+(setq-default org-download-heading-lvl nil)
+(setq-default org-download-timestamp "")
+
+
+;; ================================ USE ploymode =================================
+;; 要放在最下面，否则与org-capture冲突
+;; 要从github版本替换掉mepha版本，并且删掉 autoload 等文件，只留下 poly-org.el 文件
+(require 'poly-org)
+(add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
+
+;; ================================= dot graph using org-mode: org-mind-map  ================================
+;; 注意：为了避免 node上的表格线，对org-mind-map中的源代码进行了hack
+;; 增加了 border=\"0\"   (concat "[label=<<table border=\"0\">" 
+;; This is an Emacs package that creates graphviz directed graphs from
+;; the headings of an org file
+(use-package org-mind-map
+  :init
+  (require 'ox-org)
+  :ensure t
+  ;; Uncomment the below if 'ensure-system-packages` is installed
+  ;;:ensure-system-package (gvgen . graphviz)
+  :config
+  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+  )
+
+(setq org-mind-map-default-graph-attribs
+   (quote
+    (("autosize" . "false")
+     ("size" . "9,12")
+     ("resolution" . "100")
+     ("nodesep" . "0.75")
+     ("overlap" . "false")
+     ("spline" . "true")
+     ("rankdir" . "LR"))))
+
+(setq org-mind-map-default-node-attribs
+   (quote
+    (("fontname" . "microsoft yahei")
+     ("fontsize" . "20")
+     ("shape" . "box"))))
+
+
+(require 'orgalist)
+;;========================================Org Mode Setup END=============================================
+"Init Org"
+(interactive)			
+			)
