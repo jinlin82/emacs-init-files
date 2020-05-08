@@ -1,21 +1,46 @@
 (defun init-dired ()
 
 ;;====================================Dired and Sunrise Setup==========================================
+
+(defun create-new-org-buffer-untitled ()
+  "Create a new frame with a new empty buffer."
+  (interactive)
+  (let ((buffer (generate-new-buffer 
+		  (concat "Untitled_" (format-time-string "%Y%m%d_%H%M%S") ".org")))
+	)
+    (switch-to-buffer buffer)
+    (org-mode)
+    ))
+
+(defun create-new-rmd-buffer-untitled ()
+  "Create a new frame with a new empty buffer."
+  (interactive)
+  (let ((buffer (generate-new-buffer 
+		  (concat "Untitled_" (format-time-string "%Y%m%d_%H%M%S") ".rmd")))
+	)
+    (switch-to-buffer buffer)
+    (markdown-mode)
+    ))
+
+(global-set-key (kbd "C-x n m") #'create-new-rmd-buffer-untitled)
+(global-set-key (kbd "C-x n o") #'create-new-org-buffer-untitled)
+
 ;; --------------------- springboard ------------------------
 ;; 注意：对springboard.el 进行了 hack
 (global-set-key (kbd "C-,") 'springboard)
-(setq springboard-directories (quote ("C:/" 
-				      "C:/works" 
-				      "C:/works/teaching" 
-				      "C:/Works/2013.7-中南财经政法大学统数学院" 
-				      "C:/works/learning" 
-				      "C:/works/working_paper" 
-				      "C:/worktools" 
-				      "C:/worktools/config" 
-				      "C:/worktools/config/.emacs.d" 
-				      "C:/worktools/config/.emacs.d/init-files" 
-				      "C:/worktools/config/.emacs.d/elpa" 
-				      "C:/books")))
+(setq springboard-directories (quote ("~/../../" 
+				      "~/../../works" 
+				      "~/../../works/teaching" 
+				      "~/../../Works/2013.7-中南财经政法大学统数学院" 
+				      "~/../../works/learning"
+				      "~/../../works/temp" 
+				      "~/../../works/working_paper"
+				      "~/.." 
+				      "~/../config" 
+				      "~/../config/.emacs.d" 
+				      "~/../config/.emacs.d/init-files" 
+				      "~/../config/.emacs.d/elpa" 
+				      "~/../../books")))
 
 
 ;;----------------- neotree ---------------------------------------------------
@@ -30,6 +55,7 @@
 (setq neo-window-fixed-size nil)
 (setq neo-window-width 15)
 (setq neo-vc-integration (quote (face char)))
+(setq neo-default-system-application "open")
 
 ;; -------------------------- find-file-in-project --------------------------
 (require 'find-file-in-project)
@@ -37,10 +63,11 @@
 ;; 找不到文件属于设置原因，需设置 ffip-ignore-filenames 变量，见下面
 (setq ffip-use-rust-fd t)
 (setq ffip-rust-fd-respect-ignore-files nil)
-(when (eq system-type 'windows-nt) (setq ffip-find-executable "c:/worktools/bat/fd"))
-;(when (eq system-type 'windows-nt) (setq ffip-find-executable "c:/cygwin/bin/find"))
+(when (eq system-type 'windows-nt) (setq ffip-find-executable "fd"))
+;(when (eq system-type 'windows-nt) (setq ffip-find-executable "~/../../cygwin/bin/find"))
 (global-set-key (kbd "C-x s") 'find-file-in-project) 
 
+;; ----------------- fuzzy search in emacs ----------------------------
 ;; helm-ag ripgrep deadgrep
 
 
@@ -52,6 +79,7 @@
     "*.git"
     "tags"
     "TAGS"
+    ".Rproj.user"
     ;; compressed
     "*.tgz"
     "*.gz"
@@ -203,7 +231,7 @@
 
 (defun sunrise-startup ()
   (interactive)
-  (setq default-directory "C:/Works/2013.7-中南财经政法大学统数学院/")
+  (setq default-directory "~/../../Works/2013.7-中南财经政法大学统数学院/")
   (sunrise-cd)
   (sr-change-window)
   (sr-w32-virtual-entries)
@@ -227,19 +255,38 @@
   (sr-select-viewer-window)
   (delete-window)
   )
-(global-set-key (kbd "C-c x") 'sunrise-1)
-(global-set-key (kbd "C-c X") 'sunrise-cd)
 
-(define-key sr-mode-map (kbd "g")        'sr-checkpoint-restore)
+(defun sr-copy-file-object ()
+    (interactive)
+    (let ((file (dired-copy-filename-as-kill 0)))
+(if (equal (s-count-matches ":/" file) 1)
+    (w32-shell-execute "copy" file)
+    (shell-command (concat "file2clip.exe " file))
+)
+    (message (concat file " Copied")))
+)
+
+(global-set-key (kbd "C-c X") 'sunrise-1)
+(global-set-key (kbd "C-c x") 'sunrise-cd-1)
+
+;(define-key sr-mode-map (kbd "h")        'sr-checkpoint-restore)
 (define-key sr-mode-map (kbd "<backspace>")        'sr-dired-prev-subdir)
 (define-key sr-mode-map (kbd "o")        'dired-w32-browser)
 (define-key sr-mode-map (kbd "C-c C-k")        'dired-do-kill-lines)
 (define-key sr-mode-map (kbd "j")        'scroll-up-command)
 (define-key sr-mode-map (kbd "k")        'scroll-down-command)
-(define-key sr-mode-map (kbd "h")        'revert-buffer)
+(define-key sr-mode-map (kbd "g")        'revert-buffer)
 (define-key sr-mode-map (kbd "l")        'sr-dired-prev-subdir)
 (define-key sr-mode-map (kbd "<mouse-1>")        'mouse-set-point)
 (define-key sr-mode-map (kbd "<double-mouse-1>")        'dired-w32-browser)
+(define-key sr-mode-map (kbd "/")        'pinyin-search)
+(define-key sr-mode-map (kbd "c")        'sr-copy-file-object)
+(define-key sr-mode-map (kbd ",")        'sr-find-file)
+(define-key sr-mode-map (kbd "M-a")        'delete-other-windows)
+(define-key sr-mode-map (kbd "M-n")        'sr-beginning-of-buffer)
+
+
+
 
 
 (setq sr-windows-default-ratio 78)
@@ -250,10 +297,10 @@
 (setq find-directory-functions (cons 'sr-dired find-directory-functions))
 
 ;;----dired-view don't work-------
-; (require 'dired-view)
-; (define-key dired-mode-map (kbd ";") 'dired-view-minor-mode-toggle)
-; (define-key sr-mode-map (kbd ";") 'dired-view-minor-mode-toggle)
-;;---------------------------------open bookmark in other programs----------
+;(require 'dired-view)
+;(define-key dired-mode-map (kbd ";") 'dired-view-minor-mode-toggle)
+;(define-key sr-mode-map (kbd ";") 'dired-view-minor-mode-toggle)
+;;;---------------------------------open bookmark in other programs----------
 
 ;;-------------------------- use default windows browser to browse url-------------------
 (setq browse-url-browser-function 'browse-url-default-windows-browser)
@@ -284,11 +331,105 @@
 	    (find-file (bookmark-get-filename bookmark)))
 	)
     (sr-dired (bookmark-get-filename bookmark))
+(sr-select-viewer-window)
+  (delete-window)
     ))
 
-(define-key sr-mode-map "g"           'bookmark-open-external)
+(define-key sr-mode-map "h" 'bookmark-jump)
 (global-set-key (kbd "C-x j j") 'bookmark-open-external)
 
+(defun totalcmd (file)
+    "Open Windows Explorer to FILE (a file or a folder)."
+    (interactive "fFile: ")
+    (let ((w32file (subst-char-in-string ?/ ?\\ (expand-file-name file))))
+      (if (file-directory-p w32file)
+          (w32-shell-execute "open" "TotalCMD64.exe" w32file )
+        (w32-shell-execute "open" "TotalCMD64.exe" (concat " " w32file)))))
+
+(defun default-totalcmd ()
+    "Open Windows Explorer to current file or folder."
+    (interactive)
+    (totalcmd default-directory ))
+
+
+(defun dired-totalcmd ()
+    "Open Windows Explorer to current file or folder."
+    (interactive)
+    (totalcmd (dired-get-filename nil t)))
+
+(define-key sr-mode-map (kbd "<S-return>") 'dired-totalcmd)
+(global-set-key (kbd "C-x v e") 'default-totalcmd)
+
+(setq find-directory-functions (cons 'sr-dired find-directory-functions))
+
+
+(defun open-with-vim ()
+    (interactive)
+    (start-process-shell-command "Vim" "*Messages*"
+				 (concat "gvim -p --remote-tab-silent "
+					 (if buffer-file-name buffer-file-name default-directory)))
+    (message (concat (buffer-name) " Opened with Vim")))
+
+(defun open-with-vscode ()
+    (interactive)
+    (start-process-shell-command "Vscode" "*Messages*"
+				 (concat "code "
+					 (if buffer-file-name buffer-file-name default-directory)))
+    (message (concat (buffer-name) " Opened with Vscode")))
+
+(defun open-with-default ()
+    (interactive)
+    (start-process-shell-command "nil" "*Messages*"
+				 (concat "open " "\"" (if buffer-file-name buffer-file-name default-directory) "\""))
+    (message (concat (buffer-name) " Opened with default")))
+
+(global-set-key (kbd "C-x v v") 'open-with-vim)
+(global-set-key (kbd "C-x v c") 'open-with-vscode)
+(global-set-key (kbd "C-x v d") 'open-with-default)
+
+
+;; ---------------------------- Projectile -----------------------------------
+(setq projectile-require-project-root nil)
+(setq projectile-completion-system 'ivy)
+(setq projectile-indexing-method 'alien)
+;(projectile-ignore-global ".Rproj.user")
+(setq find-program "~/../bat/fd")
+(setq projectile-mode-line-function '(lambda () 
+				       (format " Proj[%s]" (if (> (length (projectile-project-name)) 7)
+					       (concat (substring (projectile-project-name) 0 4) "...")
+					       (projectile-project-name)
+					       ))))
+
+(setq projectile-project-search-path '("~/../" "~/../../Works/Working_Paper/"))
+(setq projectile-known-projects-file "~/../Config/.emacs.d/user-files/projectile-bookmarks.eld")
+
+(setq projectile-switch-project-action #'find-file-in-project)
+
+;;; remove Duplicated projects in index
+(defun projectile-relevant-known-projects ()
+    "Return a list of known projects except the current one (if present)."
+    (if (projectile-project-p)
+
+        (->> projectile-known-projects
+              (--reduce-from
+                (if (-contains? (-map 's-downcase acc) (s-downcase it)) acc (cons it acc))
+                (list (abbreviate-file-name (projectile-project-root))))
+              (-sort 'string-lessp))
+      projectile-known-projects))
+
+(setq projectile-globally-ignored-directories
+   (quote
+    (".idea" ".ensime_cache" ".eunit" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" ".Rproj.user")))
+
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+(defun create-projectile-file()
+    ".projectile file created"
+    (interactive)
+    (with-temp-buffer (write-file ".projectile"))
+    )
 
 "Init Dired"
 (interactive)			

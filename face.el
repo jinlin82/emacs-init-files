@@ -1,5 +1,5 @@
 (defun init-face ()
-;;-========================================½çÃæÅäÖÃ  ===============================
+;;-========================================ç•Œé¢é…ç½®  ===============================
 
 ;; ------------- rainbow-delimiters-mode -------------------
 (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
@@ -8,16 +8,35 @@
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 
-;; ==================================== ×ÖÌåÉèÖÃ ===================================
-;; ×¢ÊÍcustom.elÖĞµÄ(default Óï¾ä
-;; Ä¬ÈÏ×ÖÌå´óĞ¡
+;; ==================================== å­—ä½“è®¾ç½® ===================================
+;; æ³¨é‡Šcustom.elä¸­çš„(default è¯­å¥
+;; é»˜è®¤å­—ä½“å¤§å°
 ;(set-face-attribute 'default nil :height 118)
+(defun toggle-monitor-font ()
+  (interactive)
+  (if (= (display-pixel-width) 1680)
+      (progn 
+	(color-theme-charcoal-black)
+	(set-face-attribute 'default nil :height 110)
+	(toggle-frame-fullscreen)
+		(toggle-frame-fullscreen)
+	)
+    (progn
+      (color-theme-emacs-nw)
+      (set-face-attribute 'default nil :height 100)
+      (toggle-frame-fullscreen)
+      (toggle-frame-fullscreen)
+      )
+    )
+  )
+
+(global-set-key (kbd "C-c d") 'toggle-monitor-font)
 
 ; (use-package dashboard
   ; :config
   ; (dashboard-setup-startup-hook))
 
-;;--------------------------------------ÖĞÎÄ×ÖÌå-------------------------------------
+;;--------------------------------------ä¸­æ–‡å­—ä½“-------------------------------------
 ;(set-face-attribute
  ;'default nil
  ;:font (font-spec :name "-outline-Consolas-bold-normal-normal-mono-*-*-*-*-c-*-iso10646-1"
@@ -25,7 +44,7 @@
                   ;:slant 'normal
                   ;:size 12.5))
 
-;;; Microsoft JhengHei / Î¢ÈíÑÅºÚ /
+;;; Microsoft JhengHei / å¾®è½¯é›…é»‘ /
 ;(defun init-msyh ()
 ;(dolist (charset '(kana han symbol cjk-misc bopomofo))
   ;(set-fontset-font (frame-parameter nil 'font)
@@ -35,8 +54,19 @@
 			;)
 ;;(init-msyh)
 
+
+;; --------------------------- all the icons -----------------------
+(require 'all-the-icons)
+(setq inhibit-compacting-font-caches t)
+(setq neo-theme 'icons)
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+(all-the-icons-ivy-setup)
+
+
+
 ;; ---------------------------- cnfonts -----------------------------
-;; function toggle µÈ¿í×ÖÌå
+;; function toggle ç­‰å®½å­—ä½“
+;; æ³¨æ„ï¼šprofileé»˜è®¤å­—ä½“å¤§å°æ˜¯æœ€å¼€å§‹å­—å·ç»„åˆå†³å®šçš„
 (cnfonts-enable)
 (setq cnfonts-directory "~/.emacs.d/user-files/cnfonts/")
 (cnfonts--select-profile "profile1")
@@ -48,31 +78,50 @@
   (cnfonts--select-profile "profile2")
   (global-set-key (kbd "<C-wheel-up>") 'cnfonts-increase-fontsize)
   (global-set-key (kbd "<C-wheel-down>") 'cnfonts-decrease-fontsize)
-  (message "ÇĞ»»µ½µÈ¿í×ÖÌå")
+  (message "åˆ‡æ¢åˆ°ç­‰å®½å­—ä½“")
   )
   (cnfonts--select-profile "profile1")
-  ;; Ìí¼ÓÒÔÏÂ4¾äµ½ profile1.el ÎÄ¼şÖĞ
+  ;; æ·»åŠ ä»¥ä¸‹4å¥åˆ° profile1.el æ–‡ä»¶ä¸­
   ;(setq cnfonts-use-face-font-rescale t)
   ;(set-face-attribute 'org-level-1 nil :height 1.1 :bold t :foreground "yellow4")
   ;(set-face-attribute 'org-level-2 nil :height 1.1 :bold t)
   ;(set-face-attribute 'org-level-3 nil :height 1.0 :bold t)
   (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
   (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-  (message "ÇĞ»»µ½Ä¬ÈÏ×ÖÌå"))
+  (message "åˆ‡æ¢åˆ°é»˜è®¤å­—ä½“"))
 )
 
 (global-set-key (kbd "C-x v f") 'cnfonts-profile-toggle)
-;;---------------------------------------Ê¹ÓÃÊó±êËõ·Å×ÖÌå------------------------------
+
+
+(defun cnfonts--set-all-the-icons-fonts (fontsizes-list)
+    "Show icons in all-the-icons."
+    (when (featurep 'all-the-icons)
+      (dolist (charset '(kana han cjk-misc bopomofo gb18030))
+        (set-fontset-font (frame-parameter nil 'font) charset (font-spec :family "Microsoft Yahei"))
+        (set-fontset-font "fontset-default" charset "all-the-icons" nil 'append)
+        (set-fontset-font "fontset-default" charset "file-icons" nil 'append)
+        (set-fontset-font "fontset-default" charset "Material Icons" nil 'append)
+        (set-fontset-font "fontset-default" charset "github-octicons" nil 'append)
+        (set-fontset-font "fontset-default" charset "FontAwesome" nil 'append)
+        (set-fontset-font "fontset-default" charset "Weather Icons" nil 'append)
+
+	)))
+
+  (add-hook 'cnfonts-set-font-finish-hook #'cnfonts--set-all-the-icons-fonts)
+
+;;---------------------------------------ä½¿ç”¨é¼ æ ‡ç¼©æ”¾å­—ä½“------------------------------
 ;(setq text-scale-mode-step 1.1)
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 ;(global-set-key (kbd "<C-wheel-up>") 'cnfonts-increase-fontsize)
 ;(global-set-key (kbd "<C-wheel-down>") 'cnfonts-decrease-fontsize)
 
-;; =================================== ×ÖÌåÉèÖÃ END ===================================
+
+;; =================================== å­—ä½“è®¾ç½® END ===================================
 
 
-;;-----------------------------------------×î´ó»¯´°¿Ú----------------------------------
+;;-----------------------------------------æœ€å¤§åŒ–çª—å£----------------------------------
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;;------------------Only open one emacs window-----------------------------------------
@@ -123,13 +172,13 @@
        line-column)
       :separator " | ")  
       (buffer-position hud :separator "")
-	 (battery :when active)  ;; ĞŞ¸ÄÔÚmode line ÖĞµÄÎ»ÖÃ
+	 (battery :when active)  ;; ä¿®æ”¹åœ¨mode line ä¸­çš„ä½ç½®
 	 time-and-date
-	 (global :when active)  ;; ÅäºÏ yahoo-weather-mode, ¹Ø±ÕÁËyahoo-weather-mode¾Í×¢ÊÍµô
+	 (global :when active)  ;; é…åˆ yahoo-weather-mode, å…³é—­äº†yahoo-weather-modeå°±æ³¨é‡Šæ‰
      ,@additional-segments
      ))
 
-(defun spaceline--fancy-battery-mode-line ()  ;; ĞŞ¸Äspaceline-segmentsÔ´ÎÄ¼şÖĞµÄº¯Êı
+(defun spaceline--fancy-battery-mode-line ()  ;; ä¿®æ”¹spaceline-segmentsæºæ–‡ä»¶ä¸­çš„å‡½æ•°
   "Assemble a mode line string for Fancy Battery Mode."
   (when fancy-battery-last-status
     (let* ((type (cdr (assq ?L fancy-battery-last-status)))
@@ -137,11 +186,11 @@
            (time (spaceline--fancy-battery-time))
 		   (charge-type (cdr (assq ?b fancy-battery-last-status))))
       (cond
-       ((string= "on-line" type) (concat " AC"  percentage charge-type time))
+       ((string= "on-line" type) (concat "ïƒ”"  percentage charge-type time))
        ((string= type "") " No Battery")
-       (t (concat (if (string= "AC" type) " AC" "")  percentage charge-type time))))))
+       (t (concat (if (string= "AC" type) "ïƒ”" "")  percentage charge-type time))))))
 
-(defun spaceline--fancy-battery-face ()  ;;ĞŞ¸Äspaceline-segmentsÔ´ÎÄ¼şÖĞµÄº¯Êı
+(defun spaceline--fancy-battery-face ()  ;;ä¿®æ”¹spaceline-segmentsæºæ–‡ä»¶ä¸­çš„å‡½æ•°
   "Return a face appropriate for powerline"
   (let ((type (cdr (assq ?L fancy-battery-last-status))))
     (if (and type (string= "on-line" type))
@@ -166,9 +215,16 @@
 )
 
 
+(setq config-alist
+            '(("*" all-the-icons-octicon "pencil" :height 1.0 :v-adjust -0.0 :face 'all-the-icons-dred)
+              ("-" all-the-icons-octicon "three-bars" :height 1.0 :v-adjust -0.05 :face 'all-the-icons-green)
+              ("%" all-the-icons-octicon "lock" :height 1.0 :v-adjust -0.1 :face 'all-the-icons-purple)
+	      ))
+
+
 (spaceline-define-segment buffer-modified
   "Buffer modified marker."
-  (propertize "%*" 'face 'my-modified-face)
+  (propertize (format (eval (cdr (assoc (format-mode-line "%*") config-alist))) "%s") )
   )
 
 (defface my-file-face
@@ -182,7 +238,8 @@
   "Name of buffer."
   (propertize (powerline-buffer-id) 'face 'my-file-face)
   )
-  
+
+
 (declare-function pdf-view-current-page 'pdf-view)
 (declare-function pdf-cache-number-of-pages 'pdf-view)
 
@@ -214,6 +271,8 @@
        :weight bold
       ))
   "face for user defined variables.")
+
+
   
 (spaceline-define-segment major-mode
   "The name of the major mode."
@@ -245,7 +304,7 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
       (spaceline--pdfview-page-number) 
     "%l:%2c")'face 'my-page-face))
 
-	
+
 	
 (global-anzu-mode +1)
 (diminish 'undo-tree-mode)
@@ -258,10 +317,17 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 (diminish 'helm-mode)
 (diminish 'company-mode)
 (diminish 'abbrev-mode)
+(diminish 'auto-revert-mode) 
+(diminish 'auto-fill-mode)
+(diminish 'fast-scroll-minor-mode)
+;(diminish 'which-key-mode) ;; ä¸èµ·ä½œç”¨
+(setq which-key-lighter "")
+;(diminish 'wakatime-mode) ;; è¦å‡ºç°åœ¨åŠ è½½wakatime-modeä¹‹å
+
 
 ;;===================================== MODE LINE END =======================================
 
-;; ÔÚ±êÌâÀ¸ÏÔÊ¾µÇÂ½Ãû³ÆºÍÎÄ¼şÃû  ;;show the current directory in the frame bar
+;; åœ¨æ ‡é¢˜æ æ˜¾ç¤ºç™»é™†åç§°å’Œæ–‡ä»¶å  ;;show the current directory in the frame bar
 (setq frame-title-format
       '((:eval
          (let ((login-name (getenv-internal "LOGNAME")))
@@ -272,7 +338,7 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 	))
 
 
-;;---------- ´úÂë²Î¿¼Ïß ------------------
+;;---------- ä»£ç å‚è€ƒçº¿ ------------------
 ;; (require 'fill-column-indicator)
 ;; (setq fci-rule-width 1)
 ;; (setq fci-rule-color "grey30")
@@ -280,6 +346,7 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 ;; (add-hook 'after-change-major-mode-hook 'fci-mode)
 
 				  
+
 "Init Face"
 (interactive)			
 			)

@@ -6,7 +6,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(diff-hl-change ((t (:background "cyan" :foreground "blue3"))))
- '(diff-refine-added ((t (:inherit diff-refine-changed :background "light green"))))
+ '(diff-hl-insert ((t (:inherit diff-added :background "dark green"))))
+ '(diff-refine-added ((t (:inherit diff-refine-changed :background "dark green" :foreground "lime green"))))
  '(diff-refine-removed ((t (:inherit diff-refine-changed :background "PaleVioletRed1"))))
  '(dired-filetype-document ((t (:foreground "deep sky blue"))))
  '(elfeed-search-title-face ((t (:foreground "royal blue"))))
@@ -16,8 +17,14 @@
  '(helm-match ((t (:foreground "purple"))))
  '(helm-selection ((t (:background "dark khaki" :distant-foreground "black"))))
  '(highlight-indentation-face ((t nil)))
+ '(line-number ((t (:inherit (shadow default)))))
+ '(line-number-current-line ((t (:inherit line-number :inverse-video t :slant italic :weight bold))))
  '(linum ((t (:inherit (shadow default) :foreground "light slate gray" :slant italic :width narrow :height 0.9))))
  '(markdown-code-face ((t (:inherit font-lock-doc-face :weight normal))))
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :foreground "firebrick" :weight bold :height 1.3))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :foreground "dark green" :weight bold :height 1.2))))
+ '(markdown-header-face-3 ((t (:inherit markdown-header-face :weight bold :height 1.1))))
+ '(markdown-header-face-4 ((t (:inherit markdown-header-face :foreground "orange red" :weight bold :height 1.0))))
  '(markdown-language-info-face ((t (:inherit warning :weight bold))))
  '(markdown-markup-face ((t (:inherit shadow :foreground "LightCoral" :slant normal :weight normal))))
  '(markdown-math-face ((t (:inherit font-lock-string-face :foreground "peru"))))
@@ -62,6 +69,7 @@
     (eww-mode sunshine-mode pdf-outline-buffer-mode pdf-view-mode comint-mode erc-mode eshell-mode geiser-repl-mode gud-mode inferior-apl-mode inferior-caml-mode inferior-emacs-lisp-mode inferior-j-mode inferior-python-mode inferior-scheme-mode inferior-sml-mode internal-ange-ftp-mode prolog-inferior-mode reb-mode shell-mode slime-repl-mode term-mode wdired-mode archive-mode bbdb-mode biblio-selection-mode bookmark-bmenu-mode bookmark-edit-annotation-mode browse-kill-ring-mode bzr-annotate-mode calc-mode cfw:calendar-mode completion-list-mode Custom-mode debugger-mode delicious-search-mode desktop-menu-blist-mode desktop-menu-mode doc-view-mode dvc-bookmarks-mode dvc-diff-mode dvc-info-buffer-mode dvc-log-buffer-mode dvc-revlist-mode dvc-revlog-mode dvc-status-mode dvc-tips-mode ediff-mode ediff-meta-mode efs-mode Electric-buffer-menu-mode emms-browser-mode emms-mark-mode emms-metaplaylist-mode emms-playlist-mode ess-help-mode etags-select-mode fj-mode gc-issues-mode gdb-breakpoints-mode gdb-disassembly-mode gdb-frames-mode gdb-locals-mode gdb-memory-mode gdb-registers-mode gdb-threads-mode gist-list-mode git-commit-mode git-rebase-mode gnus-article-mode gnus-browse-mode gnus-group-mode gnus-server-mode gnus-summary-mode google-maps-static-mode ibuffer-mode jde-javadoc-checker-report-mode magit-cherry-mode magit-diff-mode magit-log-mode magit-log-select-mode magit-popup-mode magit-popup-sequence-mode magit-process-mode magit-reflog-mode magit-refs-mode magit-revision-mode magit-stash-mode magit-stashes-mode magit-status-mode magit-mode magit-branch-manager-mode magit-commit-mode magit-key-mode magit-rebase-mode magit-wazzup-mode mh-folder-mode monky-mode mu4e-main-mode mu4e-headers-mode mu4e-view-mode notmuch-hello-mode notmuch-search-mode notmuch-show-mode occur-mode org-agenda-mode package-menu-mode proced-mode rcirc-mode rebase-mode recentf-dialog-mode reftex-select-bib-mode reftex-select-label-mode reftex-toc-mode sldb-mode slime-inspector-mode slime-thread-control-mode slime-xref-mode sr-buttons-mode sr-mode sr-tree-mode sr-virtual-mode tar-mode tetris-mode tla-annotate-mode tla-archive-list-mode tla-bconfig-mode tla-bookmarks-mode tla-branch-list-mode tla-browse-mode tla-category-list-mode tla-changelog-mode tla-follow-symlinks-mode tla-inventory-file-mode tla-inventory-mode tla-lint-mode tla-logs-mode tla-revision-list-mode tla-revlog-mode tla-tree-lint-mode tla-version-list-mode twittering-mode urlview-mode vc-annotate-mode vc-dir-mode vc-git-log-view-mode vc-hg-log-view-mode vc-svn-log-view-mode vm-mode vm-summary-mode w3m-mode wab-compilation-mode xgit-annotate-mode xgit-changelog-mode xgit-diff-mode xgit-revlog-mode xhg-annotate-mode xhg-log-mode xhg-mode xhg-mq-mode xhg-mq-sub-mode xhg-status-extra-mode neotree-mode org-mode elfeed-search-mode elfeed-show-mode)))
  '(eww-search-prefix "https://www.google.com/search?q=")
  '(fci-rule-color "#383838")
+ '(global-display-line-numbers-mode t)
  '(interleave-disable-narrowing t)
  '(interleave-insert-relative-name t t)
  '(interleave-org-notes-dir-list (quote (".")) t)
@@ -69,16 +77,17 @@
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(org-agenda-files
-   (quote
-    ("C:/Works/Org/Main.trello.org" "C:/Works/Org/Memos.trello.org" "C:/Works/Org/archive.org" "C:/Works/Org/ideas.org" "C:/Works/Org/soft.org" "C:/Works/Org/statmethods.org" "C:/Works/Org/reimburse.org" "C:/Works/Org/journal.org" "C:/Works/Org/notes.org" "C:/Works/Org/funds.org" "C:/Works/Org/Tasks.org")))
  '(org-noter-always-create-frame nil)
  '(org-noter-default-notes-file-names (quote ("PDFNotes.org")))
  '(org-noter-notes-window-behavior (quote (scroll only-prev)))
  '(org-noter-separate-notes-from-heading nil)
  '(package-selected-packages
    (quote
-    (ido-springboard zenburn-theme youdao-dictionary yankpad yaml-mode yahoo-weather xah-math-input wttrin which-key websocket w3m volatile-highlights visual-regexp visible-mark vdiff use-package syndicate swiper sunshine sunrise-x-w32-addons sunrise-x-tree sunrise-x-tabs sunrise-x-popviewer sunrise-x-modeline sunrise-x-loop sunrise-x-checkpoints sunrise-x-buttons sqlup-mode springboard spacemacs-theme spaceline solarized-theme skewer-mode shell-pop ruby-mode restart-emacs register-list rainbow-delimiters python-x python-mode pydoc py-yapf py-autopep8 poly-slim poly-R plantuml-mode pkg-info paradox pandoc-mode package-build ox-twbs ox-bibtex-chinese orgalist org-trello org-toodledo org-ref org-pomodoro org-pdfview org-noter org-mind-map org-download org-bullets org-alert org-ac ob-mermaid ob-ipython oauth2 neotree monokai-theme md4rd mark-tools magithub magit-todos js-comint jedi interleave indium hungry-delete hlinum helpful helm-zhihu-daily helm-tail helm-swoop helm-pydoc helm-orgcard helm-github-stars helm-emms helm-describe-modes helm-descbinds helm-ag graphviz-dot-mode goto-line-preview google-translate gnuplot-mode gnuplot github-stars gh fancy-battery evil-visual-mark-mode evil-vimish-fold evil-tutor evil-surround evil-nerd-commenter evil-anzu ess emms-state embrace emacsist-view elpy elfeed-org elfeed-goodies ebib easy-kill diff-hl delight define-word deadgrep dashboard csv-mode company-math comment-dwim-2 color-theme-solarized cnfonts clipmon chinese-wbim chinese-pyim cdlatex cal-china-x bookmark+ benchmark-init autopair auctex anaconda-mode ahk-mode ace-window ace-pinyin ac-math)))
+    (texfrag treemacs magit-popup elfeed markdown-toc grip-mode org toc-org org-super-agenda company-emoji emojify leetcode todoist hl-todo async magit dap-mode helm-lsp lsp-treemacs company-lsp lsp-ui lsp-mode diminish wakatime-mode magic-latex-buffer helm-projectile term-projectile pythonic markdownfmt ivy-rich counsel doom-modeline all-the-icons-ivy all-the-icons octicons unicode-fonts all-the-icons-dired spaceline-all-the-icons pomidor flycheck magit-org-todos skeletor ivy ivy-yasnippet evil keyfreq company-quickhelp company-box poly-R company evil-goggles smooth-scrolling forecast focus ess-R-data-view ess-view ess-smart-equals psession window-purpose eyebrowse winum dumb-jump pinyin-search imenu-anywhere imenu-list outline-toc markdown-mode poly-noweb polymode poly-org poly-markdown jupyter ein ess-smart-underscore esup vimrc-mode ido-springboard zenburn-theme youdao-dictionary yankpad yaml-mode yahoo-weather xah-math-input wttrin which-key websocket w3m volatile-highlights visual-regexp visible-mark vdiff use-package syndicate swiper sunshine sunrise-x-w32-addons sunrise-x-tree sunrise-x-tabs sunrise-x-popviewer sunrise-x-modeline sunrise-x-loop sunrise-x-checkpoints sunrise-x-buttons sqlup-mode springboard spacemacs-theme spaceline solarized-theme skewer-mode shell-pop ruby-mode restart-emacs register-list rainbow-delimiters python-x python-mode pydoc py-yapf py-autopep8 poly-slim plantuml-mode pkg-info paradox pandoc-mode package-build ox-twbs ox-bibtex-chinese orgalist org-trello org-toodledo org-ref org-pomodoro org-pdfview org-noter org-mind-map org-download org-bullets org-alert org-ac ob-mermaid ob-ipython oauth2 neotree monokai-theme md4rd mark-tools magithub magit-todos js-comint jedi interleave indium hungry-delete hlinum helpful helm-zhihu-daily helm-tail helm-swoop helm-pydoc helm-orgcard helm-github-stars helm-emms helm-describe-modes helm-descbinds helm-ag graphviz-dot-mode goto-line-preview google-translate gnuplot-mode gnuplot github-stars gh fancy-battery evil-visual-mark-mode evil-vimish-fold evil-tutor evil-surround evil-nerd-commenter evil-anzu ess emms-state embrace emacsist-view elpy elfeed-org elfeed-goodies ebib easy-kill diff-hl delight define-word deadgrep dashboard csv-mode company-math comment-dwim-2 color-theme-solarized cnfonts clipmon chinese-wbim chinese-pyim cdlatex cal-china-x bookmark+ benchmark-init autopair auctex anaconda-mode ahk-mode ace-window ace-pinyin ac-math)))
+ '(paradox-column-width-download 7)
+ '(paradox-column-width-package 25)
+ '(paradox-column-width-version 15)
+ '(paradox-display-download-count t)
  '(paradox-github-token t)
  '(pdf-annot-default-annotation-properties
    (quote
@@ -117,3 +126,5 @@
      (340 . "#94BFF3")
      (360 . "#DC8CC3"))))
  '(vc-annotate-very-old-color "#DC8CC3"))
+
+

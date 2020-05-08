@@ -51,15 +51,8 @@
 (global-set-key "\C-cw" 'eww)
 
 ;; use browser depending on url
-; (setq browse-url-browser-function 'browse-url-default-windows-browser)
-(setq
- browse-url-browser-function
- '(
-  ; ("wikipedia\\.org" . browse-url-firefox)
-  ; ("github" . browse-url-chromium)
-  ("." . eww-browse-url)
-  ; ("." . browse-url-default-browser)
-  ))
+(setq browse-url-browser-function 'browse-url-default-windows-browser)
+
 
 (defun eww-browse-url-with-w3m ()
   (interactive)
@@ -79,7 +72,10 @@
         ; "https://www.quora.com/rss"
 		))
 
-; (elfeed-goodies/setup)
+(require 'elfeed)
+(require 'elfeed-goodies)
+
+;(elfeed-goodies/setup)
 ; (setq elfeed-goodies/entry-pane-size 0.5)
 ; (setq elfeed-goodies/powerline-default-separator (quote bar))
 
@@ -92,6 +88,15 @@
 ;; Note: The customize interface is also supported.
 (setq rmh-elfeed-org-files (list "~/.emacs.d/user-files/elfeed.org"))
 
+
+(setq elfeed-goodies/entry-pane-position (quote bottom))
+(setq elfeed-goodies/entry-pane-size 0.6)
+(setq elfeed-goodies/feed-source-column-width 16)
+(setq elfeed-goodies/powerline-default-separator (quote wave))
+(setq elfeed-search-filter "@6-months-ago")
+(setq elfeed-show-entry-author nil)
+(setq elfeed-show-entry-delete (quote elfeed-goodies/delete-pane))
+(setq elfeed-show-entry-switch (quote elfeed-goodies/switch-pane))
 
 (when (boundp 'utf-translate-cjk)
   (setq utf-translate-cjk t)
@@ -122,7 +127,7 @@
 ;;============================= Weather =============================
 ;; -------------- sunshine ---------------
 (require 'sunshine)
-(setq sunshine-location "Glasgow,UK")
+(setq sunshine-location "Wuhan, China")
 (setq sunshine-appid "29e41ab31b23e473a5aebafd93348235")
 (setq sunshine-show-icons t)
 (setq sunshine-units (quote metric))
@@ -218,10 +223,57 @@
 (setq shell-pop-full-span t)
 (setq shell-pop-window-position "bottom")
 
+(require 'aweshell)
+
 ;; ------------------------ Reddit ---------------------
 (require 'md4rd)
 (setq md4rd-subs-active '(MachineLearning learnmachinelearning statistics rstats Rlanguage Python learnpython emacs ))
 (setq md4rd--oauth-access-token "KT1qHgAxO-Ff1Ts5f1NFMFxiddA")
+
+;; --------------------- vimrc-mode --------------------
+(add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+
+;; --------------------- pomider -------------------------------  
+(add-hook 'pomidor-mode-hook 
+(lambda () 
+	  (setq global-mode-string
+             '(:eval
+               (concat " " (format-time-string "%M:%S " (pomidor-work-duration) t))))))
+
+(defadvice pomidor-stop (before pomidor-save-log activate)
+    "Log pomidor data to the ~/pomidor-log.csv file.
+Columns: date,work,overwork,break,total"
+    (write-region (format "%s,%s,%s,%s,%s\n"
+                          (format-time-string "%Y/%m/%d-%R")
+                          (format-time-string "%M:%S" (pomidor-work-duration) t)
+                          (format-time-string "%M:%S" (pomidor-overwork-duration) t)
+                          (format-time-string "%M:%S" (pomidor-break-duration) t)
+			  (format-time-string "%M:%S" (pomidor-total-duration) t))
+                  nil
+                  "~/.emacs.d/user-files/pomidor-log.csv"
+                  'append))
+
+(defun  pomidor-off-modeline ()
+  (interactive)
+ (setq global-mode-string nil)
+(pomidor-quit)
+  )
+
+;; waka time
+(global-wakatime-mode)
+(diminish 'wakatime-mode)
+
+;; tabs
+;(require 'awesome-tab)
+;(awesome-tab-mode t)
+
+;(require 'leetnote)
+;(setq url-debug t)
+
+;; emoji
+(require 'company-emoji)
+(add-to-list 'company-backends 'company-emoji)
+
 
 "Init Mix"
 (interactive)			

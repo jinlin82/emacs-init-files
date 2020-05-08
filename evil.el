@@ -4,19 +4,6 @@
 ;;(use-package vimpulse)
 ;;toggle-viper-mode
 
-(defun open-with-vim ()
-    (interactive)
-    (start-process-shell-command "Vim" "*Messages*" (concat "C:/Worktools/Vim/vim81/gvim.exe -p --remote-tab-silent " (buffer-file-name)))
-    (message (concat (buffer-name) " Opened with Vim")))
-
-(global-set-key (kbd "C-x v c") 'open-with-vim)
-
-(defun open-with-default ()
-    (interactive)
-    (start-process-shell-command "nil" "*Messages*" (concat "open " "\"" (buffer-file-name) "\""))
-    (message (concat (buffer-name) " Opened with default")))
-
-(global-set-key (kbd "C-x v v") 'open-with-default)
 
 (require 'evil)
 (evil-mode 1)
@@ -141,6 +128,22 @@ next VCOUNT - 1 lines below the current one."
      (116 . evil-surround-read-tag)
      (60 . evil-surround-read-tag)
      (102 . evil-surround-function))))
+
+(defmacro define-and-bind-quoted-text-object (name key start-regex end-regex)
+  (let ((inner-name (make-symbol (concat "evil-inner-" name)))
+        (outer-name (make-symbol (concat "evil-a-" name))))
+    `(progn
+       (evil-define-text-object ,inner-name (count &optional beg end type)
+         (evil-select-paren ,start-regex ,end-regex beg end type count nil))
+       (evil-define-text-object ,outer-name (count &optional beg end type)
+         (evil-select-paren ,start-regex ,end-regex beg end type count t))
+       (define-key evil-inner-text-objects-map ,key #',inner-name)
+       (define-key evil-outer-text-objects-map ,key #',outer-name))))
+
+(define-and-bind-quoted-text-object "pipe" "|" "|" "|")
+(define-and-bind-quoted-text-object "slash" "/" "/" "/")
+(define-and-bind-quoted-text-object "dollar" "*" "*" "*")
+(define-and-bind-quoted-text-object "dollar" "$" "\\$" "\\$") ;; sometimes your have to escape the regex
 	 
 ;; -------Comment ----------------------
 ;;evil-nerd-commenter

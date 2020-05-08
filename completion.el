@@ -77,13 +77,8 @@
 ;;-------------------------------------------------
 
 ;;-----------------------company-mode---------------------
-;;-------------在ess中使用 company-mode----------------
-; (setq ess-use-auto-complete nil)
-; (add-hook 'inferior-ess-mode-hook 'company-mode)
-; (add-hook 'ess-mode-hook 'company-mode)
+(setq company-show-numbers t)
 
-
-(add-hook 'org-mode-hook 'company-mode)
 (setq company-backends '(company-math-symbols-unicode
                          company-latex-commands
                          company-elisp
@@ -104,6 +99,42 @@
 						 company-files
 						 ; company-dabbrev ; 文本补全
 						 ))
+
+(add-hook 'after-init-hook 'global-company-mode)
+(define-key company-mode-map (kbd "C-c /") 'company-files)
+(define-key company-mode-map (kbd "C-c C-/") 'company-files)
+
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+(define-key company-active-map (kbd "TAB") nil)
+(define-key company-active-map [tab] nil)
+;(define-key company-active-map [return] nil)
+;(define-key company-active-map (kbd "RET") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous)
+  (define-key company-active-map (kbd "M-z") #'company-abort) 
+(define-key company-active-map (kbd "TAB") #'company-complete-common-or-cycle)
+(define-key company-active-map [tab] #'company-complete-common-or-cycle)
+
+)
+
+(company-quickhelp-mode)
+(eval-after-load 'company
+  '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)
+  )
+
+
+
+;;-------------在ess中使用 company-mode----------------
+ (setq ess-use-auto-complete nil)
+;(setq ess-use-company nil)
+ (add-hook 'inferior-ess-mode-hook 'company-mode)
+ (add-hook 'ess-mode-hook 'company-mode)
+
+(add-hook 'markdown-mode-hook 'company-mode)
+
+(add-hook 'org-mode-hook 'company-mode)
 
 (define-key org-mode-map (kbd "M-n TAB") 'company-math-symbols-unicode)
 
@@ -269,8 +300,10 @@
 ;; ------------ yasnippet ----------------
 (setq yas-snippet-dirs
    (quote
-    ("c:/Worktools/Config/.emacs.d/user-files/snippets" 
-     "c:/Worktools/Config/.emacs.d/elpa/elpy-20180314.1340/snippets/" )))
+    ("~/../Config/.emacs.d/user-files/snippets" 
+     ;"~/../Config/.emacs.d/elpa/elpy-20180314.1340/snippets/" 
+     )))
+
 
 (yas-reload-all)
 (add-hook 'markdown-mode-hook #'yas-minor-mode)
@@ -278,6 +311,7 @@
 
 (add-hook 'yas-minor-mode-hook '(lambda ()
 	(define-key yas-minor-mode-map (kbd "C-x a s") 'yas-insert-snippet)
+        (define-key yas-minor-mode-map (kbd "C-x a v") 'ivy-yasnippet)
 	))
 
 	
@@ -293,6 +327,91 @@
 
 
 (global-set-key (kbd "\C-x c") 'clear-shell) ;; 要出现在helm之后
+
+
+;; ================================== skeletor ======================================
+(require 'skeletor)
+;; FilePath -> IO ()
+(defun skeletor--initialize-git-repo  (dir)
+  "Initialise a new git repository at DIR."
+  (let ((default-directory dir))
+    (skeletor--log-info "Initialising git...")
+    ;; Some tools (e.g. bundler) initialise git but do not make an initial
+    ;; commit.
+    (unless (f-exists? (f-join dir ".git"))
+      (skeletor-shell-command "git init"))
+    (skeletor-shell-command "git commit --allow-empty -m \"Initial commit\"") ;; hacked
+    (skeletor-shell-command "git add -A && git commit -m \"Add initial files\"") ;; hacked
+    (message "Initialising git...done")))
+
+
+;; ================================== ivy ======================================
+(defun ivy-switch-buffer-matcher-pinyin (regexp candidates)
+  (unless (featurep 'pinyinlib) (require 'pinyinlib))
+  (let* ((pys (split-string regexp "[ \t]+"))
+         (regexp (format ".*%s.*"
+                         (mapconcat 'pinyinlib-build-regexp-string pys ".*"))))
+    (ivy--switch-buffer-matcher regexp candidates)))
+
+(defun ivy-switch-buffer-by-pinyin ()
+  "Switch to another buffer."
+  (interactive)
+  (unless (featurep 'ivy) (require 'ivy))
+  (let ((this-command 'ivy-switch-buffer))
+    (ivy-read "Switch to buffer: " 'internal-complete-buffer
+              :matcher #'ivy-switch-buffer-matcher-pinyin
+              :preselect (buffer-name (other-buffer (current-buffer)))
+              :action #'ivy--switch-buffer-action
+              :keymap ivy-switch-buffer-map
+              :caller 'ivy-switch-buffer)))
+
+(defun re-builder-extended-pattern (str)
+  (let* ((len (length str)))
+    (cond
+     ;; do nothing
+     ((<= (length str) 0))
+
+     ;; If the first charater of input in ivy is ":",
+     ;; remaining input is converted into Chinese pinyin regex.
+     ;; For example, input "/ic" match "isController" or "isCollapsed"
+     ((string= (substring str 0 1) ":")
+      (setq str (pinyinlib-build-regexp-string (substring str 1 len) t)))
+
+     ;; If the first charater of input in ivy is "/",
+     ;; remaining input is converted to pattern to search camel case word
+     ((string= (substring str 0 1) "/")
+      (let* ((rlt "")
+             (i 0)
+             (subs (substring str 1 len))
+             c)
+        (when (> len 2)
+          (setq subs (upcase subs))
+          (while (< i (length subs))
+            (setq c (elt subs i))
+            (setq rlt (concat rlt (cond
+                                   ((and (< c ?a) (> c ?z) (< c ?A) (> c ?Z))
+                                    (format "%c" c))
+                                   (t
+                                    (concat (if (= i 0) (format "[%c%c]" (+ c 32) c)
+                                              (format "%c" c))
+                                            "[a-z]+")))))
+            (setq i (1+ i))))
+        (setq str rlt))))
+    (ivy--regex-plus str)))
+;; }}
+
+;(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+
+ (setq ivy-re-builders-alist '((t . re-builder-extended-pattern)))
+     ;; set actions when running C-x b
+     ;; replace "frame" with window to open in new window
+     (ivy-set-actions
+      'ivy-switch-buffer-by-pinyin
+      '(("j" switch-to-buffer-other-frame "other frame")
+        ("k" kill-buffer "kill")
+        ("r" ivy--rename-buffer-action "rename")))
 
 ;;================================== TEMPLATES  END ==================================
 

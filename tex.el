@@ -14,6 +14,7 @@
 ; (setq cdlatex-paired-parens "$" ) ;; 注意与edit.el 中的 autopair的兼容问题,
 (setq cdlatex-simplify-sub-super-scripts t)
 
+
 ;;Ultra-TeX Mode
 ;;(setq load-path (cons "/Universal/Custom/emacs/ultratex/lisp" load-path))
 ;;(require 'ultex-setup)
@@ -75,7 +76,7 @@
 	  (?A . "\\citeauthor*{%l}")
 	  (?y . "\\citeyear{%l}")
 	  (?n . "\\nocite{%l}")
-      (?m . "[@%l]")
+	  (?m . "[@%l]")
 	     ))))
 			 
 
@@ -154,7 +155,9 @@
                 (call-process "texcount" nil t nil "-unicode" "-logograms=+cjkpunctuation" this-file)))))
       (string-match "\n$" word-count)
       (message (replace-match "" nil nil word-count))))
-  (define-key LaTeX-mode-map "\C-cw" 'latex-word-count))
+  (define-key LaTeX-mode-map "\C-cw" 'latex-word-count)
+  (define-key LaTeX-mode-map "\M-n\M-l" 'org-toggle-latex-fragment)
+  )
 (add-hook 'LaTeX-mode-hook 'my-latex-setup t)
 
 ;;; run bat file
@@ -187,7 +190,6 @@
 (setq TeX-view-program-list '(("Sumatra" "Sumatra.bat %o %t %n") ))
 (setq TeX-view-program-selection '((output-pdf "Sumatra") (output-dvi "Yap")))
 ;;================================================ LaTex Config END===========================================
-
 
 "Init Tex"
 (interactive)			

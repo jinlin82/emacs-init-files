@@ -14,8 +14,8 @@ mail-from-style    'angles)
    
 (load-library "smtpmail")
 
-(add-to-list 'load-path "C:/Worktools/emacs25.2/lisp/gnus/lisp")
-(add-to-list 'load-path "C:/Worktools/emacs25.2/lisp/gnus/contrib")
+(add-to-list 'load-path "~/../emacs26.2_64/lisp/gnus/lisp")
+(add-to-list 'load-path "~/../emacs26.2_64/lisp/gnus/contrib")
 	   
 
 (setq pop3-uidl-file "~/Gnus/.pop3-uidl")

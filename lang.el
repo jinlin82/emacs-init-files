@@ -2,27 +2,27 @@
 
 ;;======================================Programming Language Setup======================================
 ;;-------------------------------°²×°ecbºÍcedet--------------------------------------
-;(load-file "C:/Worktools/Emacs24.2/site-lisp/cedet-1.1/common/cedet.
+;(load-file "~/../Emacs24.2/site-lisp/cedet-1.1/common/cedet.
 ;(global-ede-mode 1)                      ; Enable the Project management system
 ;(semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion
 ;(global-srecode-minor-mode 1)            ; Enable template insertion menu
 ;(require 'ecb)
 
 ;; ---------------------------------------Common Lisp--------------------------------
-;;(setq inferior-lisp-program "C:/clisp/full/lisp.exe
-;;-B C:/clisp/full/
-;;-M C:/clisp/full/lispinit.mem
+;;(setq inferior-lisp-program "~/../../clisp/full/lisp.exe
+;;-B ~/../../clisp/full/
+;;-M ~/../../clisp/full/lispinit.mem
 ;;-K full")
   ;;-ansi -q")
-;(setq inferior-lisp-program "C:/sbcl/sbcl")
+;(setq inferior-lisp-program "~/../../sbcl/sbcl")
 
 
-;;(add-to-list 'load-path "C:/Worktools/Emacs24.2/site-lisp/slime")
+;;(add-to-list 'load-path "~/../Emacs24.2/site-lisp/slime")
 ;;(require 'slime)
 ;;(slime-setup '(slime-fancy slime-asdf))
 
 ;;------------------------------------------Ruby------------------------------------
-(add-to-list 'load-path "C:/Worktools/Emacs24.2/site-lisp/ruby-mode")
+(add-to-list 'load-path "~/../Emacs24.2/site-lisp/ruby-mode")
 (require 'inf-ruby)
 (require 'ruby-electric)
 (add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
@@ -36,7 +36,7 @@
 
 
 ;; --------------------------------- plantuml  ----------------------------
-(setq plantuml-jar-path "c:/Worktools/plantuml/plantuml.jar")
+(setq plantuml-jar-path "~/../plantuml/plantuml.jar")
 ;; Enable plantuml-mode for PlantUML files
 (add-to-list 'auto-mode-alist '("\\.uml\\'" . plantuml-mode))
 (add-hook 'plantuml-mode-hook 'cdlatex-mode)
@@ -44,7 +44,7 @@
 ;;---------------------------------- mermaid ------------------------------
 (require 'mermaid-mode)
 (setq mermaid-mmdc-location
-   "C:/Worktools/node-v10.15.1-win-x86/node_modules/mermaid-filter/node_modules/.bin/mmdc")
+   "~/../node-v10.15.1-win-x86/node_modules/mermaid-filter/node_modules/.bin/mmdc")
 (add-to-list 'auto-mode-alist '("\\.mmd\\'" . mermaid-mode))
 
 (defun mermaid-compile ()
@@ -66,7 +66,7 @@
 
 ;;========================= GNUPlot ========================================
 (require 'gnuplot-mode)
-(setq gnuplot-program "C:/Worktools/gnuplot/bin/wgnuplot")
+(setq gnuplot-program "~/../gnuplot/bin/wgnuplot")
 ;; set gnuplot arguments (if other than "-persist")
 (defvar gnuplot-flags "-persist -pointsize 2")
 (add-hook 'gnuplot-mode-hook
@@ -103,6 +103,9 @@
         (database :default "dvdrental")
         (server :default "localhost")
         (port :default 5432)))
+
+(require 'sql)
+(define-key sql-mode-map (kbd "<C-return>") 'sql-send-line-and-next)
 
 ;;=========================== JavaScript ================================
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))

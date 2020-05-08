@@ -5,8 +5,8 @@
 
 
 (defun init-emms ()
-(add-to-list 'exec-path "C:/Worktools/mplayer/")
-(add-to-list 'exec-path "C:/Worktools/mp3info-0.8.5/")
+(add-to-list 'exec-path "~/../mplayer/")
+(add-to-list 'exec-path "~/../mp3info-0.8.5/")
 
 
 
@@ -19,7 +19,7 @@
                          emms-player-ogg123
                          emms-player-mplayer))
 
-(setq emms-source-file-default-directory "C:/Music/")
+(setq emms-source-file-default-directory "~/../../Music/")
 
 ;; Now we will add all our music to a playlist by invoking M-x emms-add-directory-tree RET ~/Music/ RET. 
 ;; We do this because then Emms will read the tags of all your music files and caches them

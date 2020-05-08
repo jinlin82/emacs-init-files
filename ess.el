@@ -4,20 +4,46 @@
 (require 'ess-site)
 (setq ess-eval-visibly nil)
 (setq ess-ask-for-ess-directory nil)
+(setq ess-use-flymake nil)
+
+;; auto completion …Ë÷√‘⁄ completion.el ÷–
+
+;(require 'ess-smart-underscore)
+(use-package ess-smart-equals
+  :after (:any ess-r-mode inferior-ess-r-mode ess-r-transcript-mode)
+  :config (ess-smart-equals-activate))
+
+(require 'ess-view)
+(setq ess-view--spreadsheet-program "~/../../Program Files (x86)/Microsoft Office/Office14/EXCEL.EXE")
+
+;;; hack Cannot view data.frame from source code
+(defun ess-view-extract-R-process ()
+"Return the name of R running in current buffer."
+  (let*
+      ((proc (ess-get-process))         ; Modified from (proc (get-buffer-process (current-buffer)))
+       (string-proc (prin1-to-string proc))
+       (selected-proc (s-match "^#<process \\(R:?[0-9]*\\)>$" string-proc)))
+    (nth 1 (-flatten selected-proc))
+    )
+  )
+
+(define-key ess-mode-map (kbd "C-x w") 'ess-view-inspect-df)
+
+
 
 ;;No .Rhistory file
 (defun ei-no-rhistory ()
-  (setq ess-history-file "C:/Books/Statsoft/R/Code/.Rhistory"))
+  (setq ess-history-file "~/../../Books/Statsoft/R/Code/.Rhistory"))
 
 (add-hook 'inferior-ess-mode-hook 'ei-no-rhistory)
 
 ;;---------------------------------------SPLUS-------------------------------------------
 (setq-default inferior-S+6-program-name
-	      "C:/progra~1/SPLUS80/cmd/Splus")
+	      "~/../../progra~1/SPLUS80/cmd/Splus")
 (setq-default inferior-Sqpe+6-SHOME-name
-	      "C:/progra~1/SPLUS80")
+	      "~/../../progra~1/SPLUS80")
 (setq-default inferior-Sqpe+6-program-name
-	      "C:/progra~1/SPLUS80/cmd/Sqpe.exe")
+	      "~/../../progra~1/SPLUS80/cmd/Sqpe.exe")
 
 
 ;;--------------------------------------R-----------------------------------------------

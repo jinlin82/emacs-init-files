@@ -2,7 +2,7 @@
 
 ;;===================================== Doc Viewer =====================================
 (setq doc-view-continuous t)
-(setq doc-view-ghostscript-program "C:/Worktools/gs9.15/bin/gswin32.exe")
+(setq doc-view-ghostscript-program "~/../gs9.15/bin/gswin32.exe")
 
 ;;solution to deal the conflict with evil-mode: blinking
 (add-hook 'doc-view-mode-hook
@@ -13,7 +13,7 @@
 (defun my-inhibit-global-linum-mode ()
   "Counter-act `global-linum-mode'."
   (add-hook 'after-change-major-mode-hook
-            (lambda () (linum-mode 0))
+            (lambda () (display-line-numbers-mode 0))
             :append :local))
 			
 (add-hook 'doc-view-mode-hook 'my-inhibit-global-linum-mode)
@@ -158,7 +158,7 @@
 ;; 为了增加相对路径，在interleave中hacked by Jin Lin 三处
  (setq nterleave-disable-narrowing t)
  (setq interleave-insert-relative-name nil)
- (setq interleave-org-notes-dir-list (quote ("C:/Works/Learning/Interleave_Org/" ".")))
+ (setq interleave-org-notes-dir-list (quote ("~/../../Works/Learning/Interleave_Org/" ".")))
 
  
  (add-hook 'org-mode-hook '(lambda ()

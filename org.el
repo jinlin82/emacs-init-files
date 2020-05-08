@@ -17,7 +17,7 @@
 ;;3. 注意不要使用ox-beamer.elc文件，删除之
 
 ;; ======================================================================
-(add-to-list 'load-path "~/.emacs.d/elpa/org-9.2.1/")
+(add-to-list 'load-path "~/.emacs.d/elpa/org-20200224/")
 ;;(setenv "PATH" (concat "C:\\Worktools\\Bibtex2html;" (getenv "PATH")))
 
 
@@ -42,8 +42,9 @@
 (set-face-attribute 'org-level-3 nil :height 1.0 :bold t)
 
 (require 'org-bullets)
-(setq org-bullets-bullet-list  '("✸" "●" "○" "◆" "◇" "▹"))
+(setq org-bullets-bullet-list  '("" "●" "○" "◆" "◇" "▹"))
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(add-hook 'org-mode-hook 'org-num-mode)
 
 ;;----------------- 设置 auto fill width -----------------
 (add-hook 'org-mode-hook
@@ -114,8 +115,8 @@
 ; (require 'ob-ipython)       ;;  ob-ipython 与 polymode 冲突
 (require 'ob-mermaid)
 (require 'ob-asymptote)
-(setq ob-mermaid-cli-path "C:/Worktools/node-v10.15.1-win-x86/node_modules/mermaid-filter/node_modules/.bin/mmdc")
-(setq org-plantuml-jar-path "C:/Worktools/plantuml/plantuml.jar")
+(setq ob-mermaid-cli-path "~/../node-v10.15.1-win-x86/node_modules/mermaid-filter/node_modules/.bin/mmdc")
+(setq org-plantuml-jar-path "~/../plantuml/plantuml.jar")
 (setq org-confirm-babel-evaluate nil)
 
 ; ORG source code
@@ -202,8 +203,9 @@
 				 ("_" underline)
 				 ("=" org-verbatim verbatim)
 				 ("~" org-code verbatim)
-				 ("+" (:strike-through t))
+				 ("+" (:strike-through t :foreground "red"))
 				 ("$" math))))
+
 
 (defun org-emphasize-word (&optional char)
   (interactive)
@@ -223,6 +225,7 @@
 
 (define-key org-mode-map (kbd "M-n M-m") 'org-emphasize-math)
 (define-key org-mode-map (kbd "M-n m") 'org-emphasize-math-word)
+
 
 (defun replace-regexp-math-delimiter-display(beg end)
   (interactive "*r")
@@ -264,15 +267,38 @@
 	    (search-forward-regexp "\\$\\([^]]*?\\)\\$" nil t)
 	  (replace-match "\\\\[\\1\\\\]" nil nil))))
 
-    ))	
+    ))
+
+(defun math-delimiter-add-space-inline(beg end)
+  (interactive "*r")
+  (let ((beg (if (region-active-p)
+                 (region-beginning)
+               (line-beginning-position)))
+        (end (if (region-active-p)
+                 (region-end)
+               (line-end-position))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (save-excursion
+	(goto-char (point-min)) 
+	(while 
+	    (search-forward-regexp " *\\$ *\\([^]]*?\\) *\\$ *" nil t)
+	  (replace-match " $\\1$ " nil nil))))
+    ))
 
 (define-key org-mode-map (kbd "M-n d") 'replace-regexp-math-delimiter-display)
 (define-key org-mode-map (kbd "M-n M-d") 'replace-regexp-math-delimiter-inline)
+
+(define-key org-mode-map (kbd "C-x vk") '(lambda () (interactive) (org-emphasize ?\=)))
+(define-key org-mode-map (kbd "C-x vt") '(lambda () (interactive) (org-emphasize ?\~)))
+(define-key org-mode-map (kbd "C-x vb") '(lambda () (interactive) (org-emphasize ?\*)))
+(define-key org-mode-map (kbd "C-x vr") '(lambda () (interactive) (org-emphasize ?\ )))
+
 ;; =============================== Latex Math END ===================================
 
 ;; =================================== Latex Export Packages=========================
 (setq org-latex-default-packages-alist (quote (
-"\\usepackage[BoldFont]{xeCJK}
+"\\usepackage{xeCJK}
 \\setCJKmainfont[BoldFont=AdobeHeitiStd-Regular]{AdobeSongStd-Light}
 \\setCJKfamilyfont{song}{AdobeSongStd-Light}
 \\setCJKfamilyfont{hei}{AdobeHeitiStd-Regular}
@@ -309,6 +335,9 @@
 \\setlength{\\parindent}{22pt}
 %\\setlength{\\parskip}{1ex plus 0.5ex minus 0.2ex}
 
+\\newcommand\\hmmax{0} %% 防止Too many math alphabets used in version normal.
+\\newcommand\\bmmax{0} %% 防止Too many math alphabets used in version normal.
+
 "
 					       ("AUTO" "inputenc" t)
 					       ;; ("T1" "fontenc" nil)  ;;  % [T1] 主要支持东欧等国家重音符, 与下面 consolas 冲突，引入T1目的是与下面upquote=true配合，支持竖引号
@@ -320,12 +349,12 @@
 					       ("" "wrapfig" nil)
 					       ("" "soul" t)
 					       ("" "textcomp" nil)
+					       ("" "lmodern,bm" t) ;; % 必需出现在amsmath等包前面，否则会出错
 					       ("" "amsmath" t)
 					       ("" "marvosym" t)
 					       ("" "wasysym" t)
 					       ("" "latexsym" t)
 					       ("" "amssymb" t)
-					       ("" "lmodern,bm" t)
 					       ("" "hyperref" nil)
 					       ("" "listings" t)
 					       ("" "tikz" t)
@@ -357,7 +386,8 @@
   xrightmargin=10pt,
   morecomment=[s]{\\#}{\\#},
   commentstyle=\\color{OliveGreen!60}\\scriptsize,
-  tabsize=4}
+  tabsize=4
+  }
 "
 					       "\\tolerance=1000")))
 ;; ============================== Latex Export Packages END =========================
@@ -375,22 +405,49 @@
 
 (defun my-org-setup ()
   (defun org-latex-utf8-fixbbl ()
-    (org-latex-export-to-latex)
     (interactive)
+    (progn
+    (save-excursion
+    (goto-char (point-min))
+    (insert "#+LATEX_CLASS_OPTIONS: [UTF8,a4paper,12pt]{ctexart} %注释掉后面的内容\n")
+    (save-buffer))
+    (org-latex-export-to-latex)
+)
 	(if (get-buffer "*Latex-Compile*")
     (kill-buffer "*Latex-Compile*"))
-    (start-process-shell-command "article-xelatex" "*Latex-Compile*"  (concat "runpdf-org.bat " (substring (buffer-name) 0 -4) ) )
+    (start-process-shell-command "article-xelatex" "*Latex-Compile*"  (concat "runpdf-org.bat " (substring (buffer-name) 0 -4) ))
+    (save-excursion
+    (goto-char (point-min))
+    (kill-whole-line)
+    (save-buffer))
     (message (concat "runpdf-org.bat " (substring (buffer-name) 0 -4) )))
 
   (defun org-beamer-utf8-fixbbl ()
-    (org-beamer-export-to-latex)
     (interactive)
+    (progn
+    (save-excursion
+    (goto-char (point-min))
+    (insert "#+LATEX_CLASS_OPTIONS: [11pt,xcolor=dvipsnames,aspectratio=1610,hyperref={colorlinks,allcolors=.,urlcolor=blue,bookmarksdepth=4}]\n")
+    (save-buffer))
+    (org-beamer-export-to-latex)
+    ;; 把 ox-beamer 生成的tex中的tab化为space
+    (find-file-literally (concat (substring (buffer-name) 0 -4) ".tex"))
+    (untabify (point-min) (point-max))
+    (save-buffer)
+    (kill-buffer)
+    )
 	(if (get-buffer "*Latex-Compile*")
 	  (kill-buffer "*Latex-Compile*"))  
 ;; 注意：1. 由于用于中文作者排序的fixbbl.exe与beamer冲突，故在runbeamer-org.bat中删除了关于fixbbl.exe的功能
 ;;       2. 在生成beamer时未使用 natbib 包，如想使用中括号上标引用，可如在生成article中一样，使用natbib语句
-    (start-process-shell-command "beamer-xelatex" "*Latex-Compile*"  (concat "runbeamer-org.bat " (substring (buffer-name) 0 -4) ) )
-    (message (concat "runpdf-org.bat " (substring (buffer-name) 0 -4) )))
+    (start-process-shell-command "beamer-xelatex" "*Latex-Compile*"  (concat "runbeamer-org.bat " (substring (buffer-name) 0 -4)))
+    (save-excursion
+    (goto-char (point-min))
+    (kill-whole-line)
+    (save-buffer))
+    (message (concat "runbeamer-org.bat " (substring (buffer-name) 0 -4) )))
+
+ (setq org-beamer-outline-frame-title "\\CJKfamily{kai}\\textcolor{violet}{\\bfseries\\LARGE 大\\ \\ 纲 }} \\textcolor{violet}{")
 
   (defun org-view-pdf ()
     (interactive)
@@ -404,7 +461,10 @@
 
   (defun org-view-latex ()
     (interactive)
-    (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".tex"))
+    (if (file-exists-p (concat (substring (buffer-name) 0 -4) "_beamer.tex"))
+	(start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) "_beamer.tex"))
+	(start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".tex"))
+      )
     (message (concat "Open " (substring (buffer-name) 0 -4) ".tex")))
 
   (define-key org-mode-map "\M-na" 'org-latex-utf8-fixbbl)
@@ -413,6 +473,7 @@
   (define-key org-mode-map "\M-n\M-h" 'org-view-html)
   (define-key org-mode-map "\M-nl" 'org-view-latex)
   (define-key org-mode-map (kbd "C-c C-;") 'org-toggle-comment)
+  (define-key org-mode-map (kbd "C-,") 'springboard)
 )
   
 (add-hook 'org-mode-hook 'my-org-setup t)
@@ -549,7 +610,7 @@ unwanted space when exporting org-mode to odt."
 		:message "you need to install the programs: latex and dvipng." 
 		:image-input-type "dvi" 
 		:image-output-type "png" 
-		 :latex-header
+		:latex-header
 "\\usepackage[dvipsnames]{xcolor}
 \\usepackage[usenames]{color}
 \\usepackage{amsmath}
@@ -568,11 +629,12 @@ unwanted space when exporting org-mode to odt."
 \\usepackage{latexsym}
 \\usepackage{amssymb}
 \\usepackage{unicode-math}
+
 % Package amstext omitted
 % Package hyperref omitted"
 		:image-size-adjust (1.0 . 1.0)
 		:latex-compiler ("latex -interaction nonstopmode -output-directory %o %f")
-		:image-converter ("dvipng -fg %F -bg %B -D %D -T tight -o %O %f"))
+		:image-converter ("dvipng -fg \"rgb 1 0.0784314 0.576471\" -D %D -T tight -o %O %f"))
 	(dvisvgm :programs
 		 ("latex" "dvisvgm")
 		 :description "dvi > svg" 
@@ -602,27 +664,44 @@ unwanted space when exporting org-mode to odt."
 ;; 在安卓app中设置后sort by date create(newest first) 乱码
 ;; 如何单个head乱码，可试试同步整个buffer
 ;; 单个head乱码, 可在description 位置加入中文后同步试试
+;; 乱码问题最终解决：要设置 coding-system-for-read 变量为 'utf-8 ，但设置后 rconsole
+;; 和 python inferior 模式等中文乱码，因此通过 add-hook 把其值设置为local
+
 (require 'org-trello)
+
+(add-hook 'org-trello-mode-hook (lambda () (set (make-local-variable 'coding-system-for-read) 'utf-8)))
 ;(add-hook 'org-mode-hook 'org-trello-mode)
 ;; org-trello major mode for all .trello files
 ; (add-to-list 'auto-mode-alist '("\\.trello$" . org-mode))
-; (setq org-trello-files (list "C:/Works/Org/trello/main.trello"
-                        ; "C:/Works/Org/trello/doc.org"))
+; (setq org-trello-files (list "~/../../Works/Org/trello/main.trello"
+                        ; "~/../../Works/Org/trello/doc.org"))
 						
 ;;; Automatic org-trello files in emacs
 ;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
+
+
 (defun my/org-mode-hook-org-trello-mode ()
-      (when (and (buffer-file-name)
-                 (string-match "\\.trello.org$" (buffer-file-name)))
-          (message "Turning on org-trello in %s" (buffer-file-name))
-          (org-trello-mode)))
+  (when (and (buffer-file-name)
+             (string-match "\\.trello.org$" (buffer-file-name)))
+    (message "Turning on org-trello in %s" (buffer-file-name))
+    (org-trello-mode)
+    (defun org-trello-sync-card-utf-8 ()
+      (interactive)
+      (progn 
+	(setq coding-system-for-read 'utf-8) 
+	(setq current-prefix-arg '(4)) ; C-u
+	(call-interactively 'org-trello-sync-card)
+	;; (setq coding-system-for-read nil)
+	)
+      )
+    ))
 		  
-(add-hook 'org-mode-hook #'my/org-mode-hook-org-trello-mode)						
+(add-hook 'org-mode-hook #'my/org-mode-hook-org-trello-mode)
 
 
 ;; =================================== Capture ===================================
 ;;Capture 不出错要在setq org-agenda-files中设置文件
-(setq org-default-notes-file "C:/Works/Org/notes.org")
+(setq org-default-notes-file "~/../../Works/Org/notes.org")
 (define-key global-map "\C-cc" 'org-capture)
 
 (defun org-capture-with-prefix-arg ()
@@ -634,23 +713,25 @@ unwanted space when exporting org-mode to odt."
 
 (setq org-capture-templates
 '(
-  ; ("n" "Notes" entry (file+headline "C:/Works/Org/Notes.org" "Notes")
+  ; ("n" "Notes" entry (file+headline "~/../../Works/Org/Notes.org" "Notes")
    ; "* %?\n %i\n %a")
-  ("t" "Todo" entry (file+headline "C:/Works/Org/Tasks.org" "Tasks")
-   "* TODO %?\n %i\n %a")
-  ("m" "Trello" entry (file "C:/Works/Org/Main.trello.org")
+  ;("t" "Todo" entry (file+headline "~/../../Works/Org/Tasks.org" "Tasks")
+   ;"* TODO %?\n %i\n %a")
+  ("t" "Mixed" entry (file "~/../../Works/Org/Mixed.trello.org")
+   "* TODO %?\n %i\n %a" :unnarrowed t :empty-lines 1)
+  ("m" "Trello" entry (file "~/../../Works/Org/Main.trello.org")
    "* TODO %?\n %i\n %a" :prepend t)
-  ("w" "Work" checkitem (file+headline "C:/Works/Org/Main.trello.org" "Work Task")
+  ("w" "Work" checkitem (file+headline "~/../../Works/Org/Main.trello.org" "Work Task")
    "[ ] %?\n %i\n %a")
-  ("i" "Ideas" item (file+headline "C:/Works/Org/Memos.trello.org" "Ideas")
+  ("i" "Ideas" item (file+headline "~/../../Works/Org/Memos.trello.org" "Ideas")
    " %?\n %i\n %a")
-  ("j" "Journal" entry (file+datetree "C:/Works/Org/journal.org")
+  ("j" "Journal" entry (file+datetree "~/../../Works/Org/journal.org")
    "* %?\nEntered on %U\n %i\n %a")
-  ("l" "Learning" entry (file+headline "C:/Works/Org/learning/learning.org" "Unorganized")
+  ("l" "Learning" entry (file+headline "~/../../Works/Org/learning/learning.org" "Unorganized")
    "* %?\n \n %i\n %a")
 ))
 
-(setq org-archive-location "C:/Works/org/archive.org::* Completed Tasks From %s")
+(setq org-archive-location "~/../../Works/org/archive.org::* Completed Tasks From %s")
 
 (defun org-archive-done-tasks ()
   (interactive)
@@ -661,19 +742,28 @@ unwanted space when exporting org-mode to odt."
    "/DONE" 'file))  ;; if you use 'agenda or 'tree scope instead of 'file, then it will apply to all registered agenda files.
 
 ;; =========================== Globle Agenda, TODOs =============================
-(setq org-agenda-files (list "C:/Works/Org/Main.trello.org"
-			     "C:/Works/Org/Memos.trello.org"
-			     "C:/Works/Org/archive.org"
-                             ;"C:/Works/Org/ideas.org"
-			     ;"C:/Works/Org/soft.org"
-			     ;"C:/Works/Org/statmethods.org"
-			     ;"C:/Works/Org/reimburse.org"                             
-                             "C:/Works/Org/journal.org"
-			     ;"C:/Works/Org/notes.org"
-			     ;"C:/Works/Org/funds.org"
-			     "C:/Works/Org/learning/learning.org"
-			     ;"C:/Works/Org/Tasks.org"
+(setq org-agenda-files (list "~/../../Works/Org/Todoist.org"
+			 "~/../../Works/Org/Main.trello.org"
+			     "~/../../Works/Org/Memos.trello.org"
+			     "~/../../Works/Org/Mixed.trello.org"
+			     "~/../../Works/Org/archive.org"
+                             ;"~/../../Works/Org/ideas.org"
+			     ;"~/../../Works/Org/soft.org"
+			     ;"~/../../Works/Org/statmethods.org"
+			     ;"~/../../Works/Org/reimburse.org"                             
+                             "~/../../Works/Org/journal.org"
+			     ;"~/../../Works/Org/notes.org"
+			     ;"~/../../Works/Org/funds.org"
+			     "~/../../Works/Org/learning/learning.org"
+			     ;"~/../../Works/Org/Tasks.org"
+
 			     ))
+(require 'todoist)
+(find-file-noselect "~/../../Works/Org/Todoist.org")
+(with-current-buffer "Todoist.org"
+(revert-buffer-with-coding-system-no-confirm 'utf-8)
+(todoist-mode)
+)
 
 (execute-kbd-macro (read-kbd-macro "C-c a n"))
 (org-agenda-goto-today)
@@ -738,6 +828,32 @@ unwanted space when exporting org-mode to odt."
 
 
 (require 'orgalist)
+
+
+(defun org-todo-list-current-file (&optional arg)
+  "Like `org-todo-list', but using only the current buffer's file."
+  (interactive "P")
+  (let ((org-agenda-files (list (buffer-file-name (current-buffer)))))
+    (if (null (car org-agenda-files))
+        (error "%s is not visiting a file" (buffer-name (current-buffer)))
+      (org-todo-list arg))))
+
+;; todoist
+;; 注意: 需要修改 todoist.el 源代码, 见https://github.com/abrochard/emacs-todoist/issues/17
+(setq todoist-token "2d9fb5e5a53b0d2ddaeacf34f9d1744fdad06cd0")
+(setq todoist-backing-buffer "~/../../Works/Org/Todoist.org") ;; 注意大小写要完全一致
+(setq todoist-show-all t)
+
+(define-key global-map "\C-x\C-t" 'todoist)
+
+
+
+;; Automatically toggle org-mode latex fragment previews  
+;; 出现错误
+(require 'org-fragtog)
+(add-hook 'org-mode-hook 'org-fragtog-mode)
+
+
 ;;========================================Org Mode Setup END=============================================
 "Init Org"
 (interactive)			

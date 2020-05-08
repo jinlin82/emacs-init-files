@@ -1,11 +1,27 @@
 (defun init-edit ()
 
-(setq reb-re-syntax 'string)  ;; re-builder¡¯s support for different syntax
+;; é¼ æ ‡æ»šåŠ¨è¡Œæ•°  
+(setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ))
+
+
+(require 'fast-scroll)
+;; If you would like to turn on/off other modes, like flycheck, add
+;; your own hooks.
+;; (add-hook 'fast-scroll-start-hook (lambda () (flycheck-mode -1)))
+;; (add-hook 'fast-scroll-end-hook (lambda () (flycheck-mode 1)))
+(fast-scroll-config)
+(fast-scroll-minor-mode 1)
+
+;(require 'smooth-scrolling)
+;(smooth-scrolling-mode 1)
+
+  
+(setq reb-re-syntax 'string)  ;; re-builderâ€™s support for different syntax
 ;;----------------------------------------Auto Pairs------------------------------------
 ; (defun set-parens-24.2 ()
 ; (use-package autopair
 ; :config
-; (autopair-global-mode) ;; enable autopair in all buffers  ×¢ÒâÓëtex.el ÖĞµÄ(setq cdlatex-paired-parens "$([{" ) µÄ¼æÈİÎÊÌâ
+; (autopair-global-mode) ;; enable autopair in all buffers  æ³¨æ„ä¸tex.el ä¸­çš„(setq cdlatex-paired-parens "$([{" ) çš„å…¼å®¹é—®é¢˜
 ; turn on highlight matching brackets when cursor is on one
 ; (show-paren-mode 1)))
 
@@ -30,7 +46,7 @@
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
 (global-set-key (kbd "M-u") 'unfill-paragraph)
-;; Ò»ĞĞÒ»ĞĞ¿ÉÒÔÓÃ 	"M-^"
+;; ä¸€è¡Œä¸€è¡Œå¯ä»¥ç”¨ 	"M-^"
 
 (defun unfill-region ()
   (interactive)
@@ -55,10 +71,10 @@
 ;;-----------------------------------Mark----------------------------------
 (use-package visible-mark
 :init
-;; °Ñ set-mark-command °ó¶¨µ½ ÆäËû¼üÉÏÃæ ÉÏ
+;; æŠŠ set-mark-command ç»‘å®šåˆ° å…¶ä»–é”®ä¸Šé¢ ä¸Š
 (global-set-key (kbd "M-c") 'set-mark-command)
-;;--------- visible-mark ÏÔÊ¾ markµÄÎ»ÖÃ ----------------
-;;×¢Òâ£ºvisible-mark.elÖĞvisible-mark-mode-maybeµÄcl-fletº¯ÊıÔÚ24.2(ÆäÊÇ24.3µÄº¯Êı)ÖĞ´íÎó£¬±»¸Ä³Éflet
+;;--------- visible-mark æ˜¾ç¤º markçš„ä½ç½® ----------------
+;;æ³¨æ„ï¼švisible-mark.elä¸­visible-mark-mode-maybeçš„cl-fletå‡½æ•°åœ¨24.2(å…¶æ˜¯24.3çš„å‡½æ•°)ä¸­é”™è¯¯ï¼Œè¢«æ”¹æˆflet
 (defface visible-mark-active ;; put this before (use-package visible-mark)
   '((((type tty) (class mono)))
     (t (:background "magenta"))) "")
@@ -258,7 +274,7 @@ Version 2017-01-15"
   ;;(paste-to-mark arg)
   )
 ;;key binding
-(global-set-key (kbd "C-c p") (quote copy-paragraph))
+;(global-set-key (kbd "C-c p") (quote copy-paragraph))
 
 
 ;;-------------------------------Increment Number--------------------------------------
@@ -283,7 +299,7 @@ Version 2017-01-15"
 (global-set-key (kbd "C-c +") 'increment-number-or-char-at-point)
 
 
-;;----------------------------------- ÏÔÊ¾×î½ü¸Ä¶¯ ------------------------------------
+;;----------------------------------- æ˜¾ç¤ºæœ€è¿‘æ”¹åŠ¨ ------------------------------------
 (use-package volatile-highlights
 :config
 (volatile-highlights-mode t)
@@ -295,8 +311,8 @@ Version 2017-01-15"
 ;;===============================================register Setup===============================================
 ;;-----------improve list register-------------------------------------------
 ;(use-package better-registers)
-;;ÔÚbetter-registersÎÄ¼şÖĞ×¢ÊÍÁË(define-key better-registers-map "\C-j" 'better-registers-jump-to-register)
-;;²¢°Ñ"\Cx-j" ĞŞ¸ÄÎª"\Cr-j"
+;;åœ¨better-registersæ–‡ä»¶ä¸­æ³¨é‡Šäº†(define-key better-registers-map "\C-j" 'better-registers-jump-to-register)
+;;å¹¶æŠŠ"\Cx-j" ä¿®æ”¹ä¸º"\Cr-j"
 (use-package list-register
 :init
 ;; This is used in the function below to make marked points visible
@@ -304,7 +320,7 @@ Version 2017-01-15"
   "Used to mark register positions in a buffer."
   :group 'faces)
 ;;This redefines (and therefore overrides) the standard function of the same name.
-;;Highlights points that are ¡®registered¡¯ and floatover help tells what register key the point was mapped to.
+;;Highlights points that are â€˜registeredâ€™ and floatover help tells what register key the point was mapped to.
 
 (defun set-register (register value)
   "Set Emacs register named REGISTER to VALUE.  Returns VALUE.
@@ -330,7 +346,10 @@ Version 2017-01-15"
       (push (cons register value) register-alist))
     value))
 )
-; (use-package register-list)   ;; ³öÏÖ Eager macro-expansion ´íÎó
+; (use-package register-list)   ;; å‡ºç° Eager macro-expansion é”™è¯¯
+
+(global-set-key (kbd "C-x r h") 'helm-register)
+
 ;;===========================================register Setup END===============================================
 
 
@@ -398,7 +417,7 @@ Version 2017-01-15"
 (global-set-key (kbd "M-g e") 'avy-goto-word-0)
 
 ;;-----------------------------------Buffer Menu--------------------------------------
-; eliminate the need for ¡®C-x o¡¯, making list-buffers much easier to use
+; eliminate the need for â€˜C-x oâ€™, making list-buffers much easier to use
 (global-set-key (kbd "\C-x\C-b") 'buffer-menu-other-window)
 ;;(global-set-key (kbd "C-x C-b") 'bs-show)
 ;;
@@ -454,18 +473,6 @@ Version 2017-01-15"
 	     (ibuffer-switch-to-saved-filter-groups "home")))
 ;;(use-package buff-menu+)
 
-;;--------------------------------Name-Based Switching--------------------------------
-; (iswitchb-mode 1)
-;;---------------Using the arrow keys to select a buffer------------
-; (defun iswitchb-local-keys ()
-  ; (mapc (lambda (K)
-	  ; (let* ((key (car K)) (fun (cdr K)))
-	    ; (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
-	; '(("<right>" . iswitchb-next-match)
-	  ; ("<left>"  . iswitchb-prev-match)
-	  ; ("<up>"    . ignore             )
-	  ; ("<down>"  . ignore             ))))
-; (add-hook 'iswitchb-define-mode-map-hook 'iswitchb-local-keys)
 
 ;;-----------------------------Control TAB buffer Cycling-----------------------------
 (global-set-key [(control tab)] 'bury-buffer)
@@ -475,6 +482,8 @@ Version 2017-01-15"
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 ; (global-set-key [(shift tab)] 'switch-to-previous-buffer)
+
+
 ;;===================================Frame Window and Buffer Setup END==================================
 
 
@@ -482,7 +491,7 @@ Version 2017-01-15"
 (setq bmkp-last-as-first-bookmark-file "~/.emacs.d/user-files/bookmarks")
 (setq bookmark-default-file "~/.emacs.d/user-files/bookmarks")
 
-;;ÔÚĞÂ´°¿ÚÖĞ´ò¿ªbookmark list ºÍ register list
+;;åœ¨æ–°çª—å£ä¸­æ‰“å¼€bookmark list å’Œ register list
 (defun get-bookmarks-in-new-frame ()
   (interactive)
   (bookmark-bmenu-list)
@@ -496,8 +505,7 @@ Version 2017-01-15"
 (recentf-mode 1) ; keep a list of recently opened files
 (global-set-key (kbd "C-x f") 'recentf-open-files)
 
-
-(use-package bookmark+)
+(require 'bookmark+)
 
 ;;-------------------------------browse-kill-ring----------------------------
 ;; Ever feel that 'C-y M-y M-y M-y ...' is not a great way of trying
@@ -564,6 +572,18 @@ This command is convenient when reading novel, documentation."
 
 ;----- goto-line-preview
 (global-set-key [remap goto-line] 'goto-line-preview)
+
+
+
+;;; ------------ imenu-list --------------------------
+(setq imenu-list-focus-after-activation t)
+(setq imenu-list-position 'left)
+
+(add-hook 'imenu-list-major-mode-hook 'my-inhibit-global-linum-mode)
+
+(global-set-key (kbd "C-'") #'imenu-list-smart-toggle)
+
+(dumb-jump-mode)
 
 "Init Edit"
 (interactive)			

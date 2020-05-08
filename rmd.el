@@ -4,6 +4,7 @@
 (require 'polymode)
 ;;;  注意！！！从 poly-markdown.el 文件中 注释掉 ; pm-inner/markdown-inline-math
 ;;;  注意！！！原因一是公式的 face 有问题，二是性能受影响
+;;;  注意！！！poly-R.el hacked
 (require 'poly-markdown) ;;要从github版本替换掉mepha版本,并删掉 elc文件，否则会出错
                              ; pm-inner/markdown-inline-math
 (require 'poly-R)        ;;要从github版本替换掉mepha版本,并删掉 elc文件，否则会出错
@@ -36,7 +37,7 @@
     (message "Poly-Mode Disabled"))
    
 ; (setq markdown-command "markdown")
-(setq markdown-command "pandoc")
+(setq markdown-command "multimarkdown")
 (setq markdown-asymmetric-header t)
 
 
@@ -80,7 +81,12 @@
     (message (concat "export to org-mode with pandoc "  (buffer-name)))
   )
   
- 
+  (defun pandoc-bookdown-pdf ()
+    (interactive)
+	(save-buffer)
+    (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "bookdown-pdf.bat " (f-base (buffer-name)) ))
+    (message (concat "bookdown-pdf.bat " (buffer-name) ))) 
+
   (defun rmarkdown-insert-r-chunk () 
   "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet" 
   (interactive) 
@@ -105,16 +111,24 @@ Not effective after loading the polymode library."
 		(define-key map "b" 'pandoc-rmd-beamer)
 		(define-key map "o" 'pandoc-rmd-org)
 		(define-key map "d" 'pandoc-rmd-doc)
+		(define-key map "P" 'pandoc-bookdown-pdf)
 		(define-key map "m" 'org-emphasize-math-word)
 		(define-key map "\M-b" 'org-emphasize-math)
 		(define-key map "\M-v" 'org-view-pdf)
 		(define-key map "l" 'org-view-latex)
+        (define-key map "\M-l" 'org-toggle-latex-fragment)
+        (define-key map "s" 'math-delimiter-add-space-inline)
 		(define-key map "\M-h" 'org-view-html)
 		(define-key map "\M-f" 'vimish-fold)
+		(define-key map "\M-c" 'polymode-mark-or-extend-chunk)
 		(define-key map "f" 'vimish-fold-toggle)
+		(define-key map (kbd "<down>") 'polymode-next-chunk-same-type)
+		(define-key map (kbd "<up>") 'polymode-previous-chunk-same-type)
 map))
 
 (define-key markdown-mode-map (kbd "<tab>") 'markdown-cycle)
+(define-key markdown-mode-map (kbd "C-c C-<left>") 'markdown-promote-subtree)
+(define-key markdown-mode-map (kbd "C-c C-<right>") 'markdown-demote-subtree)
 
 )
 
@@ -127,10 +141,15 @@ map))
 (add-hook 'markdown-mode-hook 'cdlatex-mode)
 
 ;;支持文献引用，注意 rmd 文件中需使用注释行：[//]: # (\bibliography{bibfile})
+(require 'reftex)
 (add-hook 'markdown-mode-hook 'turn-on-reftex)
 ;; 还需 设置reftex-cite-format, 增加 (?m . "[@%l]") 以支持 Pandoc markdown的文献引用
+
 (font-lock-add-keywords 'markdown-mode
-  '(("\\[@.*?\\]" . font-lock-keyword-face)))
+  '(("\\[@.*?\\]" . font-lock-keyword-face)
+    ("\\\\@ref(.*?)" . font-lock-keyword-face)
+("{#eq:.*?}" . font-lock-keyword-face)
+    ))
 
 ;;----------- folding vimish -----------
 ;(require 'vimish-fold)
@@ -152,6 +171,7 @@ map))
      ) 
 
 (add-hook 'markdown-mode-hook 'markdown-fold-yaml-header)
+(add-hook 'markdown-mode-hook 'auto-fill-mode)
   
 ;; --------- Manage Org-like lists in non-Org buffers
 (require 'orgalist)
@@ -162,6 +182,9 @@ map))
 (define-key orgalist-mode-map (kbd "M-S-<down>") 'orgalist-next-item)
 (define-key orgalist-mode-map (kbd "M-S-<down>") 'orgalist-next-item)
 (define-key orgalist-mode-map (kbd "<M-RET>") 'markdown-insert-list-item)
+
+
+
 ;;========================================Markdown Mode Setup END=============================================
 "Init Rmd"
 (interactive)			

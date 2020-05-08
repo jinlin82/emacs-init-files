@@ -1,6 +1,6 @@
 (defun init-start ()
 
-;; 拷到U盘中作两处修改：1. 修改路径名，把所有文件中的 C:\ D:\ 修改成 H:\， 2. 把face.el中的字体从 Consola 修改成 Courier new
+;; 拷到U盘中作两处修改：1. 修改路径名，把所有文件中的 C:\ 修改成 H:\， 2. 把face.el中的字体从 Consola 修改成 Courier new
 
 ;; PATH Settings
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -10,7 +10,7 @@
 (package-initialize)
 
 ;; On Glasgow PC have to set This
-(setenv "PATH" (concat "C:\\texlive\\2014\\bin\\win32;C:\\texlive\\fixbbl\\bin;" (getenv "PATH")))  
+; (setenv "PATH" (concat "C:\\texlive\\2014\\bin\\win32;C:\\texlive\\fixbbl\\bin;" (getenv "PATH")))  
 
 
 ;; ---- emacs startup time benchmark ----
@@ -41,6 +41,7 @@
 (load "~/.emacs.d/init-files/emms.el")
 (load "~/.emacs.d/init-files/evil.el")
 (load "~/.emacs.d/init-files/pdf.el")
+(load "~/.emacs.d/init-files/lsp.el")
 (load custom-file)
 
 
@@ -62,7 +63,7 @@
 (init-emms)    ;;独立  start in Notebook 0.5s
 (init-evil)
 (init-pdf)
-
+(init-lsp)
 
 ; (execute-kbd-macro (read-kbd-macro "C-x 1"))
 (delete-other-windows)

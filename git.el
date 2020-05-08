@@ -1,10 +1,14 @@
 (defun init-git()
 
+(setq magit-commit-show-diff nil);; 加快magit反应速度
+
 ;; ---------------- Git status and magit-repolist setup -----------------
-(setq magit-repository-directories (quote (("C:/github_fork_repo/" . 1)
-					   ("C:/Works/" . 4)
+(setq magit-repository-directories (quote (("~/../../github_fork_repo/" . 1)
+					   ("~/../../Works/" . 3)
+					   ("~/../../Works/Learning/" . 3)
 					   )))
 
+(require 'magit-todos)
 (require 'magit-repos)
 (require 'magit-repos-fetch)  ;; 自己根据网上资料写的包
 
@@ -48,7 +52,7 @@
   :after magit
   :config
   (magithub-feature-autoinject t)
-  (setq magithub-clone-default-directory "C:/github_fork_repo"))  
+  (setq magithub-clone-default-directory "~/../../github_fork_repo"))  
   
 (setq magithub-preferred-remote-method (quote clone_url))
 
@@ -72,6 +76,15 @@
 
 ;; --------------------- magit-stats config --------------------
 (setq magit-status-show-hashes-in-headers t)
+
+(setq magit-section-initial-visibility-alist
+   (quote
+    ((stashes . hide)
+     (unpushed . show)
+     (untracked . hide)
+     (modules modules . show)
+     (unpulled . show)
+     )))
 
 (setq magit-status-headers-hook
    (quote
@@ -104,8 +117,17 @@
       magit-insert-unpushed-to-upstream-or-recent 
       magit-insert-stashes 
       magithub-issue--insert-pr-section 
-      magithub-issue--insert-issue-section 
-      magit-insert-untracked-files)))
+      magithub-issue--insert-issue-section
+      magit-insert-modules
+      magit-insert-untracked-files
+      magit-insert-tracked-files)))
+
+(use-package flycheck
+   :ensure t
+   ;:init (global-flycheck-mode)
+   )
+
+(define-key magit-status-mode-map (kbd "C-c b") 'magithub-browse)
 
 "Init Git"
 (interactive)			
