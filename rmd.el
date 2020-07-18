@@ -61,6 +61,12 @@
     (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "rmd-doc.bat " (f-base (buffer-name)) ))
     (message (concat "rmd-doc.bat " (buffer-name) )))
 
+  (defun pandoc-rmd-ppt ()
+    (interactive)
+	(save-buffer)
+    (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "rmd-ppt.bat " (f-base (buffer-name)) ))
+    (message (concat "rmd-ppt.bat " (buffer-name) )))
+
 ;;--- RMARKDOWN 输出PDF的设置有3个地方：1.	yaml前言；2. rmd-pdf.bat和rmd-pdf.R; 3. tex模板(在R安装文件夹中)：default-1.17.0.2.tex
   (defun pandoc-rmd-pdf ()
     (interactive)
@@ -111,6 +117,7 @@ Not effective after loading the polymode library."
 		(define-key map "b" 'pandoc-rmd-beamer)
 		(define-key map "o" 'pandoc-rmd-org)
 		(define-key map "d" 'pandoc-rmd-doc)
+	        (define-key map "p" 'pandoc-rmd-ppt)
 		(define-key map "P" 'pandoc-bookdown-pdf)
 		(define-key map "m" 'org-emphasize-math-word)
 		(define-key map "\M-b" 'org-emphasize-math)

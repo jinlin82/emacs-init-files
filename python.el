@@ -41,14 +41,25 @@
 
 
 ;;-------------- elpy ----------------
+;; 特别注意：要把 elpy.el中的  (set (make-local-variable 'company-idle-delay)
+;;          0.5) ;; 需要从0.1修改为0.5才不卡
 ;; 注意：elpy 自动补全 需要 ("jedi" "flake8" "autopep8" "yapf" "black" "rope") 支持
+(add-hook 'python-mode-hook (lambda () (auto-complete-mode -1))) ;; 关闭auto-complete-mod 
+
 (package-initialize)
 (elpy-enable)
 (remove-hook 'elpy-modules 'elpy-module-flymake)
 
+
 (setq elpy-rpc-python-command "~/../../Anaconda3/pythonw.exe")
 (setq python-indent-guess-indent-offset t)  
 (setq python-indent-guess-indent-offset-verbose nil)
+(setq eldoc-idle-delay 1)
+(setq elpy-autodoc-delay 1)
+(setq elpy-eldoc-show-current-function t)
+(setq elpy-get-info-from-shell t)
+
+
 
 ;;------------ autopep8 -------------- 
 ;(require 'py-autopep8)

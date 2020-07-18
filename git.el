@@ -43,9 +43,13 @@
 ;; bug see https://github.com/alphapapa/magit-todos/issues/72
 ;; https://github.com/alphapapa/magit-todos/issues/29
 (global-hl-todo-mode)
+(magit-todos-mode)
 (setq magit-todos-nice nil)
 (setq magit-todos-scanner (quote magit-todos--scan-with-git-grep))
-(magit-todos-mode)
+(setq magit-todos-ignore-case t)
+;;  '(magit-todos-ignored-keywords (quote ("NOTE"))) 这个设置在custom.el中，这里设置不起作用
+
+
 
 ;; -------------- magithub ------------------
 (use-package magithub

@@ -316,14 +316,14 @@
 
 	
 ;; ---------------- yankpad --------------
-(require 'yankpad)
-(setq yankpad-file "~/.emacs.d/user-files/yankpad.org")
-(global-set-key "\M-]" 'yankpad-insert)
-(global-set-key "\M-[" 'yankpad-expand)
-; If you want to complete snippets using company-mode
-(add-to-list 'company-backends #'company-yankpad)
-; If you want to expand snippets with hippie-expand
-(add-to-list 'hippie-expand-try-functions-list #'yankpad-expand)
+;; (require 'yankpad)
+;; (setq yankpad-file "~/.emacs.d/user-files/yankpad.org")
+;; (global-set-key "\M-]" 'yankpad-insert)
+;; (global-set-key "\M-[" 'yankpad-expand)
+;; ; If you want to complete snippets using company-mode
+;; (add-to-list 'company-backends #'company-yankpad)
+;; ; If you want to expand snippets with hippie-expand
+;; (add-to-list 'hippie-expand-try-functions-list #'yankpad-expand)
 
 
 (global-set-key (kbd "\C-x c") 'clear-shell) ;; 要出现在helm之后

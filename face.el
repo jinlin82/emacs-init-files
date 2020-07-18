@@ -11,7 +11,7 @@
 ;; ==================================== 字体设置 ===================================
 ;; 注释custom.el中的(default 语句
 ;; 默认字体大小
-;(set-face-attribute 'default nil :height 118)
+;; (set-face-attribute 'default nil :height 100)
 (defun toggle-monitor-font ()
   (interactive)
   (if (= (display-pixel-width) 1680)

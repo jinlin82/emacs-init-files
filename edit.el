@@ -1,5 +1,45 @@
 (defun init-edit ()
 
+;; Being able to duplicate current line
+ (defun duplicate-line-down ()
+   (interactive)
+   (save-mark-and-excursion
+     (beginning-of-line)
+     (insert (thing-at-point 'line t))))
+
+ (defun duplicate-line-up ()
+   (interactive)
+   (save-mark-and-excursion
+     (beginning-of-line)
+     (insert (thing-at-point 'line t)))
+   (previous-line)
+)
+
+
+;; Move or drag a line up and down
+ (defun move-line-down ()
+   (interactive)
+   (let ((col (current-column)))
+     (save-excursion
+       (forward-line)
+       (transpose-lines 1))
+     (forward-line)
+     (move-to-column col)))
+
+ (defun move-line-up ()
+   (interactive)
+   (let ((col (current-column)))
+     (save-excursion
+       (forward-line)
+       (transpose-lines -1))
+     (forward-line -1)
+     (move-to-column col)))
+
+(global-set-key (kbd "C-S-h") 'duplicate-line-up)
+(global-set-key (kbd "C-S-l") 'duplicate-line-down)
+(global-set-key (kbd "C-S-j") 'move-line-down)
+(global-set-key (kbd "C-S-k") 'move-line-up)
+
 ;; 鼠标滚动行数  
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ))
 

@@ -612,7 +612,7 @@ unwanted space when exporting org-mode to odt."
 		:image-output-type "png" 
 		:latex-header
 "\\usepackage[dvipsnames]{xcolor}
-\\usepackage[usenames]{color}
+\\usepackage{color}
 \\usepackage{amsmath}
 \\usepackage[mathscr]{eucal}
 \\usepackage[utf8]{inputenc}
@@ -849,7 +849,6 @@ unwanted space when exporting org-mode to odt."
 
 
 ;; Automatically toggle org-mode latex fragment previews  
-;; 出现错误
 (require 'org-fragtog)
 (add-hook 'org-mode-hook 'org-fragtog-mode)
 
