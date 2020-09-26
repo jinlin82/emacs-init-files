@@ -358,7 +358,7 @@
     (totalcmd (dired-get-filename nil t)))
 
 (define-key sr-mode-map (kbd "<S-return>") 'dired-totalcmd)
-(global-set-key (kbd "C-x v e") 'default-totalcmd)
+(global-set-key (kbd "C-x v d") 'default-totalcmd)
 
 (setq find-directory-functions (cons 'sr-dired find-directory-functions))
 
@@ -385,7 +385,7 @@
 
 (global-set-key (kbd "C-x v v") 'open-with-vim)
 (global-set-key (kbd "C-x v c") 'open-with-vscode)
-(global-set-key (kbd "C-x v d") 'open-with-default)
+(global-set-key (kbd "C-x v e") 'open-with-default)
 
 
 ;; ---------------------------- Projectile -----------------------------------
