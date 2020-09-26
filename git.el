@@ -133,6 +133,22 @@
 
 (define-key magit-status-mode-map (kbd "C-c b") 'magithub-browse)
 
+(defun magit-open-readme ()
+  (interactive)
+  (if (not (file-exists-p "README.MD")) (progn
+					  (find-file-other-window "README.MD")
+					  (insert "# Readme")
+					  (save-buffer)
+					  (message "README.MD Created and Opened" )
+					  )
+    (progn (find-file-other-window "README.MD")
+	   (message "README.MD Opened" )
+	   )
+  )
+)
+(define-key magit-status-mode-map (kbd "C-c v") 'magit-open-readme)
+
+
 "Init Git"
 (interactive)			
 			)

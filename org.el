@@ -449,10 +449,12 @@
 
  (setq org-beamer-outline-frame-title "\\CJKfamily{kai}\\textcolor{violet}{\\bfseries\\LARGE 大\\ \\ 纲 }} \\textcolor{violet}{")
 
-  (defun org-view-pdf ()
-    (interactive)
-    (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".pdf"))
-    (message (concat "Open " (substring (buffer-name) 0 -4) ".pdf")))
+ (defun org-view-pdf ()
+   (interactive)
+   (if (file-exists-p (concat (substring (buffer-name) 0 -4) "_beamer.pdf"))
+       (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) "_beamer.pdf"))
+     (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".pdf")))
+     (message (concat "Open " (substring (buffer-name) 0 -4) ".pdf")))
 	
   (defun org-view-html ()
     (interactive)
