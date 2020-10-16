@@ -449,10 +449,12 @@
 
  (setq org-beamer-outline-frame-title "\\CJKfamily{kai}\\textcolor{violet}{\\bfseries\\LARGE 大\\ \\ 纲 }} \\textcolor{violet}{")
 
-  (defun org-view-pdf ()
-    (interactive)
-    (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".pdf"))
-    (message (concat "Open " (substring (buffer-name) 0 -4) ".pdf")))
+ (defun org-view-pdf ()
+   (interactive)
+   (if (file-exists-p (concat (substring (buffer-name) 0 -4) "_beamer.pdf"))
+       (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) "_beamer.pdf"))
+     (start-process-shell-command "nil" "*Latex-Compile*"  (concat "open " (substring (buffer-name) 0 -4) ".pdf")))
+     (message (concat "Open " (substring (buffer-name) 0 -4) ".pdf")))
 	
   (defun org-view-html ()
     (interactive)
@@ -673,8 +675,8 @@ unwanted space when exporting org-mode to odt."
 ;(add-hook 'org-mode-hook 'org-trello-mode)
 ;; org-trello major mode for all .trello files
 ; (add-to-list 'auto-mode-alist '("\\.trello$" . org-mode))
-; (setq org-trello-files (list "~/../../Works/Org/trello/main.trello"
-                        ; "~/../../Works/Org/trello/doc.org"))
+; (setq org-trello-files (list (concat prepath "Works/Org/trello/main.trello"))
+                        ; (concat prepath "Works/Org/trello/doc.org")))
 						
 ;;; Automatic org-trello files in emacs
 ;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
@@ -701,7 +703,7 @@ unwanted space when exporting org-mode to odt."
 
 ;; =================================== Capture ===================================
 ;;Capture 不出错要在setq org-agenda-files中设置文件
-(setq org-default-notes-file "~/../../Works/Org/notes.org")
+(setq org-default-notes-file (concat prepath "Works/Org/notes.org"))
 (define-key global-map "\C-cc" 'org-capture)
 
 (defun org-capture-with-prefix-arg ()
@@ -713,25 +715,25 @@ unwanted space when exporting org-mode to odt."
 
 (setq org-capture-templates
 '(
-  ; ("n" "Notes" entry (file+headline "~/../../Works/Org/Notes.org" "Notes")
+  ; ("n" "Notes" entry (file+headline (concat prepath "Works/Org/Notes.org") "Notes")
    ; "* %?\n %i\n %a")
-  ;("t" "Todo" entry (file+headline "~/../../Works/Org/Tasks.org" "Tasks")
+  ;("t" "Todo" entry (file+headline (concat prepath "Works/Org/Tasks.org") "Tasks"))
    ;"* TODO %?\n %i\n %a")
-  ("t" "Mixed" entry (file "~/../../Works/Org/Mixed.trello.org")
+  ("t" "Mixed" entry (file (concat prepath "Works/Org/Mixed.trello.org"))
    "* TODO %?\n %i\n %a" :unnarrowed t :empty-lines 1)
-  ("m" "Trello" entry (file "~/../../Works/Org/Main.trello.org")
+  ("m" "Trello" entry (file (concat prepath "Works/Org/Main.trello.org"))
    "* TODO %?\n %i\n %a" :prepend t)
-  ("w" "Work" checkitem (file+headline "~/../../Works/Org/Main.trello.org" "Work Task")
+  ("w" "Work" checkitem (file+headline (concat prepath "Works/Org/Main.trello.org") "Work Task")
    "[ ] %?\n %i\n %a")
-  ("i" "Ideas" item (file+headline "~/../../Works/Org/Memos.trello.org" "Ideas")
+  ("i" "Ideas" item (file+headline (concat prepath "Works/Org/Memos.trello.org") "Ideas")
    " %?\n %i\n %a")
-  ("j" "Journal" entry (file+datetree "~/../../Works/Org/journal.org")
+  ("j" "Journal" entry (file+datetree (concat prepath "Works/Org/journal.org"))
    "* %?\nEntered on %U\n %i\n %a")
-  ("l" "Learning" entry (file+headline "~/../../Works/Org/learning/learning.org" "Unorganized")
+  ("l" "Learning" entry (file+headline (concat prepath "Works/Org/learning/learning.org") "Unorganized")
    "* %?\n \n %i\n %a")
 ))
 
-(setq org-archive-location "~/../../Works/org/archive.org::* Completed Tasks From %s")
+(setq org-archive-location (concat prepath "Works/org/archive.org::* Completed Tasks From %s"))
 
 (defun org-archive-done-tasks ()
   (interactive)
@@ -742,24 +744,24 @@ unwanted space when exporting org-mode to odt."
    "/DONE" 'file))  ;; if you use 'agenda or 'tree scope instead of 'file, then it will apply to all registered agenda files.
 
 ;; =========================== Globle Agenda, TODOs =============================
-(setq org-agenda-files (list "~/../../Works/Org/Todoist.org"
-			 "~/../../Works/Org/Main.trello.org"
-			     "~/../../Works/Org/Memos.trello.org"
-			     "~/../../Works/Org/Mixed.trello.org"
-			     "~/../../Works/Org/archive.org"
-                             ;"~/../../Works/Org/ideas.org"
-			     ;"~/../../Works/Org/soft.org"
-			     ;"~/../../Works/Org/statmethods.org"
-			     ;"~/../../Works/Org/reimburse.org"                             
-                             "~/../../Works/Org/journal.org"
-			     ;"~/../../Works/Org/notes.org"
-			     ;"~/../../Works/Org/funds.org"
-			     "~/../../Works/Org/learning/learning.org"
-			     ;"~/../../Works/Org/Tasks.org"
+(setq org-agenda-files (list (concat prepath "Works/Org/Todoist.org")
+			 (concat prepath "Works/Org/Main.trello.org")
+			     (concat prepath "Works/Org/Memos.trello.org")
+			     (concat prepath "Works/Org/Mixed.trello.org")
+			     (concat prepath "Works/Org/archive.org")
+                             ;(concat prepath "Works/Org/ideas.org")
+			     ;(concat prepath "Works/Org/soft.org")
+			     ;(concat prepath "Works/Org/statmethods.org")
+			     ;(concat prepath "Works/Org/reimburse.org")                             
+                             (concat prepath "Works/Org/journal.org")
+			     ;(concat prepath "Works/Org/notes.org")
+			     ;(concat prepath "Works/Org/funds.org")
+			     (concat prepath "Works/Org/learning/learning.org")
+			     ;(concat prepath "Works/Org/Tasks.org")
 
 			     ))
 (require 'todoist)
-(find-file-noselect "~/../../Works/Org/Todoist.org")
+(find-file-noselect (concat prepath "Works/Org/Todoist.org"))
 (with-current-buffer "Todoist.org"
 (revert-buffer-with-coding-system-no-confirm 'utf-8)
 (todoist-mode)
@@ -841,7 +843,7 @@ unwanted space when exporting org-mode to odt."
 ;; todoist
 ;; 注意: 需要修改 todoist.el 源代码, 见https://github.com/abrochard/emacs-todoist/issues/17
 (setq todoist-token "2d9fb5e5a53b0d2ddaeacf34f9d1744fdad06cd0")
-(setq todoist-backing-buffer "~/../../Works/Org/Todoist.org") ;; 注意大小写要完全一致
+(setq todoist-backing-buffer (concat prepath "Works/Org/Todoist.org")) ;; 注意大小写要完全一致
 (setq todoist-show-all t)
 
 (define-key global-map "\C-x\C-t" 'todoist)

@@ -9,12 +9,12 @@
 ;(require 'ecb)
 
 ;; ---------------------------------------Common Lisp--------------------------------
-;;(setq inferior-lisp-program "~/../../clisp/full/lisp.exe
+;;(setq inferior-lisp-program (concat prepath "clisp/full/lisp.exe")
 ;;-B ~/../../clisp/full/
 ;;-M ~/../../clisp/full/lispinit.mem
 ;;-K full")
   ;;-ansi -q")
-;(setq inferior-lisp-program "~/../../sbcl/sbcl")
+;(setq inferior-lisp-program (concat prepath "sbcl/sbcl"))
 
 
 ;;(add-to-list 'load-path "~/../Emacs24.2/site-lisp/slime")

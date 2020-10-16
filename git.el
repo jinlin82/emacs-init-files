@@ -3,10 +3,10 @@
 (setq magit-commit-show-diff nil);; 加快magit反应速度
 
 ;; ---------------- Git status and magit-repolist setup -----------------
-(setq magit-repository-directories (quote (("~/../../github_fork_repo/" . 1)
-					   ("~/../../Works/" . 3)
-					   ("~/../../Works/Learning/" . 3)
-					   )))
+(setq magit-repository-directories `((,(concat prepath "github_fork_repo/") . 1)
+					   (,(concat prepath "Works/") . 3)
+					   (,(concat prepath "Works/Learning/") . 3)
+					   ))
 
 (require 'magit-todos)
 (require 'magit-repos)
@@ -56,7 +56,7 @@
   :after magit
   :config
   (magithub-feature-autoinject t)
-  (setq magithub-clone-default-directory "~/../../github_fork_repo"))  
+  (setq magithub-clone-default-directory (concat prepath "github_fork_repo"))) 
   
 (setq magithub-preferred-remote-method (quote clone_url))
 
@@ -132,6 +132,22 @@
    )
 
 (define-key magit-status-mode-map (kbd "C-c b") 'magithub-browse)
+
+(defun magit-open-readme ()
+  (interactive)
+  (if (not (file-exists-p "README.MD")) (progn
+					  (find-file-other-window "README.MD")
+					  (insert "# Readme")
+					  (save-buffer)
+					  (message "README.MD Created and Opened" )
+					  )
+    (progn (find-file-other-window "README.MD")
+	   (message "README.MD Opened" )
+	   )
+  )
+)
+(define-key magit-status-mode-map (kbd "C-c v") 'magit-open-readme)
+
 
 "Init Git"
 (interactive)			

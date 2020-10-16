@@ -118,10 +118,10 @@
 ;;----------------- Calendar ------------------
 (setq calendar-week-start-day 1)
 
-(require 'cal-china-x)
-(setq mark-holidays-in-calendar t)
-(setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
-(setq calendar-holidays cal-china-x-important-holidays)
+; (require 'cal-china-x)
+; (setq mark-holidays-in-calendar t)
+; (setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
+; (setq calendar-holidays cal-china-x-important-holidays)
 
 
 ;;============================= Weather =============================
@@ -261,6 +261,7 @@ Columns: date,work,overwork,break,total"
 
 ;; waka time
 (global-wakatime-mode)
+(setq wakatime-api-key "5bf23cc2-69da-406a-ab9c-81a85fe06d22")
 (diminish 'wakatime-mode)
 
 ;; tabs

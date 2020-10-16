@@ -173,6 +173,8 @@ next VCOUNT - 1 lines below the current one."
   "o" '(lambda () (interactive) (syndicate-eol-then 'insert-item-below) (evil-normal-state) (message "Item Inserted")))
 ;;=========================== PLUGINS END==================================
 
+
+
 ;;========================================Evil Setup END=============================================
 "Init Evil"
 (interactive)			
