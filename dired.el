@@ -27,7 +27,10 @@
 
 ;; --------------------- springboard ------------------------
 ;; 注意：对springboard.el 进行了 hack
-(global-set-key (kbd "C-,") 'springboard)
+(if (eq system-type 'windows-nt)
+    (global-set-key (kbd "C-,") 'springboard)
+  (global-set-key (kbd "C-x ,") 'springboard)
+  )
 (setq springboard-directories (list (concat prepath "" ) 
 				      (concat prepath "works") 
 				      (concat prepath "works/teaching") 

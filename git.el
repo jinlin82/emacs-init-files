@@ -148,9 +148,9 @@
 	   (message "README.MD Opened" )
 	   )
   )
- )
-
+)
 (define-key magit-status-mode-map (kbd "C-c v") 'magit-open-readme)
+
 
 "Init Git"
 (interactive)			
