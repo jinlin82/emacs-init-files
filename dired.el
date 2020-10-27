@@ -28,19 +28,19 @@
 ;; --------------------- springboard ------------------------
 ;; 注意：对springboard.el 进行了 hack
 (global-set-key (kbd "C-,") 'springboard)
-(setq springboard-directories (quote ("~/../../" 
-				      "~/../../works" 
-				      "~/../../works/teaching" 
-				      "~/../../Works/2013.7-中南财经政法大学统数学院" 
-				      "~/../../works/learning"
-				      "~/../../works/temp" 
-				      "~/../../works/working_paper"
+(setq springboard-directories (list (concat prepath "" ) 
+				      (concat prepath "works") 
+				      (concat prepath "works/teaching") 
+				      (concat prepath "Works/2013.7-中南财经政法大学统数学院") 
+				      (concat prepath "works/learning") 
+				      (concat prepath "works/temp") 
+				      (concat prepath "works/working_paper") 
 				      "~/.." 
-				      "~/../config" 
-				      "~/../config/.emacs.d" 
-				      "~/../config/.emacs.d/init-files" 
-				      "~/../config/.emacs.d/elpa" 
-				      "~/../../books")))
+				      "~" 
+				      "~/.emacs.d" 
+				      "~/.emacs.d/init-files" 
+				      "~/.emacs.d/elpa" 
+				      (concat prepath "books")))
 
 
 ;;----------------- neotree ---------------------------------------------------
@@ -64,7 +64,7 @@
 (setq ffip-use-rust-fd t)
 (setq ffip-rust-fd-respect-ignore-files nil)
 (when (eq system-type 'windows-nt) (setq ffip-find-executable "fd"))
-;(when (eq system-type 'windows-nt) (setq ffip-find-executable "~/../../cygwin/bin/find"))
+;(when (eq system-type 'windows-nt) (setq ffip-find-executable (concat prepath "cygwin/bin/find")))
 (global-set-key (kbd "C-x s") 'find-file-in-project) 
 
 ;; ----------------- fuzzy search in emacs ----------------------------
@@ -231,7 +231,7 @@
 
 (defun sunrise-startup ()
   (interactive)
-  (setq default-directory "~/../../Works/2013.7-中南财经政法大学统数学院/")
+  (setq default-directory (concat prepath "Works/2013.7-中南财经政法大学统数学院/"))
   (sunrise-cd)
   (sr-change-window)
   (sr-w32-virtual-entries)
@@ -400,7 +400,8 @@
 					       (projectile-project-name)
 					       ))))
 
-(setq projectile-project-search-path '("~/../" "~/../../Works/Working_Paper/"))
+(setq projectile-project-search-path (list "~/../" (concat prepath "Works/Working_Paper/")))
+
 (setq projectile-known-projects-file "~/../Config/.emacs.d/user-files/projectile-bookmarks.eld")
 
 (setq projectile-switch-project-action #'find-file-in-project)
