@@ -73,6 +73,12 @@
 ;; ----------------- fuzzy search in emacs ----------------------------
 ;; helm-ag ripgrep deadgrep
 
+;;  rg.el
+(global-set-key (kbd "C-c s") #'rg-menu)
+(with-eval-after-load 'rg
+   ;; Your settings goes here.
+)
+
 
 (setq ffip-ignore-filenames
   '(;; VCS
