@@ -143,11 +143,10 @@
 ;; (require 'completion-ui)  ;; 似乎没有上面两个好用
 
 
-
-
-
-
 ;;===================================== HElM ==========================================
+;; When running helm-mini: Invalid function: "B"
+;; solution: recompile helm-utils.el or delete helm-utils.elc 
+
 (require 'helm-config)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (helm-mode 1)
