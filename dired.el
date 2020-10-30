@@ -71,13 +71,46 @@
 (global-set-key (kbd "C-x s") 'find-file-in-project) 
 
 ;; ----------------- fuzzy search in emacs ----------------------------
-;; helm-ag ripgrep deadgrep
+;; helm-ag ripgrep deadgrep rg.el
+;; helm-ag 由于 ag.exe 程序有问题，中文搜索有问题
+;; ripgrep 较快，但结果组织比较乱，deadgrep 组织较好
+;; rg.el 功能强大，但有些文件没有被搜索，要自己定义文件类型
+ 
 
 ;;  rg.el
-(global-set-key (kbd "C-c s") #'rg-menu)
-(with-eval-after-load 'rg
-   ;; Your settings goes here.
-)
+(defun rg-autoload-keymap ()
+  (interactive)
+  (if (not (require 'rg nil t))
+      (user-error (format "Cannot load rg"))
+    (let ((key-vec (this-command-keys-vector)))
+      (global-set-key key-vec rg-global-map)
+      (setq unread-command-events
+        (mapcar (lambda (ev) (cons t ev))
+                (listify-key-sequence key-vec))))))
+
+(global-set-key (kbd "C-c s") #'rg-autoload-keymap)
+
+(defvar rg-global-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "d" 'rg-dwim)
+    (define-key map "k" 'rg-kill-saved-searches)
+    (define-key map "l" 'rg-list-searches)
+    (define-key map "p" 'rg-project)
+    (define-key map "r" 'rg)
+    (define-key map "s" 'rg-save-search)
+    (define-key map "S" 'rg-save-search-as-name)
+    (define-key map "t" 'rg-literal)
+    (define-key map "a" 'helm-ag)
+    (define-key map "f" 'helm-ag-this-file)
+    (define-key map "g" 'deadgrep)
+	(define-key map "e" 'ripgrep)
+    map)
+  "The global keymap for `rg'.")
+ (setq rg-default-alias-fallback "everything")
+ (setq rg-custom-type-aliases
+   (quote
+    (("rmd" . "*.rmd *.Rmd *.RMD")
+     ("gyp" . "*.gyp *.gypi"))))
 
 
 (setq ffip-ignore-filenames
