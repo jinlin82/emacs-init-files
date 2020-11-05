@@ -30,11 +30,25 @@
     )
   )
 
-(global-set-key (kbd "C-c d") 'toggle-monitor-font)
+; (global-set-key (kbd "C-c d") 'toggle-monitor-font)
 
-; (use-package dashboard
-  ; :config
-  ; (dashboard-setup-startup-hook))
+
+(require 'dashboard)
+(dashboard-setup-startup-hook)
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-set-navigator t)
+(setq dashboard-startup-banner 'logo)
+
+(setq dashboard-items '(
+						(projects . 8)
+						(recents  . 8)
+						(agenda . 8)
+                        ; (bookmarks . 5)                                              
+                        ; (registers . 5)
+						))
+
+(global-set-key (kbd "C-c d") 'dashboard-refresh-buffer)
 
 ;;--------------------------------------中文字体-------------------------------------
 ;(set-face-attribute

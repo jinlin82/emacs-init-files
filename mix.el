@@ -261,9 +261,11 @@ Columns: date,work,overwork,break,total"
 
 ;; waka time
 (if (not (string-equal (downcase (substring (expand-file-name "~") 0 1)) (downcase "H")))
+    (progn 
 (global-wakatime-mode)
 (setq wakatime-api-key "5bf23cc2-69da-406a-ab9c-81a85fe06d22")
 (diminish 'wakatime-mode)
+)
 )
 
 
