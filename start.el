@@ -42,8 +42,10 @@
 (load "~/.emacs.d/init-files/face.el")
 (load "~/.emacs.d/init-files/mix.el")
 (load "~/.emacs.d/init-files/git.el")
+(if (not (string-equal (downcase (substring (expand-file-name "~") 0 1)) (downcase "H"))) 
 (load "~/.emacs.d/init-files/mail.el")
 (load "~/.emacs.d/init-files/emms.el")
+)
 (load "~/.emacs.d/init-files/evil.el")
 (if (eq system-type 'windows-nt) (load "~/.emacs.d/init-files/pdf.el"))
 (load "~/.emacs.d/init-files/lsp.el")
@@ -64,8 +66,10 @@
 (init-face)    ;;“¿¿µ basic£¨edit, mix;  start in Notebook 1s
 (init-mix)      ;;∂¿¡¢start in Notebook 2s
 (init-git)
+(if (not (string-equal (downcase (substring (expand-file-name "~") 0 1)) (downcase "H"))) 
 (init-mail)  ;;“¿¿µ org;   start in Notebook 1.5s
 (init-emms)    ;;∂¿¡¢  start in Notebook 0.5s
+)
 (init-evil)
 (if (eq system-type 'windows-nt) (init-pdf))
 (init-lsp)

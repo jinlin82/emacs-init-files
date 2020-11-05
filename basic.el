@@ -25,9 +25,9 @@
   (require 'color-theme)
   (color-theme-initialize)
 
-  (if (string-equal (downcase (system-name)) (downcase "JL-Thinkpad"))
+  (if (string-equal (downcase (system-name)) (downcase "JL-Hu-notebook"))
+      (color-theme-charcoal-black)
       (color-theme-emacs-nw)
-    (color-theme-charcoal-black)
     )
 
   ;(add-hook 'after-init-hook (lambda () (load-theme 'spacemacs-dark)))
