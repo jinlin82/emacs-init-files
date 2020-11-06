@@ -1,5 +1,15 @@
 (defun init-edit ()
 
+
+;; ----------- CTRLF-mode --------------------------------
+  (ctrlf-mode +1)
+  ; (define-key global-map "\C-t" 'ctrlf-forward-literal)
+  ; (define-key esc-map "\C-t" 'ctrlf-forward-regexp)
+  ;; 注意：上面这两句没有作用，需要改动 ctrlf.el 和 ctrlf-autoloads.el 中的快捷键, 
+  ;; 对 ctrlf.el 中多处作了修改，通过 "hacked by JL" 查找
+  ; (define-key isearch-mode-map (kbd "M-z") 'ctrlf-cancel)   ;; isearch
+  ; (define-key ctrlf-mode-map (kbd "M-z") 'ctrlf-cancel)   ;; isearch
+
 ;; Being able to duplicate current line
  (defun duplicate-line-down ()
    (interactive)

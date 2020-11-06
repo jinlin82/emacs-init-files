@@ -4,17 +4,13 @@
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
 
-  (define-key global-map "\C-t" 'isearch-forward)
-  (define-key esc-map "\C-t" 'isearch-forward-regexp)
-
   (global-set-key (kbd "C-s") 'save-buffer)
 					; Map M-z to cancel (like C-g)...
 					;(define-key isearch-mode-map "\e" 'isearch-abort)   ;; \e seems to work better for terminals
   (global-set-key  (kbd "M-z") 'keyboard-escape-quit)         ;; everywhere else
-  (define-key isearch-mode-map (kbd "M-z") 'isearch-abort)   ;; isearch
- 
 
-  (global-set-key (kbd "M-s") 'yank)
+
+  (global-set-key (kbd "M-s s") 'yank)
   (global-set-key (kbd "M-k") 'kill-buffer)
   (global-set-key (kbd "M-j") 'ibuffer)
   (global-set-key (kbd "M-a") 'delete-other-windows)
