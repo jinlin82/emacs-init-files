@@ -61,6 +61,7 @@
 (setq elpy-autodoc-delay 1)
 (setq elpy-eldoc-show-current-function t)
 (setq elpy-get-info-from-shell t)
+(setq elpy-shell-starting-directory (quote current-directory))
 
 
 

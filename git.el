@@ -46,9 +46,29 @@
 (magit-todos-mode)
 (setq magit-todos-nice nil)
 (setq magit-todos-scanner (quote magit-todos--scan-with-git-grep))
-(setq magit-todos-ignore-case t)
-;;  '(magit-todos-ignored-keywords (quote ("NOTE"))) 这个设置在custom.el中，这里设置不起作用
 
+(setq magit-todos-ignore-case nil)
+;;  '(magit-todos-ignored-keywords (quote ("NOTE"))) 这个设置在custom.el中，这里设置不起作用
+(setq magit-todos-ignored-keywords (quote ("NOTE" "???" "XXX")))
+(setq magit-todos-keyword-suffix "")
+
+;; ------------------------- Hacked ----------------------------------
+(magit-todos-defscanner "git grep"
+  :test (string-match "--perl-regexp" (shell-command-to-string "git grep --magit-todos-testing-git-grep"))
+  :command (progn
+  (setq-local default-process-coding-system '(utf-8 . utf-8)) ;; Hacked by Jin Lin
+				(list "git" "--no-pager" "grep"
+                 "--full-name" "--no-color" "-n"
+                 (when depth
+                   (list "--max-depth" depth))
+                 (when magit-todos-ignore-case
+                   "--ignore-case")
+                 "--perl-regexp"
+                 "-e" search-regexp-pcre
+                 extra-args "--" directory
+                 (when magit-todos-exclude-globs
+                   (--map (concat ":!" it)
+                          magit-todos-exclude-globs)))))
 
 
 ;; -------------- magithub ------------------
@@ -150,6 +170,34 @@
   )
 )
 (define-key magit-status-mode-map (kbd "C-c v") 'magit-open-readme)
+
+
+
+;;; git-messenger
+;; git-messenger.el 中 (setq-local default-process-coding-system '(utf-8 . utf-8)) ;; Hacked by Jin Lin
+(require 'git-messenger) ;; You need not to load if you install with package.el
+(global-set-key (kbd "C-x v p") 'git-messenger:popup-message)
+
+(define-key git-messenger-map (kbd "m") 'git-messenger:copy-message)
+
+(setq git-messenger:show-detail t)
+(setq git-messenger:use-magit-popup t)
+
+;; ------------------------- Hacked ----------------------------------
+(defun git-messenger:execute-command (vcs args output)
+  (cl-case vcs
+    (git (progn
+	(setq-local default-process-coding-system '(utf-8 . utf-8)) ;; Hacked by Jin Lin
+	(apply 'process-file "git" nil output nil args)
+	))
+    (svn
+     (let ((process-environment (cons "LANG=C" process-environment)))
+       (apply 'process-file "svn" nil output nil args)))
+    (hg
+     (let ((process-environment (cons
+                                 "HGPLAIN=1"
+                                 (cons "LANG=utf-8" process-environment))))
+       (apply 'process-file "hg" nil output nil args)))))
 
 
 "Init Git"

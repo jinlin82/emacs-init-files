@@ -10,13 +10,18 @@
   (global-set-key  (kbd "M-z") 'keyboard-escape-quit)         ;; everywhere else
 
 
-  (global-set-key (kbd "M-s s") 'yank)
+  (global-set-key (kbd "M-s") nil)
+  (global-set-key (kbd "M-s") 'yank)
   (global-set-key (kbd "M-k") 'kill-buffer)
   (global-set-key (kbd "M-j") 'ibuffer)
   (global-set-key (kbd "M-a") 'delete-other-windows)
   (global-set-key (kbd "M-,") 'delete-window)
   (global-set-key (kbd "M-g l") 'goto-last-change)
+  (global-set-key (kbd "M-g r") 'replace-string)
 
+
+  ; (global-set-key (kbd "M-c") 'search-map)
+  
   ;;--------------------------------color-theme--------------------------------------
   (require 'color-theme)
   (color-theme-initialize)
@@ -76,6 +81,7 @@
   (set-file-name-coding-system 'gb2312)
   (set-file-name-coding-system 'utf-8)
   )
+  ;; ----------------------------------------------------------
   (setq ansi-color-for-comint-mode t)
 
 (defun revert-buffer-with-coding-system-no-confirm (coding-system &optional force)
