@@ -49,7 +49,7 @@
 
 (setq magit-todos-ignore-case nil)
 ;;  '(magit-todos-ignored-keywords (quote ("NOTE"))) 这个设置在custom.el中，这里设置不起作用
-(setq magit-todos-ignored-keywords (quote ("NOTE" "???" "XXX")))
+; (setq magit-todos-ignored-keywords (quote ("NOTE" "???" "XXX")))
 (setq magit-todos-keyword-suffix "")
 
 ;; ------------------------- Hacked ----------------------------------

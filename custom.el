@@ -75,6 +75,7 @@
  '(interleave-disable-narrowing t)
  '(interleave-insert-relative-name t t)
  '(interleave-org-notes-dir-list (quote (".")) t)
+ '(magit-todos-ignored-keywords (quote ("NOTE" "???" "XXX")))
  '(markdown-enable-math t)
  '(nrepl-message-colors
    (quote
