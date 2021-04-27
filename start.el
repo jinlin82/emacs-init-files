@@ -9,6 +9,11 @@
 (setq custom-file "~/.emacs.d/init-files/custom.el")
 (package-initialize)
 
+(if (eq system-type 'windows-nt)
+(setq prepath "~/../../")
+(setq prepath "~/storage/shared/Allfiles/")
+)
+
 ;; On Glasgow PC have to set This
 ; (setenv "PATH" (concat "C:\\texlive\\2014\\bin\\win32;C:\\texlive\\fixbbl\\bin;" (getenv "PATH")))  
 
@@ -37,10 +42,12 @@
 (load "~/.emacs.d/init-files/face.el")
 (load "~/.emacs.d/init-files/mix.el")
 (load "~/.emacs.d/init-files/git.el")
+(if (not (string-equal (downcase (substring (expand-file-name "~") 0 1)) (downcase "H"))) 
 (load "~/.emacs.d/init-files/mail.el")
 (load "~/.emacs.d/init-files/emms.el")
+)
 (load "~/.emacs.d/init-files/evil.el")
-(load "~/.emacs.d/init-files/pdf.el")
+(if (eq system-type 'windows-nt) (load "~/.emacs.d/init-files/pdf.el"))
 (load "~/.emacs.d/init-files/lsp.el")
 (load custom-file)
 
@@ -59,15 +66,16 @@
 (init-face)    ;;“¿¿µ basic£¨edit, mix;  start in Notebook 1s
 (init-mix)      ;;∂¿¡¢start in Notebook 2s
 (init-git)
+(if (not (string-equal (downcase (substring (expand-file-name "~") 0 1)) (downcase "H"))) 
 (init-mail)  ;;“¿¿µ org;   start in Notebook 1.5s
 (init-emms)    ;;∂¿¡¢  start in Notebook 0.5s
+)
 (init-evil)
-(init-pdf)
+(if (eq system-type 'windows-nt) (init-pdf))
 (init-lsp)
 
 ; (execute-kbd-macro (read-kbd-macro "C-x 1"))
 (delete-other-windows)
-
 
 "Init Begin"
 (interactive)			

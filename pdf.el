@@ -158,7 +158,7 @@
 ;; 为了增加相对路径，在interleave中hacked by Jin Lin 三处
  (setq nterleave-disable-narrowing t)
  (setq interleave-insert-relative-name nil)
- (setq interleave-org-notes-dir-list (quote ("~/../../Works/Learning/Interleave_Org/" ".")))
+ (setq interleave-org-notes-dir-list (quote ((concat prepath "Works/Learning/Interleave_Org/") ".")))
 
  
  (add-hook 'org-mode-hook '(lambda ()

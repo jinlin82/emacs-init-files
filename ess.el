@@ -14,7 +14,7 @@
   :config (ess-smart-equals-activate))
 
 (require 'ess-view)
-(setq ess-view--spreadsheet-program "~/../../Program Files (x86)/Microsoft Office/Office14/EXCEL.EXE")
+(setq ess-view--spreadsheet-program (concat prepath "Program Files (x86)/Microsoft Office/Office14/EXCEL.EXE"))
 
 ;;; hack Cannot view data.frame from source code
 (defun ess-view-extract-R-process ()
@@ -33,17 +33,17 @@
 
 ;;No .Rhistory file
 (defun ei-no-rhistory ()
-  (setq ess-history-file "~/../../Books/Statsoft/R/Code/.Rhistory"))
+  (setq ess-history-file (concat prepath "Books/Statsoft/R/Code/.Rhistory")))
 
 (add-hook 'inferior-ess-mode-hook 'ei-no-rhistory)
 
 ;;---------------------------------------SPLUS-------------------------------------------
 (setq-default inferior-S+6-program-name
-	      "~/../../progra~1/SPLUS80/cmd/Splus")
+	      (concat prepath "progra~1/SPLUS80/cmd/Splus"))
 (setq-default inferior-Sqpe+6-SHOME-name
-	      "~/../../progra~1/SPLUS80")
+	      (concat prepath "progra~1/SPLUS80"))
 (setq-default inferior-Sqpe+6-program-name
-	      "~/../../progra~1/SPLUS80/cmd/Sqpe.exe")
+	      (concat prepath "progra~1/SPLUS80/cmd/Sqpe.exe"))
 
 
 ;;--------------------------------------R-----------------------------------------------

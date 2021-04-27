@@ -11,7 +11,7 @@
 ;; ==================================== 字体设置 ===================================
 ;; 注释custom.el中的(default 语句
 ;; 默认字体大小
-;(set-face-attribute 'default nil :height 118)
+;; (set-face-attribute 'default nil :height 100)
 (defun toggle-monitor-font ()
   (interactive)
   (if (= (display-pixel-width) 1680)
@@ -30,11 +30,25 @@
     )
   )
 
-(global-set-key (kbd "C-c d") 'toggle-monitor-font)
+; (global-set-key (kbd "C-c d") 'toggle-monitor-font)
 
-; (use-package dashboard
-  ; :config
-  ; (dashboard-setup-startup-hook))
+
+(require 'dashboard)
+(dashboard-setup-startup-hook)
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-set-navigator t)
+(setq dashboard-startup-banner 'logo)
+
+(setq dashboard-items '(
+						(projects . 8)
+						(recents  . 8)
+						(agenda . 8)
+                        ; (bookmarks . 5)                                              
+                        ; (registers . 5)
+						))
+
+(global-set-key (kbd "C-c d") 'dashboard-refresh-buffer)
 
 ;;--------------------------------------中文字体-------------------------------------
 ;(set-face-attribute

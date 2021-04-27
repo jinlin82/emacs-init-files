@@ -1,5 +1,22 @@
 (defun init-edit ()
 
+
+;; ----------- CTRLF-mode --------------------------------
+  (ctrlf-mode +1)
+  ; (define-key global-map "\C-t" 'ctrlf-forward-literal)
+  ; (define-key esc-map "\C-t" 'ctrlf-forward-regexp)
+  ;; 注意：上面这两句没有作用，需要改动 ctrlf.el 和 ctrlf-autoloads.el 中的快捷键, 
+  ;; 对 ctrlf.el 中多处作了修改，通过 "hacked by JL" 查找
+  ; (define-key isearch-mode-map (kbd "M-z") 'ctrlf-cancel)   ;; isearch
+  ; (define-key ctrlf-mode-map (kbd "M-z") 'ctrlf-cancel)   ;; isearch
+
+
+(require 'move-dup)
+(global-set-key (kbd "M-g <up>") 'md-move-lines-up)
+(global-set-key (kbd "M-g <down>") 'md-move-lines-down)
+(global-set-key (kbd "M-g <M-up>") 'md-duplicate-up)
+(global-set-key (kbd "M-g <M-down>") 'md-duplicate-down)
+
 ;; 鼠标滚动行数  
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ))
 
@@ -72,7 +89,7 @@
 (use-package visible-mark
 :init
 ;; 把 set-mark-command 绑定到 其他键上面 上
-(global-set-key (kbd "M-c") 'set-mark-command)
+(global-set-key (kbd "C-SPC") 'set-mark-command)
 ;;--------- visible-mark 显示 mark的位置 ----------------
 ;;注意：visible-mark.el中visible-mark-mode-maybe的cl-flet函数在24.2(其是24.3的函数)中错误，被改成flet
 (defface visible-mark-active ;; put this before (use-package visible-mark)
@@ -197,7 +214,7 @@ Version 2017-01-15"
        ;;
        ))))
 
-(global-set-key (kbd "M-v") 'xah-extend-mark)
+(global-set-key (kbd "M-c") 'xah-extend-mark)
 
 ;;------------ selection without mouse----------------
 (use-package expand-region
@@ -416,6 +433,24 @@ Version 2017-01-15"
 (global-set-key (kbd "M-g w") 'avy-goto-word-1)
 (global-set-key (kbd "M-g e") 'avy-goto-word-0)
 
+;; -------------------------- switch-window -------------------------
+(require 'switch-window)
+(global-set-key (kbd "C-x o") 'switch-window)
+(global-set-key (kbd "C-x 1") 'switch-window-then-maximize)
+(global-set-key (kbd "C-x 2") 'switch-window-then-split-below)
+(global-set-key (kbd "C-x 3") 'switch-window-then-split-right)
+(global-set-key (kbd "C-x 0") 'switch-window-then-delete)
+
+(global-set-key (kbd "C-x 4 d") 'switch-window-then-dired)
+(global-set-key (kbd "C-x 4 f") 'switch-window-then-find-file)
+(global-set-key (kbd "C-x 4 m") 'switch-window-then-compose-mail)
+(global-set-key (kbd "C-x 4 r") 'switch-window-then-find-file-read-only)
+
+(global-set-key (kbd "C-x 4 C-f") 'switch-window-then-find-file)
+(global-set-key (kbd "C-x 4 C-o") 'switch-window-then-display-buffer)
+
+(global-set-key (kbd "C-x 4 0") 'switch-window-then-kill-buffer)
+
 ;;-----------------------------------Buffer Menu--------------------------------------
 ; eliminate the need for ‘C-x o’, making list-buffers much easier to use
 (global-set-key (kbd "\C-x\C-b") 'buffer-menu-other-window)
@@ -551,10 +586,53 @@ Version 2017-01-15"
 ("C-c <backspace>". hungry-delete-backward)))
 
 ;;===================== regexp ====================================
-(global-set-key (kbd "C-r") 'replace-string)
+;; ----------------- fuzzy search in emacs ----------------------------
+;; helm-ag ripgrep deadgrep rg.el
+;; helm-ag 由于 ag.exe 程序有问题，中文搜索有问题
+;; ripgrep 较快，但结果组织比较乱，deadgrep 组织较好
+;; rg.el 功能强大，但有些文件没有被搜索，要自己定义文件类型
 (require 'visual-regexp)
-(define-key global-map (kbd "C-c C-r") 'vr/replace)
-(define-key global-map (kbd "C-c q") 'vr/query-replace)
+; (define-key global-map (kbd "C-c C-r") 'vr/replace)
+; (define-key global-map (kbd "C-c q") 'vr/query-replace) 
+
+;;  rg.el
+(defun rg-autoload-keymap ()
+  (interactive)
+  (if (not (require 'rg nil t))
+      (user-error (format "Cannot load rg"))
+    (let ((key-vec (this-command-keys-vector)))
+      (global-set-key key-vec rg-global-map)
+      (setq unread-command-events
+        (mapcar (lambda (ev) (cons t ev))
+                (listify-key-sequence key-vec))))))
+
+(global-set-key (kbd "C-c s") #'rg-autoload-keymap)
+
+(defvar rg-global-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "w" 'rg-dwim)
+    (define-key map "k" 'rg-kill-saved-searches)
+    (define-key map "l" 'rg-list-searches)
+    (define-key map "p" 'rg-project)
+    (define-key map "g" 'rg)
+    (define-key map "s" 'rg-save-search)
+    (define-key map "S" 'rg-save-search-as-name)
+    (define-key map "t" 'rg-literal)
+    (define-key map "a" 'helm-ag)
+    (define-key map "f" 'helm-ag-this-file)
+    (define-key map "d" 'deadgrep)
+    (define-key map "e" 'ripgrep-regexp)
+    (define-key map "r" 'vr/replace)
+    (define-key map "q" 'vr/query-replace)
+    (define-key map "." 'ctrlf-forward-symbol-at-point)
+    map)
+  "The global keymap for `rg'.")
+ (setq rg-default-alias-fallback "everything")
+ (setq rg-custom-type-aliases
+   (quote
+    (("rmd" . "*.rmd *.Rmd *.RMD")
+     ("gyp" . "*.gyp *.gypi"))))
+
 
 ;; insert default directory
 (defun insert-default-path ()

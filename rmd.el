@@ -61,6 +61,12 @@
     (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "rmd-doc.bat " (f-base (buffer-name)) ))
     (message (concat "rmd-doc.bat " (buffer-name) )))
 
+  (defun pandoc-rmd-ppt ()
+    (interactive)
+	(save-buffer)
+    (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "rmd-ppt.bat " (f-base (buffer-name)) ))
+    (message (concat "rmd-ppt.bat " (buffer-name) )))
+
 ;;--- RMARKDOWN 输出PDF的设置有3个地方：1.	yaml前言；2. rmd-pdf.bat和rmd-pdf.R; 3. tex模板(在R安装文件夹中)：default-1.17.0.2.tex
   (defun pandoc-rmd-pdf ()
     (interactive)
@@ -111,6 +117,7 @@ Not effective after loading the polymode library."
 		(define-key map "b" 'pandoc-rmd-beamer)
 		(define-key map "o" 'pandoc-rmd-org)
 		(define-key map "d" 'pandoc-rmd-doc)
+	    (define-key map "p" 'pandoc-rmd-ppt)
 		(define-key map "P" 'pandoc-bookdown-pdf)
 		(define-key map "m" 'org-emphasize-math-word)
 		(define-key map "\M-b" 'org-emphasize-math)
@@ -119,9 +126,12 @@ Not effective after loading the polymode library."
         (define-key map "\M-l" 'org-toggle-latex-fragment)
         (define-key map "s" 'math-delimiter-add-space-inline)
 		(define-key map "\M-h" 'org-view-html)
+		(define-key map "\C-m" 'polymode-mark-or-extend-chunk)
 		(define-key map "\M-f" 'vimish-fold)
-		(define-key map "\M-c" 'polymode-mark-or-extend-chunk)
 		(define-key map "f" 'vimish-fold-toggle)
+		(define-key map "\M-t" 'rmd-fold-codes)
+		(define-key map "\M-c" 'rmd-fold-text)
+		(define-key map "\M-d" 'vimish-fold-delete-all)
 		(define-key map (kbd "<down>") 'polymode-next-chunk-same-type)
 		(define-key map (kbd "<up>") 'polymode-previous-chunk-same-type)
 map))
@@ -130,6 +140,7 @@ map))
 (define-key markdown-mode-map (kbd "C-c C-<left>") 'markdown-promote-subtree)
 (define-key markdown-mode-map (kbd "C-c C-<right>") 'markdown-demote-subtree)
 
+(define-key ess-mode-map (kbd "M-n f") 'vimish-fold-toggle)
 )
 
 
@@ -139,6 +150,8 @@ map))
 ;;---支持LaTeX公式 ------
 ; (setq markdown-enable-math t) ;; 在这里设置无效，要在custom.el 设置，不知道原因
 (add-hook 'markdown-mode-hook 'cdlatex-mode)
+; (add-hook 'markdown-mode-hook 'org-fragtog-mode)  ;;性能问题，需要时打开
+
 
 ;;支持文献引用，注意 rmd 文件中需使用注释行：[//]: # (\bibliography{bibfile})
 (require 'reftex)
@@ -151,7 +164,7 @@ map))
 ("{#eq:.*?}" . font-lock-keyword-face)
     ))
 
-;;----------- folding vimish -----------
+;;================================= folding vimish ========================================
 ;(require 'vimish-fold)
 ;(add-hook 'markdown-mode-hook 'vimish-fold-mode)
 
@@ -172,6 +185,83 @@ map))
 
 (add-hook 'markdown-mode-hook 'markdown-fold-yaml-header)
 (add-hook 'markdown-mode-hook 'auto-fill-mode)
+
+(defun rmd-fold-block ()
+  "Fold the contents of the current R block, in an Rmarkdown file (can be undone
+   with fold-this-unfold-at-point)"
+  (interactive)
+  (and (eq (oref pm/chunkmode :mode) 'ess-r-mode)
+       (pm-with-narrowed-to-span nil
+         (goto-char (point-min))
+         (forward-line)
+         (fold-this (point) (point-max)))))
+
+(defun rmd-fold-region (beg end &optional msg)
+  "Eval all spans within region defined by BEG and END.
+MSG is a message to be passed to `polymode-eval-region-function';
+defaults to \"Eval region\"."
+  (interactive "r")
+  (save-excursion
+    (let* ((base (pm-base-buffer))
+           ; (host-fun (buffer-local-value 'polymode-eval-region-function (pm-base-buffer)))
+           (host-fun (buffer-local-value 'polymode-eval-region-function base))
+           (msg (or msg "Eval region"))
+        )
+      (if host-fun
+          (pm-map-over-spans
+           (lambda (span)
+             (when (eq (car span) 'body)
+               (with-current-buffer base
+                 (ignore-errors (vimish-fold (max beg (nth 1 span)) (min end (nth 2 span)))))))
+           beg end)
+        (pm-map-over-spans
+         (lambda (span)
+           (when (eq (car span) 'body)
+             (setq mapped t)
+             (when polymode-eval-region-function
+               (setq evalled t)
+               (ignore-errors (vimish-fold
+                        (max beg (nth 1 span))
+                        (min end (nth 2 span))
+                        )))))
+         beg end)
+))))
+
+(defun rmd-fold-codes ()
+  "Eval all inner chunks in the buffer. 需要点击一下代码模块里面"
+  (interactive)
+  (vimish-fold-delete-all)
+  (markdown-fold-yaml-header)
+  (rmd-fold-region (point-min) (point-max) "Eval buffer")
+  (polymode-previous-chunk 1)
+  (next-line 2)
+  )
+
+  
+(defun re-seq (regexp string n)
+  "Get a list of all regexp matches in a string"
+  (save-match-data
+    (let ((pos 0)
+          matches)
+      (while (string-match regexp string pos)
+        (add-to-list 'matches (+ n (string-match regexp string pos)) t)
+        (setq pos (match-end 0)))
+      matches)))
+
+
+(defun rmd-fold-text ()
+  (interactive)
+  (vimish-fold-delete-all)
+  (markdown-fold-yaml-header)
+  (let ((begs (re-seq "```{" (buffer-string) 0))
+	(ends (re-seq "```$" (buffer-string) 0)))
+    (add-to-list 'begs (point-max) t)
+    (while ends  (progn
+		(ignore-errors (vimish-fold (nth 1 begs) (nth 0 ends)))
+	    (pop begs)
+	    (pop ends))))
+  (beginning-of-buffer)
+  (polymode-next-chunk 2))
   
 ;; --------- Manage Org-like lists in non-Org buffers
 (require 'orgalist)

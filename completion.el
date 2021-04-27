@@ -143,11 +143,10 @@
 ;; (require 'completion-ui)  ;; 似乎没有上面两个好用
 
 
-
-
-
-
 ;;===================================== HElM ==========================================
+;; When running helm-mini: Invalid function: "B"
+;; solution: recompile helm-utils.el or delete helm-utils.elc 
+
 (require 'helm-config)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (helm-mode 1)
@@ -316,14 +315,14 @@
 
 	
 ;; ---------------- yankpad --------------
-(require 'yankpad)
-(setq yankpad-file "~/.emacs.d/user-files/yankpad.org")
-(global-set-key "\M-]" 'yankpad-insert)
-(global-set-key "\M-[" 'yankpad-expand)
-; If you want to complete snippets using company-mode
-(add-to-list 'company-backends #'company-yankpad)
-; If you want to expand snippets with hippie-expand
-(add-to-list 'hippie-expand-try-functions-list #'yankpad-expand)
+;; (require 'yankpad)
+;; (setq yankpad-file "~/.emacs.d/user-files/yankpad.org")
+;; (global-set-key "\M-]" 'yankpad-insert)
+;; (global-set-key "\M-[" 'yankpad-expand)
+;; ; If you want to complete snippets using company-mode
+;; (add-to-list 'company-backends #'company-yankpad)
+;; ; If you want to expand snippets with hippie-expand
+;; (add-to-list 'hippie-expand-try-functions-list #'yankpad-expand)
 
 
 (global-set-key (kbd "\C-x c") 'clear-shell) ;; 要出现在helm之后

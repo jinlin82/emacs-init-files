@@ -3,31 +3,33 @@
   (require 'keyfreq)
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
-
-  (define-key global-map "\C-t" 'isearch-forward)
-  (define-key esc-map "\C-t" 'isearch-forward-regexp)
+  (setq tab-width 4)
 
   (global-set-key (kbd "C-s") 'save-buffer)
 					; Map M-z to cancel (like C-g)...
 					;(define-key isearch-mode-map "\e" 'isearch-abort)   ;; \e seems to work better for terminals
   (global-set-key  (kbd "M-z") 'keyboard-escape-quit)         ;; everywhere else
-  (define-key isearch-mode-map (kbd "M-z") 'isearch-abort)   ;; isearch
- 
 
+
+  (global-set-key (kbd "M-s") nil)
   (global-set-key (kbd "M-s") 'yank)
   (global-set-key (kbd "M-k") 'kill-buffer)
   (global-set-key (kbd "M-j") 'ibuffer)
   (global-set-key (kbd "M-a") 'delete-other-windows)
   (global-set-key (kbd "M-,") 'delete-window)
   (global-set-key (kbd "M-g l") 'goto-last-change)
+  (global-set-key (kbd "M-g r") 'replace-string)
 
+
+  ; (global-set-key (kbd "M-c") 'search-map)
+  
   ;;--------------------------------color-theme--------------------------------------
   (require 'color-theme)
   (color-theme-initialize)
 
-  (if (string-equal (downcase (system-name)) (downcase "JL-Thinkpad"))
+  (if (string-equal (downcase (system-name)) (downcase "JL-Hu-notebook"))
+      (color-theme-charcoal-black)
       (color-theme-emacs-nw)
-    (color-theme-charcoal-black)
     )
 
   ;(add-hook 'after-init-hook (lambda () (load-theme 'spacemacs-dark)))
@@ -69,9 +71,18 @@
 					; (set-selection-coding-system 'utf-8)  ;; 不能增加，粘贴出现乱码
 
   (modify-coding-system-alist 'process "*" 'utf-8)
-  (setq default-process-coding-system '(gb2312 . gb2312)) ;; 要设置为 gb2312，否则message中出现乱码
+  ;; 下面要设置为 gb2312，否则message中出现乱码
+  (if (eq system-type 'windows-nt) 
+  (setq default-process-coding-system '(gb2312 . gb2312)) 
+  (setq default-process-coding-system '(utf-8 . utf-8)) 
+  )
   (setq-default pathname-coding-system 'utf-8)
-  (set-file-name-coding-system 'gb2312) ;; 不能设置为UTF-8，会导致中文路径和文件名乱码
+  ;; 下面不能设置为UTF-8，会导致中文路径和文件名乱码
+  (if (eq system-type 'windows-nt) 
+  (set-file-name-coding-system 'gb2312)
+  (set-file-name-coding-system 'utf-8)
+  )
+  ;; ----------------------------------------------------------
   (setq ansi-color-for-comint-mode t)
 
 (defun revert-buffer-with-coding-system-no-confirm (coding-system &optional force)
@@ -83,13 +94,14 @@
     (revert-buffer t t)))
 
 
-  (setq default-directory "~/../../Works/temp/")
+  (setq default-directory (concat prepath "Works/temp/"))
   
   (column-number-mode t)
   (tool-bar-mode -1);;don't display toolbar
   (menu-bar-mode -1)  ;;不显示 menu bar ,临时弹出用 Ctrl+右键
+  (if (eq system-type 'windows-nt)
   (scroll-bar-mode -1)
-
+)
   ;; (global-linum-mode 1)
   ;; (require 'hlinum)
   ;; (hlinum-activate)
@@ -100,7 +112,10 @@
 
 					; (setq linum-format 'dynamic)
   (set-face-attribute 'fringe nil )
+  
+  (if (eq system-type 'windows-nt)
   (fringe-mode '(10 . 0))
+  )
 
   (setq-default indicate-empty-lines t)
 
@@ -212,15 +227,15 @@
   ;;----------------------------------------- filesets------------------------------
 					; (require 'filesets)
 					; (filesets-init)
-					; (setq filesets-data (quote (("thesis" (:files
-					; "~/../../Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-semipara/chap-semipara.Rnw"
-					; "~/../../Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-conclusion/chap-conclusion.Rnw"
-					; "~/../../Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-country/chap-country.Rnw"
-					; "~/../../Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-semimixed/chap-semimixed.Rnw"
-					; "~/../../Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-district/chap-district.Rnw"
-					; "~/../../Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-intro/chap-intro.Rnw"
-					; "~/../../Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-nonpara/chap-nonpara.Rnw"
-					; "~/../../Works/2010.9-2013.7读博项目/Dissertation/Rnw/thesis.Rnw")))))		
+					; (setq filesets-data `(("thesis" (:files
+					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-semipara/chap-semipara.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-conclusion/chap-conclusion.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-country/chap-country.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-semimixed/chap-semimixed.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-district/chap-district.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-intro/chap-intro.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-nonpara/chap-nonpara.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/thesis.Rnw")))))		
 
   "Init Basic"
   (interactive)			

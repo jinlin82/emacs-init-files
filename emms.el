@@ -19,7 +19,7 @@
                          emms-player-ogg123
                          emms-player-mplayer))
 
-(setq emms-source-file-default-directory "~/../../Music/")
+(setq emms-source-file-default-directory (concat prepath "Music/"))
 
 ;; Now we will add all our music to a playlist by invoking M-x emms-add-directory-tree RET ~/Music/ RET. 
 ;; We do this because then Emms will read the tags of all your music files and caches them

@@ -9,17 +9,75 @@
 ;(require 'ecb)
 
 ;; ---------------------------------------Common Lisp--------------------------------
-;;(setq inferior-lisp-program "~/../../clisp/full/lisp.exe
+;;(setq inferior-lisp-program (concat prepath "clisp/full/lisp.exe")
 ;;-B ~/../../clisp/full/
 ;;-M ~/../../clisp/full/lispinit.mem
 ;;-K full")
   ;;-ansi -q")
-;(setq inferior-lisp-program "~/../../sbcl/sbcl")
+;(setq inferior-lisp-program (concat prepath "sbcl/sbcl"))
 
 
 ;;(add-to-list 'load-path "~/../Emacs24.2/site-lisp/slime")
 ;;(require 'slime)
 ;;(slime-setup '(slime-fancy slime-asdf))
+
+;;-----------------------------------------header2------------------------------
+;; 注意： header2.el 中 header-end-line 函数进行了更改
+;; ((nonempty-comment-start))
+;((make-string 70 (aref comment-start 0)))  ;; HACK by Jin Lin
+
+(autoload 'auto-update-file-header "header2")
+(add-hook 'write-file-hooks 'auto-update-file-header)
+
+(autoload 'auto-make-header "header2")
+(add-hook 'emacs-lisp-mode-hook 'auto-make-header)
+(add-hook 'python-mode-hook 'auto-make-header)
+(add-hook 'ess-r-mode-hook 'auto-make-header)
+(setq header-date-format "%Y-%m-%d %A %T (%z)")
+
+(setq make-header-hook
+    '(
+	; header-title 
+	; header-blank 
+	header-end-line 
+	header-file-name 
+	header-description 
+	header-author 
+	; header-maintainer 
+	header-copyright 
+	header-creation-date 
+	; header-version 
+	; header-pkg-requires 
+	header-modification-date 
+	header-modification-author 
+	header-update-count 
+	; header-url 
+	; header-doc-url 
+	; header-keywords 
+	; header-compatibility 
+	; header-blank 
+	; header-lib-requires 
+	header-end-line
+	newline
+	newline
+	newline
+	; header-commentary 
+	; header-blank 
+	; header-blank 
+	; header-end-line 
+	; header-history 
+	; header-blank 
+	; header-blank 
+	; header-end-line 
+	; header-free-software 
+	; header-code 
+	header-eof
+	previous-line
+	previous-line
+	previous-line
+	previous-line
+	previous-line
+	))
 
 ;;------------------------------------------Ruby------------------------------------
 (add-to-list 'load-path "~/../Emacs24.2/site-lisp/ruby-mode")

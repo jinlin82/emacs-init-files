@@ -41,14 +41,29 @@
 
 
 ;;-------------- elpy ----------------
+;; 特别注意：要把 elpy.el中的  (set (make-local-variable 'company-idle-delay)
+;;          0.5) ;; 需要从0.1修改为0.5才不卡
 ;; 注意：elpy 自动补全 需要 ("jedi" "flake8" "autopep8" "yapf" "black" "rope") 支持
-(package-initialize)
+(add-hook 'python-mode-hook (lambda () (auto-complete-mode -1))) ;; 关闭auto-complete-mod 
+
+(if (eq system-type 'windows-nt) (package-initialize))
 (elpy-enable)
 (remove-hook 'elpy-modules 'elpy-module-flymake)
 
+(if (eq system-type 'windows-nt)
 (setq elpy-rpc-python-command "~/../../Anaconda3/pythonw.exe")
+(setq elpy-rpc-python-command "~/../usr/bin/python")
+)
+
 (setq python-indent-guess-indent-offset t)  
 (setq python-indent-guess-indent-offset-verbose nil)
+(setq eldoc-idle-delay 1)
+(setq elpy-autodoc-delay 1)
+(setq elpy-eldoc-show-current-function t)
+(setq elpy-get-info-from-shell t)
+(setq elpy-shell-starting-directory (quote current-directory))
+
+
 
 ;;------------ autopep8 -------------- 
 ;(require 'py-autopep8)
@@ -74,8 +89,8 @@
 
 ;; ein-jupyter.el 中hack 函数 ein:jupyter-server-start
 
-(setq ein:jupyter-default-notebook-directory "~/../../Books/Statsoft/Python/ipynb")
-(setq elpy-rpc-pythonpath "~/../Config/.emacs.d/elpa/elpy-20200329.1830/elpy")
+(setq ein:jupyter-default-notebook-directory (concat prepath "Books/Statsoft/Python/ipynb"))
+(setq elpy-rpc-pythonpath "~/../Config/.emacs.d/elpa/elpy-20201003.2153/elpy")
 ;(add-hook 'ein:notebook-multilang-mode-hook 'poly-ein-mode)  ;; polymode 很慢，并且编辑时(jit-lock--run-functions 95 186)错误，目前可用于浏览
 (add-hook 'ein:notebook-multilang-mode-hook 'cdlatex-mode)
 (add-hook 'ein:notebook-multilang-mode-hook 'autopair-mode)
