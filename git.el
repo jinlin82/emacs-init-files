@@ -32,7 +32,7 @@
 ;; 增加了 magit-get-push-remote判断，防止在刚创建repo时出错
 (add-hook 'magit-status-mode-hook
 	  '(lambda ()
-	     (if (magit-get-push-remote) 
+	     (if (magit-get-current-remote) 
 	     (call-interactively 'magit-fetch-all-prune)
 	     nil)))
 
