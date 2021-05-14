@@ -41,7 +41,7 @@
 			     ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
 			     ;; ("melpa stable" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/")
 			     ))
-    ;(setq paradox-github-token 0b38f45bfcd76015f4a3ec84bdacafc40bb32122) ;ÍøÂç²»ºÃ
+    ;(setq paradox-github-token 0b38f45bfcd76015f4a3ec84bdacafc40bb32122) ;ç½‘ç»œä¸å¥½
     )
 (add-to-list 'package-archives '("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/") t)
 
@@ -57,27 +57,30 @@
   ;;==================================Basic Config==================================
   ;;set the default text coding system
   (setq default-buffer-file-coding-system 'utf-8)
-					; (prefer-coding-system 'utf-8) ;; ²»ÄÜÔö¼ÓÕâ¾ä£¬»áµ¼ÖÂRconsoleÂÒÂë£¬ ÈçÊäÈë "ÊÕÁ²ÂÊ"
-					;(setq coding-system-for-read 'utf-8)  ;; ²»ÄÜÔö¼ÓÕâ¾ä£¬»áµ¼ÖÂRconsoleÂÒÂë£¬ ÈçÊäÈë "ÊÕÁ²ÂÊ"
-					;(setq coding-system-for-write 'utf-8) ;; ²»ÄÜÔö¼ÓÕâ¾ä£¬»áµ¼ÖÂRconsoleÂÒÂë£¬ ÈçÊäÈë "ÊÕÁ²ÂÊ"
+					; (prefer-coding-system 'utf-8) ;; ä¸èƒ½å¢åŠ è¿™å¥ï¼Œä¼šå¯¼è‡´Rconsoleä¹±ç ï¼Œ å¦‚è¾“å…¥ "æ”¶æ•›ç‡"
+					;(setq coding-system-for-read 'utf-8)  ;; ä¸èƒ½å¢åŠ è¿™å¥ï¼Œä¼šå¯¼è‡´Rconsoleä¹±ç ï¼Œ å¦‚è¾“å…¥ "æ”¶æ•›ç‡"
+					;(setq coding-system-for-write 'utf-8) ;; ä¸èƒ½å¢åŠ è¿™å¥ï¼Œä¼šå¯¼è‡´Rconsoleä¹±ç ï¼Œ å¦‚è¾“å…¥ "æ”¶æ•›ç‡"
+					
+;;Set default encoding system for opening and saving					
+  (set-language-environment "UTF-8")
+; (set-language-environment 'Chinese-GB)
 
-					; (set-language-environment 'Chinese-GB)
   (set-default-coding-systems 'utf-8)
   (set-buffer-file-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
 
-  (set-keyboard-coding-system 'utf-8)   ;; ²»ÄÜÔö¼ÓÕâ¾ä£¬»áµ¼ÖÂRconsoleÂÒÂë£¬ ÈçÊäÈë "ÊÕÁ²ÂÊ"£¬2019 ess ÖĞOKÁË
-					; (set-clipboard-coding-system 'utf-8)  ;; ²»ÄÜÔö¼Ó£¬Õ³Ìù³öÏÖÂÒÂë
-					; (set-selection-coding-system 'utf-8)  ;; ²»ÄÜÔö¼Ó£¬Õ³Ìù³öÏÖÂÒÂë
+  (set-keyboard-coding-system 'utf-8)   ;; ä¸èƒ½å¢åŠ è¿™å¥ï¼Œä¼šå¯¼è‡´Rconsoleä¹±ç ï¼Œ å¦‚è¾“å…¥ "æ”¶æ•›ç‡"ï¼Œ2019 ess ä¸­OKäº†
+					; (set-clipboard-coding-system 'utf-8)  ;; ä¸èƒ½å¢åŠ ï¼Œç²˜è´´å‡ºç°ä¹±ç 
+					; (set-selection-coding-system 'utf-8)  ;; ä¸èƒ½å¢åŠ ï¼Œç²˜è´´å‡ºç°ä¹±ç 
 
   (modify-coding-system-alist 'process "*" 'utf-8)
-  ;; ÏÂÃæÒªÉèÖÃÎª gb2312£¬·ñÔòmessageÖĞ³öÏÖÂÒÂë
+  ;; ä¸‹é¢è¦è®¾ç½®ä¸º gb2312ï¼Œå¦åˆ™messageä¸­å‡ºç°ä¹±ç 
   (if (eq system-type 'windows-nt) 
   (setq default-process-coding-system '(gb2312 . gb2312)) 
   (setq default-process-coding-system '(utf-8 . utf-8)) 
   )
   (setq-default pathname-coding-system 'utf-8)
-  ;; ÏÂÃæ²»ÄÜÉèÖÃÎªUTF-8£¬»áµ¼ÖÂÖĞÎÄÂ·¾¶ºÍÎÄ¼şÃûÂÒÂë
+  ;; ä¸‹é¢ä¸èƒ½è®¾ç½®ä¸ºUTF-8ï¼Œä¼šå¯¼è‡´ä¸­æ–‡è·¯å¾„å’Œæ–‡ä»¶åä¹±ç 
   (if (eq system-type 'windows-nt) 
   (set-file-name-coding-system 'gb2312)
   (set-file-name-coding-system 'utf-8)
@@ -98,7 +101,7 @@
   
   (column-number-mode t)
   (tool-bar-mode -1);;don't display toolbar
-  (menu-bar-mode -1)  ;;²»ÏÔÊ¾ menu bar ,ÁÙÊ±µ¯³öÓÃ Ctrl+ÓÒ¼ü
+  (menu-bar-mode -1)  ;;ä¸æ˜¾ç¤º menu bar ,ä¸´æ—¶å¼¹å‡ºç”¨ Ctrl+å³é”®
   (if (eq system-type 'windows-nt)
   (scroll-bar-mode -1)
 )
@@ -120,7 +123,7 @@
   (setq-default indicate-empty-lines t)
 
   (global-font-lock-mode t)  ; turn on syntax highlight
-  (setq inhibit-startup-screen t) ;; ²»ÏÔÊ¾emacs ¿ªÊ¼½çÃæ
+  (setq inhibit-startup-screen t) ;; ä¸æ˜¾ç¤ºemacs å¼€å§‹ç•Œé¢
   (setq inhibit-splash-screen t);; Remove splash screen
 
   ;;Setting Emacs default Split to Horizontal
@@ -140,31 +143,31 @@
 
   
   ;;=============================== Input method =====================================
-  ;; ÓÃ ; ÔİÊ±ÊäÈëÓ¢ÎÄ
+  ;; ç”¨ ; æš‚æ—¶è¾“å…¥è‹±æ–‡
   ;; (use-package chinese-wbim-extra
   ;;   :init
-  ;;   ;;------------ Îå±Ê -------------
+  ;;   ;;------------ äº”ç¬” -------------
   ;;   (autoload 'chinese-wbim-use-package "chinese-wbim" "Another emacs input method")
-  ;;   ;; Tooltip ÔİÊ±»¹²»ºÃÓÃ
+  ;;   ;; Tooltip æš‚æ—¶è¿˜ä¸å¥½ç”¨
   ;;   (setq chinese-wbim-use-tooltip nil)
 
   ;;   (register-input-method
   ;;    "chinese-wbim" "euc-cn" 'chinese-wbim-use-package
-  ;;    "Îå±Ê" "ºº×ÖÎå±ÊÊäÈë·¨" "wb.txt")
+  ;;    "äº”ç¬”" "æ±‰å­—äº”ç¬”è¾“å…¥æ³•" "wb.txt")
   ;;   :config
   ;;   (global-set-key ";" 'chinese-wbim-insert-ascii)
-  ;; 					;ÉèÖÃÄ¬ÈÏÊäÈë·¨
+  ;; 					;è®¾ç½®é»˜è®¤è¾“å…¥æ³•
   ;; 					; (setq default-input-method 'chinese-wbim)
   ;;   )
 
-  ;;------------ Æ´Òô ------------
+  ;;------------ æ‹¼éŸ³ ------------
   ;; (use-package chinese-pyim
   ;;   :config
   ;;   (setq default-input-method "chinese-pyim")
   ;; 					; (global-set-key (kbd "C-\\") 'toggle-input-method)
   ;;   (setq pyim-dicts
   ;; 	  (quote
-  ;; 	   ((:name "Ä¬ÈÏ" :file "~/../Config/Dict/pyim-bigdict.pyim" :coding utf-8-unix :dict-type pinyin-dict))))
+  ;; 	   ((:name "é»˜è®¤" :file "~/../Config/Dict/pyim-bigdict.pyim" :coding utf-8-unix :dict-type pinyin-dict))))
 
   ;; 					;(global-set-key (kbd "M-k") 'pyim-convert-pinyin-at-point)
   ;;   (setq pyim-page-length 9)
@@ -193,7 +196,7 @@
   ;;   ;;(add-hook 'find-file-hooks 'activate-input-method-py)
   ;;   (add-hook 'find-file-hooks 'xah-math-input-mode)
 
-  ;;   ;; ¿ªÆôÆ´ÒôËÑË÷¹¦ÄÜ
+  ;;   ;; å¼€å¯æ‹¼éŸ³æœç´¢åŠŸèƒ½
   ;;   (setq pyim-isearch-enable-pinyin-search t)
 
   ;;   (global-set-key (kbd "M-f") 'pyim-forward-word)
@@ -204,7 +207,7 @@
 
 
   ;;------------------------------------- Backup and History -------------------------------
-  (setq create-lockfiles nil)  ;; Be aware that symbolic links of the form ¡°.#*¡± are not auto-save files but interlocks to prevent the simultaneous editing of the same file. You can prevent the creation of lock files by setting the variable create-lockfiles to nil
+  (setq create-lockfiles nil)  ;; Be aware that symbolic links of the form â€œ.#*â€ are not auto-save files but interlocks to prevent the simultaneous editing of the same file. You can prevent the creation of lock files by setting the variable create-lockfiles to nil
   (setq make-backup-files t)
   (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 
@@ -228,14 +231,14 @@
 					; (require 'filesets)
 					; (filesets-init)
 					; (setq filesets-data `(("thesis" (:files
-					; ,(concat prepath "Works/2010.9-2013.7¶Á²©ÏîÄ¿/Dissertation/Rnw/data/chap-semipara/chap-semipara.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7¶Á²©ÏîÄ¿/Dissertation/Rnw/data/chap-conclusion/chap-conclusion.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7¶Á²©ÏîÄ¿/Dissertation/Rnw/data/chap-country/chap-country.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7¶Á²©ÏîÄ¿/Dissertation/Rnw/data/chap-semimixed/chap-semimixed.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7¶Á²©ÏîÄ¿/Dissertation/Rnw/data/chap-district/chap-district.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7¶Á²©ÏîÄ¿/Dissertation/Rnw/data/chap-intro/chap-intro.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7¶Á²©ÏîÄ¿/Dissertation/Rnw/data/chap-nonpara/chap-nonpara.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7¶Á²©ÏîÄ¿/Dissertation/Rnw/thesis.Rnw")))))		
+					; ,(concat prepath "Works/2010.9-2013.7è¯»åšé¡¹ç›®/Dissertation/Rnw/data/chap-semipara/chap-semipara.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7è¯»åšé¡¹ç›®/Dissertation/Rnw/data/chap-conclusion/chap-conclusion.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7è¯»åšé¡¹ç›®/Dissertation/Rnw/data/chap-country/chap-country.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7è¯»åšé¡¹ç›®/Dissertation/Rnw/data/chap-semimixed/chap-semimixed.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7è¯»åšé¡¹ç›®/Dissertation/Rnw/data/chap-district/chap-district.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7è¯»åšé¡¹ç›®/Dissertation/Rnw/data/chap-intro/chap-intro.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7è¯»åšé¡¹ç›®/Dissertation/Rnw/data/chap-nonpara/chap-nonpara.Rnw")
+					; ,(concat prepath "Works/2010.9-2013.7è¯»åšé¡¹ç›®/Dissertation/Rnw/thesis.Rnw")))))		
 
   "Init Basic"
   (interactive)			
