@@ -228,17 +228,17 @@
   
 
   ;;----------------------------------------- filesets------------------------------
-					; (require 'filesets)
-					; (filesets-init)
-					; (setq filesets-data `(("thesis" (:files
-					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-semipara/chap-semipara.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-conclusion/chap-conclusion.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-country/chap-country.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-semimixed/chap-semimixed.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-district/chap-district.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-intro/chap-intro.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-nonpara/chap-nonpara.Rnw")
-					; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/thesis.Rnw")))))		
+	; (require 'filesets)
+	; (filesets-init)
+	; (setq filesets-data `(("thesis" (:files
+	; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-semipara/chap-semipara.Rnw")
+	; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-conclusion/chap-conclusion.Rnw")
+	; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-country/chap-country.Rnw")
+	; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-semimixed/chap-semimixed.Rnw")
+	; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-district/chap-district.Rnw")
+	; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-intro/chap-intro.Rnw")
+	; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/data/chap-nonpara/chap-nonpara.Rnw")
+	; ,(concat prepath "Works/2010.9-2013.7读博项目/Dissertation/Rnw/thesis.Rnw")))))		
 
   "Init Basic"
   (interactive)			
