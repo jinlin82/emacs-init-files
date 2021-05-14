@@ -1,11 +1,11 @@
 (defun init-completion ()
 
 ;;==================================== COMPLETION ===========================================
-;; Notice: auto-complete ºÍ bookmark+ ÒÔ¼° Icicles ÔÚÒ»Ğ© Major Mode ÖĞÓĞ³åÍ»£¬ °üÀ¨ R ºÍ latex
-;; ¶øIcicles ÊÇÎŞ·¨ÉáÆúµÄ¹¦ÄÜ£¬´ËÍâ sunrise commander ĞèÒª¼ÓÔØ bookmark+, ¶øsunrise commanderÒ²ÎŞ·¨ÉáÆú
-;; ¹ÊÖ»ÄÜÈÌÊÜÕâ¸öbug. ÔÚ R ÖĞÒÑÓÃ company mode ½üËÆ´úÌæ auto-completeµÄ¹¦ÄÜ£¬µ«ÔÚlatex-modeÖĞÈÔÃ»ÓĞÕÒµ½Ìæ´ú·½°¸
+;; Notice: auto-complete å’Œ bookmark+ ä»¥åŠ Icicles åœ¨ä¸€äº› Major Mode ä¸­æœ‰å†²çªï¼Œ åŒ…æ‹¬ R å’Œ latex
+;; è€ŒIcicles æ˜¯æ— æ³•èˆå¼ƒçš„åŠŸèƒ½ï¼Œæ­¤å¤– sunrise commander éœ€è¦åŠ è½½ bookmark+, è€Œsunrise commanderä¹Ÿæ— æ³•èˆå¼ƒ
+;; æ•…åªèƒ½å¿å—è¿™ä¸ªbug. åœ¨ R ä¸­å·²ç”¨ company mode è¿‘ä¼¼ä»£æ›¿ auto-completeçš„åŠŸèƒ½ï¼Œä½†åœ¨latex-modeä¸­ä»æ²¡æœ‰æ‰¾åˆ°æ›¿ä»£æ–¹æ¡ˆ
 
-;;-------- ¼ÓÔØ auto-compltete ---------
+;;-------- åŠ è½½ auto-compltete ---------
 (require 'auto-complete-config)
 (ac-config-default)
 (setq ac-auto-start 3)
@@ -15,8 +15,8 @@
 (setq-default ac-sources '(ac-source-abbrev ac-source-dictionary ))
 
 
-;-------- ÔÚlatex-modeÖĞ¼ÓÔØ auto-complete--------
-; ³åÍ»£¬ÎŞ·¨Ê¹ÓÃ£¬¼ûÉÏÃæËµÃ÷
+;-------- åœ¨latex-modeä¸­åŠ è½½ auto-complete--------
+; å†²çªï¼Œæ— æ³•ä½¿ç”¨ï¼Œè§ä¸Šé¢è¯´æ˜
 (require 'auto-complete-latex)
 (setq ac-modes (append ac-modes '(foo-mode)))
 (add-hook 'foo-mode-hook 'ac-l-setup)
@@ -97,7 +97,7 @@
 						 company-keywords
 						 company-oddmuse
 						 company-files
-						 ; company-dabbrev ; ÎÄ±¾²¹È«
+						 ; company-dabbrev ; æ–‡æœ¬è¡¥å…¨
 						 ))
 
 (add-hook 'after-init-hook 'global-company-mode)
@@ -126,7 +126,7 @@
 
 
 
-;;-------------ÔÚessÖĞÊ¹ÓÃ company-mode----------------
+;;-------------åœ¨essä¸­ä½¿ç”¨ company-mode----------------
  (setq ess-use-auto-complete nil)
 ;(setq ess-use-company nil)
  (add-hook 'inferior-ess-mode-hook 'company-mode)
@@ -140,7 +140,7 @@
 
 ;;----------------------------------------------------
 
-;; (require 'completion-ui)  ;; ËÆºõÃ»ÓĞÉÏÃæÁ½¸öºÃÓÃ
+;; (require 'completion-ui)  ;; ä¼¼ä¹æ²¡æœ‰ä¸Šé¢ä¸¤ä¸ªå¥½ç”¨
 
 
 ;;===================================== HElM ==========================================
@@ -194,7 +194,7 @@
 
 
 ;;----------------------------------------------- Icicles -----------------------------------
-; (require 'icicles)  ;;Òª³öÏÖÔÚdired-filetype-faceÖ®ºó, ³öÏÖÔÚido Ö®Ç°
+; (require 'icicles)  ;;è¦å‡ºç°åœ¨dired-filetype-faceä¹‹å, å‡ºç°åœ¨ido ä¹‹å‰
 ; (setq completions-format (quote vertical))
 ; (setq icicle-completions-format (quote vertical))
 ; (icy-mode 1)
@@ -278,8 +278,8 @@
 
 
 ;;===================================== TEMPLATES ==================================
-;; Ö÷ÒªÉæ¼°µ½Èı¸ö packages£º skeleton, tempo Óë yasnippet£¬¶ø clipper ÊÇÒ»¸öĞ¡ÇÉµÄÎÄ±¾
-;; ±£´æ¹¤¾ß£¬Ä¿Ç°·ûºÏÎÒµÄÒªÇó¡£
+;; ä¸»è¦æ¶‰åŠåˆ°ä¸‰ä¸ª packagesï¼š skeleton, tempo ä¸ yasnippetï¼Œè€Œ clipper æ˜¯ä¸€ä¸ªå°å·§çš„æ–‡æœ¬
+;; ä¿å­˜å·¥å…·ï¼Œç›®å‰ç¬¦åˆæˆ‘çš„è¦æ±‚ã€‚
 
 ;;---------------- Abbrev Mode ---------------
 ;; turn on abbrev mode globally
@@ -325,7 +325,7 @@
 ;; (add-to-list 'hippie-expand-try-functions-list #'yankpad-expand)
 
 
-(global-set-key (kbd "\C-x c") 'clear-shell) ;; Òª³öÏÖÔÚhelmÖ®ºó
+(global-set-key (kbd "\C-x c") 'clear-shell) ;; è¦å‡ºç°åœ¨helmä¹‹å
 
 
 ;; ================================== skeletor ======================================

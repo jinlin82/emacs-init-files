@@ -6,7 +6,7 @@
 (setq ess-ask-for-ess-directory nil)
 (setq ess-use-flymake nil)
 
-;; auto completion …Ë÷√‘⁄ completion.el ÷–
+;; auto completion ËÆæÁΩÆÂú® completion.el ‰∏≠
 
 ;(require 'ess-smart-underscore)
 (use-package ess-smart-equals
@@ -77,18 +77,18 @@
 				       (ess-fl-keyword:= . t)
 				       (ess-R-fl-keyword:F&T . t))))
 
-;;--------------------------------÷ÿ–¬∂®“Âess-swv-latex∫Ø ˝ ------------------------------
+;;--------------------------------ÈáçÊñ∞ÂÆö‰πâess-swv-latexÂáΩÊï∞ ------------------------------
 (defun ess-swv-latex ()
   "Run LaTeX on the product of Sweave()ing the current file."
   (interactive)
   (save-excursion
-    (let* ((namestem (file-name-sans-extension (shell-quote-argument (buffer-file-name))))  ;;”√(shell-quote-argument (buffer-file-name)) ∂¯≤ª «£®buffer-file-name£©±‹√‚¬∑æ∂√˚÷–ø’∞◊µº÷¬≥ˆœ÷¥ÌŒÛ
+    (let* ((namestem (file-name-sans-extension (shell-quote-argument (buffer-file-name))))  ;;Áî®(shell-quote-argument (buffer-file-name)) ËÄå‰∏çÊòØÔºàbuffer-file-nameÔºâÈÅøÂÖçË∑ØÂæÑÂêç‰∏≠Á©∫ÁôΩÂØºËá¥Âá∫Áé∞ÈîôËØØ
 	   (latex-filename (concat namestem ".tex"))
 	   (tex-buf (get-buffer-create " *ESS-tex-output*")))
       (message "Running LaTeX on '%s' ..." latex-filename)
-      ;;(switch-to-buffer tex-buf)     ;;≤ª◊™œÚ*ESS-tex-output*
-      ;;(call-process "latex" nil tex-buf 1 latex-filename) ;;≤ªƒ‹…˙≥…DVIµƒSource Link
-      (call-process-shell-command "xelatex --synctex=1"nil tex-buf 1 latex-filename);; ;; π”√xelatex“˝«Ê
+      ;;(switch-to-buffer tex-buf)     ;;‰∏çËΩ¨Âêë*ESS-tex-output*
+      ;;(call-process "latex" nil tex-buf 1 latex-filename) ;;‰∏çËÉΩÁîüÊàêDVIÁöÑSource Link
+      (call-process-shell-command "xelatex --synctex=1"nil tex-buf 1 latex-filename);; ;;‰ΩøÁî®xelatexÂºïÊìé
       (switch-to-buffer (buffer-name))
       (display-buffer tex-buf)
       (message "Finished running LaTeX" ))))
@@ -96,7 +96,7 @@
 ;; ---------Send a blank line from code to *R*
 (setq ess-eval-empty t)
 
-;; -------------------- «Â∆¡ -----------------------
+;; -------------------- Ê∏ÖÂ±è -----------------------
 (defun clear-shell ()
   (interactive)
   (let ((old-max comint-buffer-maximum-size))
@@ -108,7 +108,7 @@
 
 ;;---------------------------------------ESSOutlineMode------------------------------------
 ;;Outline mode for .R files
-;;In order to enable Emacs°Ø standard OutlineMode for .R files:
+;;In order to enable Emacs‚Äô standard OutlineMode for .R files:
 
 (add-hook 'ess-mode-hook
 	  '(lambda ()
@@ -144,13 +144,13 @@
 (global-set-key (kbd "s-P") 'outline-previous-heading)
 (global-set-key (kbd "s-N") 'outline-next-heading)
 ;;This is what Andrei sent to the ess-help mailing list on 2010-08-18. Thank you, Andrei! It is based on an adapted (by me, Sven)
-;;version of Heinz Tuechler°Øs outline suggestion he posted to the ESS-help mailing list on 2007-05-11.
+;;version of Heinz Tuechler‚Äôs outline suggestion he posted to the ESS-help mailing list on 2007-05-11.
 
 ;;The above will define the following heading levels in .R files:
 ;;lines starting with #####  --> level 1
 ;;lines starting with ####   --> level 2
 ;;R functions                --> level 3
-;;Although R functions are not °∞headings°± really, I still imagine this could be a nice way of getting an overview over a larger .R file. I can°Øt yet say whether it will prove useful for me in the long run. ®C Sven
+;;Although R functions are not ‚Äúheadings‚Äù really, I still imagine this could be a nice way of getting an overview over a larger .R file. I can‚Äôt yet say whether it will prove useful for me in the long run. ‚Äì Sven
 
 
 ;-----------------------------------------ado-Mode-------------------------------------------

@@ -19,8 +19,8 @@
 (add-hook 'doc-view-mode-hook 'my-inhibit-global-linum-mode)
 	
 ;; =================================== pdf-tools =======================================
-;; Ê¹ÓÃ¹Ù·½°æ 64 Î»ÏµÍ³²»±ÀÀ££¬ËÙ¶È¸ü¿ì¡£ ÎªÖ§³Öpdf tools¿ÉÏÂÔØ pdf-tools-20180428.827.7z
-;; ½âÑ¹ºócopyÖÁelpaÎÄ¼ş¼Ğ¼´¿É£¨×¢ÒâÉ¾³ıÆäËû°æ±¾µÄpdf-toolsÎÄ¼ş¼Ğ£©
+;; ä½¿ç”¨å®˜æ–¹ç‰ˆ 64 ä½ç³»ç»Ÿä¸å´©æºƒï¼Œé€Ÿåº¦æ›´å¿«ã€‚ ä¸ºæ”¯æŒpdf toolså¯ä¸‹è½½ pdf-tools-20180428.827.7z
+;; è§£å‹åcopyè‡³elpaæ–‡ä»¶å¤¹å³å¯ï¼ˆæ³¨æ„åˆ é™¤å…¶ä»–ç‰ˆæœ¬çš„pdf-toolsæ–‡ä»¶å¤¹ï¼‰
 
 (pdf-tools-install)
 (setq-default pdf-view-display-size 'fit-page)
@@ -109,17 +109,17 @@
 (add-hook 'pdf-view-mode-hook 'pdf-midnite-colour-schemes)
 
 (defun pdf-set-key ()
-(define-key pdf-view-mode-map "," 'pdf-view-first-page)                     ;µÚÒ»Ò³
-(define-key pdf-view-mode-map "." 'pdf-view-last-page)                      ;×îºóÒ»Ò³
-(define-key pdf-view-mode-map "g" 'pdf-view-goto-page)                      ;Ìøµ½µÚ¼¸Ò³
-(define-key pdf-view-mode-map "e" 'pdf-view-scroll-down-or-previous-page)   ;ÏòÉÏ¹ö¶¯Ò»ÆÁ
-(define-key pdf-view-mode-map "SPC" 'pdf-view-scroll-up-or-next-page)       ;ÏòÏÂ¹ö¶¯Ò»ÆÁ
-(define-key pdf-view-mode-map "j" 'pdf-view-next-line-or-next-page)         ;ÏÂÒ»ĞĞ»òÏÂÒ»ÆÁ
-(define-key pdf-view-mode-map "k" 'pdf-view-previous-line-or-previous-page) ;ÉÏÒ»ĞĞ»òÉÏÒ»ÆÁ
-(define-key pdf-view-mode-map "h" 'image-scroll-right)         ;ÏÂÒ»ĞĞ»òÏÂÒ»ÆÁ
-(define-key pdf-view-mode-map "l" 'image-scroll-left) ;ÉÏÒ»ĞĞ»òÉÏÒ»ÆÁ
-(define-key pdf-view-mode-map "x" 'kill-this-buffer)                        ;ÍË³ö
-(define-key pdf-view-mode-map "d" 'quit-window)                        ;ÍË³ö
+(define-key pdf-view-mode-map "," 'pdf-view-first-page)                     ;ç¬¬ä¸€é¡µ
+(define-key pdf-view-mode-map "." 'pdf-view-last-page)                      ;æœ€åä¸€é¡µ
+(define-key pdf-view-mode-map "g" 'pdf-view-goto-page)                      ;è·³åˆ°ç¬¬å‡ é¡µ
+(define-key pdf-view-mode-map "e" 'pdf-view-scroll-down-or-previous-page)   ;å‘ä¸Šæ»šåŠ¨ä¸€å±
+(define-key pdf-view-mode-map "SPC" 'pdf-view-scroll-up-or-next-page)       ;å‘ä¸‹æ»šåŠ¨ä¸€å±
+(define-key pdf-view-mode-map "j" 'pdf-view-next-line-or-next-page)         ;ä¸‹ä¸€è¡Œæˆ–ä¸‹ä¸€å±
+(define-key pdf-view-mode-map "k" 'pdf-view-previous-line-or-previous-page) ;ä¸Šä¸€è¡Œæˆ–ä¸Šä¸€å±
+(define-key pdf-view-mode-map "h" 'image-scroll-right)         ;ä¸‹ä¸€è¡Œæˆ–ä¸‹ä¸€å±
+(define-key pdf-view-mode-map "l" 'image-scroll-left) ;ä¸Šä¸€è¡Œæˆ–ä¸Šä¸€å±
+(define-key pdf-view-mode-map "x" 'kill-this-buffer)                        ;é€€å‡º
+(define-key pdf-view-mode-map "d" 'quit-window)                        ;é€€å‡º
 (define-key pdf-view-mode-map (kbd "<C-wheel-up>") 'pdf-view-enlarge)
 (define-key pdf-view-mode-map (kbd "<C-wheel-down>") 'pdf-view-shrink)
 (define-key pdf-view-mode-map (kbd "C-c C-c") 'interleave-open-notes-file-for-pdf)
@@ -136,7 +136,7 @@
 (add-hook 'pdf-view-mode-hook 'pdf-tools-set-coding-system)
 
 ;; ============================= org-noter =================================
-;; Ä¿Ç°¹ıÓÚ¸´ÔÓ£¬²»Ì«Ö±¹Û£¬µ«ÊÇ¹¦ÄÜËÆºõ±È½ÏÇ¿´ó£¬ÒÔºóÓĞ»ú»áÊÔÓÃ
+;; ç›®å‰è¿‡äºå¤æ‚ï¼Œä¸å¤ªç›´è§‚ï¼Œä½†æ˜¯åŠŸèƒ½ä¼¼ä¹æ¯”è¾ƒå¼ºå¤§ï¼Œä»¥åæœ‰æœºä¼šè¯•ç”¨
 ; (setq org-noter-always-create-frame nil)
 ; (setq org-noter-default-notes-file-names (quote ("PDFNotes.org")))
 ; (setq org-noter-notes-window-behavior (quote (scroll only-prev)))
@@ -155,7 +155,7 @@
 	; (define-key org-noter-doc-mode-map "q" 'org-noter-kill-session-modified))) 
 
 ;; ============================= interleave ================================
-;; ÎªÁËÔö¼ÓÏà¶ÔÂ·¾¶£¬ÔÚinterleaveÖĞhacked by Jin Lin Èı´¦
+;; ä¸ºäº†å¢åŠ ç›¸å¯¹è·¯å¾„ï¼Œåœ¨interleaveä¸­hacked by Jin Lin ä¸‰å¤„
  (setq nterleave-disable-narrowing t)
  (setq interleave-insert-relative-name nil)
  (setq interleave-org-notes-dir-list (quote ((concat prepath "Works/Learning/Interleave_Org/") ".")))

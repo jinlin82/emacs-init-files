@@ -1,7 +1,7 @@
 (defun init-lang ()
 
 ;;======================================Programming Language Setup======================================
-;;-------------------------------°²×°ecbºÍcedet--------------------------------------
+;;-------------------------------å®‰è£…ecbå’Œcedet--------------------------------------
 ;(load-file "~/../Emacs24.2/site-lisp/cedet-1.1/common/cedet.
 ;(global-ede-mode 1)                      ; Enable the Project management system
 ;(semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion
@@ -22,7 +22,7 @@
 ;;(slime-setup '(slime-fancy slime-asdf))
 
 ;;-----------------------------------------header2------------------------------
-;; ×¢Òâ£º header2.el ÖĞ header-end-line º¯Êı½øĞĞÁË¸ü¸Ä
+;; æ³¨æ„ï¼š header2.el ä¸­ header-end-line å‡½æ•°è¿›è¡Œäº†æ›´æ”¹
 ;; ((nonempty-comment-start))
 ;((make-string 70 (aref comment-start 0)))  ;; HACK by Jin Lin
 

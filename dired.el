@@ -26,7 +26,7 @@
 (global-set-key (kbd "C-x n o") #'create-new-org-buffer-untitled)
 
 ;; --------------------- springboard ------------------------
-;; ×¢Òâ£º¶Ôspringboard.el ½øĞĞÁË hack
+;; æ³¨æ„ï¼šå¯¹springboard.el è¿›è¡Œäº† hack
 (if (eq system-type 'windows-nt)
     (global-set-key (kbd "C-,") 'springboard)
   (global-set-key (kbd "C-x ,") 'springboard)
@@ -34,7 +34,7 @@
 (setq springboard-directories (list (concat prepath "" ) 
 				      (concat prepath "works") 
 				      (concat prepath "works/teaching") 
-				      (concat prepath "Works/2013.7-ÖĞÄÏ²Æ¾­Õş·¨´óÑ§Í³ÊıÑ§Ôº") 
+				      (concat prepath "Works/2013.7-ä¸­å—è´¢ç»æ”¿æ³•å¤§å­¦ç»Ÿæ•°å­¦é™¢") 
 				      (concat prepath "works/learning") 
 				      (concat prepath "works/temp") 
 				      (concat prepath "works/working_paper") 
@@ -62,8 +62,8 @@
 
 ;; -------------------------- find-file-in-project --------------------------
 (require 'find-file-in-project)
-;; fd.exe ËÙ¶È¸ü¿ì£¬µ«´æÔÚÒ»¸öbug£¬²»ÄÜÕÒµ½ .emacs.d ÎÄ¼ş¼Ğ¼°ÆäÄÚÈİ
-;; ÕÒ²»µ½ÎÄ¼şÊôÓÚÉèÖÃÔ­Òò£¬ĞèÉèÖÃ ffip-ignore-filenames ±äÁ¿£¬¼ûÏÂÃæ
+;; fd.exe é€Ÿåº¦æ›´å¿«ï¼Œä½†å­˜åœ¨ä¸€ä¸ªbugï¼Œä¸èƒ½æ‰¾åˆ° .emacs.d æ–‡ä»¶å¤¹åŠå…¶å†…å®¹
+;; æ‰¾ä¸åˆ°æ–‡ä»¶å±äºè®¾ç½®åŸå› ï¼Œéœ€è®¾ç½® ffip-ignore-filenames å˜é‡ï¼Œè§ä¸‹é¢
 (setq ffip-use-rust-fd t)
 (setq ffip-rust-fd-respect-ignore-files nil)
 (when (eq system-type 'windows-nt) (setq ffip-find-executable "fd"))
@@ -232,7 +232,7 @@
 
 (defun sunrise-startup ()
   (interactive)
-  (setq default-directory (concat prepath "Works/2013.7-ÖĞÄÏ²Æ¾­Õş·¨´óÑ§Í³ÊıÑ§Ôº/"))
+  (setq default-directory (concat prepath "Works/2013.7-ä¸­å—è´¢ç»æ”¿æ³•å¤§å­¦ç»Ÿæ•°å­¦é™¢/"))
   (sunrise-cd)
   (sr-change-window)
   (sr-w32-virtual-entries)

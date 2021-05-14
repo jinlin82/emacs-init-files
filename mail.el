@@ -1,7 +1,7 @@
 (defun init-mail ()
 
 ;; ============================Sending Mail============================
-(setq user-full-name  "½ğÁÖ"
+(setq user-full-name  "é‡‘æ—"
 user-mail-address  "jinlin82@qq.com"
 mail-from-style    'angles)
 
@@ -19,30 +19,30 @@ mail-from-style    'angles)
 	   
 
 (setq pop3-uidl-file "~/Gnus/.pop3-uidl")
-(setq gnus-startup-file "~/Gnus/.newsrc")                  ;³õÊ¼ÎÄ¼ş
-(setq gnus-init-file "~/Gnus/.gnus.el")                  ;³õÊ¼ÎÄ¼ş
+(setq gnus-startup-file "~/Gnus/.newsrc")                  ;åˆå§‹æ–‡ä»¶
+(setq gnus-init-file "~/Gnus/.gnus.el")                  ;åˆå§‹æ–‡ä»¶
 (setq gnus-home-directory "~/Gnus/")
 (setq gnus-directory "~/Gnus/News/")
-(setq gnus-dribble-directory "~/Gnus/")                    ;»Ö¸´Ä¿Â¼
-(setq gnus-article-save-directory "~/Gnus/News/")          ;ÎÄÕÂ±£´æÄ¿Â¼
-(setq gnus-kill-files-directory "~/Gnus/News/")      ;ÎÄ¼şÉ¾³ıÄ¿Â¼
-(setq gnus-cache-directory "~/Gnus/News/cache/")           ;»º´æÄ¿Â¼
-(setq message-directory "~/Gnus/Mail/")                    ;ÓÊ¼şµÄ´æ´¢Ä¿Â¼
-(setq message-auto-save-directory "~/Gnus/Mail/drafts")    ;×Ô¶¯±£´æµÄÄ¿Â¼
-(setq mail-source-directory "~/Gnus/Mail/")        ;ÓÊ¼şµÄÔ´Ä¿Â¼
-(setq nnmail-message-id-cache-file "~/Gnus/.nnmail-cache") ;nnmailµÄÏûÏ¢ID»º´æ
+(setq gnus-dribble-directory "~/Gnus/")                    ;æ¢å¤ç›®å½•
+(setq gnus-article-save-directory "~/Gnus/News/")          ;æ–‡ç« ä¿å­˜ç›®å½•
+(setq gnus-kill-files-directory "~/Gnus/News/")      ;æ–‡ä»¶åˆ é™¤ç›®å½•
+(setq gnus-cache-directory "~/Gnus/News/cache/")           ;ç¼“å­˜ç›®å½•
+(setq message-directory "~/Gnus/Mail/")                    ;é‚®ä»¶çš„å­˜å‚¨ç›®å½•
+(setq message-auto-save-directory "~/Gnus/Mail/drafts")    ;è‡ªåŠ¨ä¿å­˜çš„ç›®å½•
+(setq mail-source-directory "~/Gnus/Mail/")        ;é‚®ä»¶çš„æºç›®å½•
+(setq nnmail-message-id-cache-file "~/Gnus/.nnmail-cache") ;nnmailçš„æ¶ˆæ¯IDç¼“å­˜
 (setq nnfolder-directory "~/Gnus/Mail/archive/")
-;;(setq nntp-authinfo-file "~/Gnus/.authinfo") ;;smtp authinfo ²»Ö§³ÖÖ¸¶¨Î»ÖÃ£¬Òò´ËÍ³Ò»Ê¹ÓÃ ~/.authinfo
+;;(setq nntp-authinfo-file "~/Gnus/.authinfo") ;;smtp authinfo ä¸æ”¯æŒæŒ‡å®šä½ç½®ï¼Œå› æ­¤ç»Ÿä¸€ä½¿ç”¨ ~/.authinfo
 
 
 (setq mail-default-directory "~/Gnus")
-(setq message-confirm-send t)                       ;·ÀÖ¹Îó·¢ÓÊ¼ş, ·¢ÓÊ¼şÇ°ĞèÒªÈ·ÈÏ
-(setq message-kill-buffer-on-exit t)                ;ÉèÖÃ·¢ËÍÓÊ¼şºóÉ¾³ıbuffer
-(setq message-from-style 'angles)                   ;`From' Í·µÄÏÔÊ¾·ç¸ñ
+(setq message-confirm-send t)                       ;é˜²æ­¢è¯¯å‘é‚®ä»¶, å‘é‚®ä»¶å‰éœ€è¦ç¡®è®¤
+(setq message-kill-buffer-on-exit t)                ;è®¾ç½®å‘é€é‚®ä»¶ååˆ é™¤buffer
+(setq message-from-style 'angles)                   ;`From' å¤´çš„æ˜¾ç¤ºé£æ ¼
 
 (setq message-signature-directory "~./Gnus/")
 (setq message-signature-file "~./Gnus/.signature")
-(setq message-forward-as-mime nil)                    ;ÒÔÆÕÍ¨¸ñÊ½×ª·¢ÓÊ¼ş£¬²»ÊÇÒÔ¸½¼ş×ª·¢
+(setq message-forward-as-mime nil)                    ;ä»¥æ™®é€šæ ¼å¼è½¬å‘é‚®ä»¶ï¼Œä¸æ˜¯ä»¥é™„ä»¶è½¬å‘
 (setq message-forward-show-mml nil)
 	
 
@@ -72,13 +72,13 @@ mail-from-style    'angles)
 				  
 ;; ======================== Reading Mail ================================
 ;;-------------RMAIL--------------------------
-;; RMAIL µÄÎÊÌâ: 1. ÒªÃ´É¾³ı ÓÊ¼ş£¬ÒªÃ´ÖØ¸´ÊÕÈ¡ÓÊ¼ş 2. ²»ÄÜ¶ÁÈ¡ html ÓÊ¼ş
+;; RMAIL çš„é—®é¢˜: 1. è¦ä¹ˆåˆ é™¤ é‚®ä»¶ï¼Œè¦ä¹ˆé‡å¤æ”¶å–é‚®ä»¶ 2. ä¸èƒ½è¯»å– html é‚®ä»¶
  ; (setenv "MAILHOST" "pop.qq.com")
  ; (setq rmail-primary-inbox-list '("po:jinlin82")
        ; rmail-pop-password-required t)
 
-;; Emacs Wiki ÏÂÃæÆäËû·½Ê½¾ù³õ²½ÊÔ¹ı£¬¶¼²»ÄÜÔÚ Windows ÏÂÓ¦ÓÃ¡£
-;; Òò´Ë Î¨Ò»µÄÑ¡Ôñ Gnus
+;; Emacs Wiki ä¸‹é¢å…¶ä»–æ–¹å¼å‡åˆæ­¥è¯•è¿‡ï¼Œéƒ½ä¸èƒ½åœ¨ Windows ä¸‹åº”ç”¨ã€‚
+;; å› æ­¤ å”¯ä¸€çš„é€‰æ‹© Gnus
 
 ; (require 'oauth2)
 ; (require 'google-contacts)

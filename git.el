@@ -207,7 +207,6 @@
                                  (cons "LANG=utf-8" process-environment))))
        (apply 'process-file "hg" nil output nil args)))))
 
-
 "Init Git"
 (interactive)			
 			)

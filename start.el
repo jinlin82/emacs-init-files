@@ -1,6 +1,6 @@
 (defun init-start ()
 
-;; ¿½µ½UÅÌÖĞ×÷Á½´¦ĞŞ¸Ä£º1. ĞŞ¸ÄÂ·¾¶Ãû£¬°ÑËùÓĞÎÄ¼şÖĞµÄ C:\ ĞŞ¸Ä³É H:\£¬ 2. °Ñface.elÖĞµÄ×ÖÌå´Ó Consola ĞŞ¸Ä³É Courier new
+;; æ‹·åˆ°Uç›˜ä¸­ä½œä¸¤å¤„ä¿®æ”¹ï¼š1. ä¿®æ”¹è·¯å¾„åï¼ŒæŠŠæ‰€æœ‰æ–‡ä»¶ä¸­çš„ C:\ ä¿®æ”¹æˆ H:\ï¼Œ 2. æŠŠface.elä¸­çš„å­—ä½“ä» Consola ä¿®æ”¹æˆ Courier new
 
 ;; PATH Settings
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -53,22 +53,22 @@
 
 
 ; ===== load all at Notebook 20s ===========
-(init-basic) ;; ¶ÀÁ¢  start in Notebook 2s
-(init-edit)  ;; ÒÀÀµ basic;  start in Notebook 1s
-(init-dired) ;;¶ÀÁ¢ start in Notebook 6s
-(init-tex)   ;;¶ÀÁ¢ start in Notebook 2s
-(init-ess)  ;; ¶ÀÁ¢    start in Notebook 0.5s 
-(init-org)      ;;ÒÀÀµ tex ºÍ ess, start in Notebook 3s
-(init-rmd)        ;;ÒÀÀµ ess
-(init-lang)      ;;¶ÀÁ¢ start in Notebook 0.5s
-(init-python)      ;;¶ÀÁ¢ start in Notebook 0.5s
+(init-basic) ;; ç‹¬ç«‹  start in Notebook 2s
+(init-edit)  ;; ä¾èµ– basic;  start in Notebook 1s
+(init-dired) ;;ç‹¬ç«‹ start in Notebook 6s
+(init-tex)   ;;ç‹¬ç«‹ start in Notebook 2s
+(init-ess)  ;; ç‹¬ç«‹    start in Notebook 0.5s 
+(init-org)      ;;ä¾èµ– tex å’Œ ess, start in Notebook 3s
+(init-rmd)        ;;ä¾èµ– ess
+(init-lang)      ;;ç‹¬ç«‹ start in Notebook 0.5s
+(init-python)      ;;ç‹¬ç«‹ start in Notebook 0.5s
 (init-completion)
-(init-face)    ;;ÒÀÀµ basic£¬edit, mix;  start in Notebook 1s
-(init-mix)      ;;¶ÀÁ¢start in Notebook 2s
+(init-face)    ;;ä¾èµ– basicï¼Œedit, mix;  start in Notebook 1s
+(init-mix)      ;;ç‹¬ç«‹start in Notebook 2s
 (init-git)
 (if (not (string-equal (downcase (substring (expand-file-name "~") 0 1)) (downcase "H"))) 
-(init-mail)  ;;ÒÀÀµ org;   start in Notebook 1.5s
-(init-emms)    ;;¶ÀÁ¢  start in Notebook 0.5s
+(init-mail)  ;;ä¾èµ– org;   start in Notebook 1.5s
+(init-emms)    ;;ç‹¬ç«‹  start in Notebook 0.5s
 )
 (init-evil)
 (if (eq system-type 'windows-nt) (init-pdf))
