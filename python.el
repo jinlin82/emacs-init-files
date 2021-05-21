@@ -90,8 +90,8 @@
 ;; ein-jupyter.el 中hack 函数 ein:jupyter-server-start
 
 (setq ein:jupyter-default-notebook-directory (concat prepath "Books/Statsoft/Python/ipynb"))
-(setq elpy-rpc-pythonpath "~/../Config/.emacs.d/elpa/elpy-20201003.2153/elpy")
-;(add-hook 'ein:notebook-multilang-mode-hook 'poly-ein-mode)  ;; polymode 很慢，并且编辑时(jit-lock--run-functions 95 186)错误，目前可用于浏览
+(setq elpy-rpc-pythonpath "~/../Config/.emacs.d/elpa/elpy-20210328.1852/elpy")
+(add-hook 'ein:notebook-multilang-mode-hook 'poly-ein-mode)  ;; polymode 很慢，并且编辑时(jit-lock--run-functions 95 186)错误，目前可用于浏览
 (add-hook 'ein:notebook-multilang-mode-hook 'cdlatex-mode)
 (add-hook 'ein:notebook-multilang-mode-hook 'autopair-mode)
 
