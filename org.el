@@ -282,8 +282,8 @@
       (save-excursion
 	(goto-char (point-min)) 
 	(while 
-	    (search-forward-regexp " *\\$\\([^$].*?[^$]\\)\\$[^$] *" nil t)
-	  (replace-match " $\\1$ " nil nil))))
+	    (search-forward-regexp "\\(^\\|[^$\n]\\) *\\$\\([^$\n]+?\\)\\$ *" nil t)
+	  (replace-match "\\1 $\\2$ " nil nil))))
     ))
 
 (define-key org-mode-map (kbd "M-n d") 'replace-regexp-math-delimiter-display)
@@ -788,6 +788,7 @@ unwanted space when exporting org-mode to odt."
 ;; ================================ USE ploymode =================================
 ;; 要放在最下面，否则与org-capture冲突
 ;; 要从github版本替换掉mepha版本，并且删掉 autoload 等文件，只留下 poly-org.el 文件
+;; org中的python代码块最后一句运行有问题，主要是和elpy-shell-send-statement-and-step有关系，因为会超越代码块范围寻找statement
 (require 'poly-org)
 (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
 
@@ -851,8 +852,26 @@ unwanted space when exporting org-mode to odt."
 
 
 ;; Automatically toggle org-mode latex fragment previews  
+(defalias #'org-latex-preview #'math-preview-at-point)
+(defalias #'org-clear-latex-preview #'math-preview-clear-region)
+(setq math-preview-inline-style nil)
+(setq math-preview-margin (quote (2 . 1)))
+(setq math-preview-raise 0.25)
+(setq math-preview-relief 0)
+(setq math-preview-scale 2.5)
+(setq math-preview-scale-increment 0.1)
+
+
 (require 'org-fragtog)
 (add-hook 'org-mode-hook 'org-fragtog-mode)
+(add-hook 'markdown-mode-hook 'org-fragtog-mode)
+
+;;---- org-latex-impatient
+; (require 'org-latex-impatient)
+; (add-hook 'org-mode-hook org-latex-impatient-mode)
+  ; (setq org-latex-impatient-tex2svg-bin
+        ; location of tex2svg executable
+        ; "C:/Users/JL/node_modules/.bin/tex2svg")
 
 ;; Org-Projectile
 (require 'org-projectile)
