@@ -179,7 +179,25 @@
 )
 (define-key magit-status-mode-map (kbd "C-c v") 'magit-open-readme)
 
+;;;单独 gitee 项目中在 emacs中 COMMIT_EDITMSG 乱码，HACKed magit-commit-create 函数
 
+(defun magit-commit-create (&optional args)
+  "Create a new commit on `HEAD'.
+With a prefix argument, amend to the commit at `HEAD' instead.
+\n(git commit [--amend] ARGS)"
+  (set-language-environment "UTF-8")    ;; HACKed by Jin Lin
+  (interactive (if current-prefix-arg
+                   (list (cons "--amend" (magit-commit-arguments)))
+                 (list (magit-commit-arguments))))
+  (when (member "--all" args)
+    (setq this-command 'magit-commit-all))
+  (when (setq args (magit-commit-assert args))
+    (let ((default-directory (magit-toplevel)))
+      (magit-run-git-with-editor "commit" args))))
+  
+	  
+(add-hook 'with-editor-post-cancel-hook '(lambda () (set-language-environment "Chinese-GBK")))
+(add-hook 'with-editor-post-finish-hook '(lambda () (set-language-environment "Chinese-GBK")))
 
 ;;; git-messenger
 ;; git-messenger.el 中 (setq-local default-process-coding-system '(utf-8 . utf-8)) ;; Hacked by Jin Lin
