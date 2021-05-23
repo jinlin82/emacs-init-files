@@ -62,7 +62,7 @@
 					;(setq coding-system-for-write 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
 					
 ;;Set default encoding system for opening and saving					
-  (set-language-environment "UTF-8")
+  ;; (set-language-environment "UTF-8") ;; 不能增加这句，会导致Rconsole乱码， 如代码中输入 "收敛率"
 ; (set-language-environment 'Chinese-GB)
 
   (set-default-coding-systems 'utf-8)
@@ -95,6 +95,11 @@
 	    (merge-coding-systems coding-system buffer-file-coding-system)))
   (let ((coding-system-for-read coding-system))
     (revert-buffer t t)))
+	
+(defun revert-buffer-with-coding-system-no-confirm-utf8 ()
+	(interactive)
+	(revert-buffer-with-coding-system-no-confirm 'utf-8)
+)
 
 
   (setq default-directory (concat prepath "Works/temp/"))
