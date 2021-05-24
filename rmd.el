@@ -150,7 +150,7 @@ map))
 ;;---支持LaTeX公式 ------
 ; (setq markdown-enable-math t) ;; 在这里设置无效，要在custom.el 设置，不知道原因
 (add-hook 'markdown-mode-hook 'cdlatex-mode)
-; (add-hook 'markdown-mode-hook 'org-fragtog-mode)  ;;性能问题，需要时打开
+(add-hook 'markdown-mode-hook 'org-fragtog-mode)  ;;性能问题，需要时打开
 
 
 ;;支持文献引用，注意 rmd 文件中需使用注释行：[//]: # (\bibliography{bibfile})

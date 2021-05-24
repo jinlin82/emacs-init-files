@@ -143,6 +143,10 @@
 (setq TeX-source-specials-view-start-server t)
 (add-to-list 'TeX-command-list '("View" "%V" TeX-run-discard nil t))
 
+;;Magically enhance LaTeX-mode font-locking for semi-WYSIWYG editing.
+(require 'magic-latex-buffer)
+(add-hook 'latex-mode-hook 'magic-latex-buffer)
+
 
 ;;;Count TeX Words
 (defun my-latex-setup ()

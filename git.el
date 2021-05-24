@@ -209,7 +209,7 @@ With a prefix argument, amend to the commit at `HEAD' instead.
 (setq git-messenger:show-detail t)
 (setq git-messenger:use-magit-popup t)
 
-;; ------------------------- HACK ----------------------------------
+;; -------------------- HACK 修复commit message 中含有中文乱码-------------------
 (defun git-messenger:execute-command (vcs args output)
   (cl-case vcs
     (git (progn
@@ -224,6 +224,7 @@ With a prefix argument, amend to the commit at `HEAD' instead.
                                  "HGPLAIN=1"
                                  (cons "LANG=utf-8" process-environment))))
        (apply 'process-file "hg" nil output nil args)))))
+
 
 "Init Git"
 (interactive)			
