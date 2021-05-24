@@ -285,6 +285,30 @@
 	    (search-forward-regexp "\\(^\\|[^$\n]\\) *\\$\\([^$\n]+?\\)\\$ *" nil t)
 	  (replace-match "\\1 $\\2$ " nil nil))))
     ))
+	
+(defun math-delimiter-add-newline-for-typora(beg end)
+  (interactive "*r")
+  (let ((beg (if (region-active-p)
+                 (region-beginning)
+               (point-min)))
+        (end (if (region-active-p)
+                 (region-end)
+              (point-max))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (save-excursion
+	(goto-char (point-min)) 
+	(while 
+	  (search-forward-regexp "^ *\\(\\$\\$\\)\\([^ \n]\\)" nil t)
+	  (replace-match "\\1\n\\2" nil nil))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (save-excursion
+	(goto-char (point-min)) 
+	(while 
+	  (search-forward-regexp "\\(.\\)\\(\\$\\$\\) *$" nil t)
+	  (replace-match "\\1\n\\2" nil nil))))
+    ))
 
 (define-key org-mode-map (kbd "M-n d") 'replace-regexp-math-delimiter-display)
 (define-key org-mode-map (kbd "M-n M-d") 'replace-regexp-math-delimiter-inline)
@@ -559,6 +583,7 @@ unwanted space when exporting org-mode to odt."
    (quote ("-a" "-nobibsource" "-noabstract" "-nokeywords" "-i" "-nolinks")))
 ;; 样式在 ox-bibtex-chinese-default-bibtex-style 变量中设置
 
+
 ;; 在org文件中 增加以下语句
 ;;# \bibliography{Bibfile}  % 使用该注释行让 org-ref 找到本地bib文件
 ;;#+BIBLIOGRAPHY: Bibfile nil limit:t
@@ -662,6 +687,7 @@ unwanted space when exporting org-mode to odt."
 
 
 ;; =================================== trello ==================================
+;; 注意：trello时间消耗太多
 ;; 注意：Headline 与内容中间不要空行，否则出现问题！！！
 ;; 在安卓app中设置后sort by date create(newest first) 乱码
 ;; 如何单个head乱码，可试试同步整个buffer
@@ -694,8 +720,7 @@ unwanted space when exporting org-mode to odt."
 	(setq current-prefix-arg '(4)) ; C-u
 	(call-interactively 'org-trello-sync-card)
 	;; (setq coding-system-for-read nil)
-	)
-      )
+	)  )
     ))
 		  
 (add-hook 'org-mode-hook #'my/org-mode-hook-org-trello-mode)
