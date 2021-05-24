@@ -460,33 +460,34 @@ Version 2017-01-15"
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
 
+
 (setq ibuffer-saved-filter-groups
       '(("home"
-	 ("LaTex" (or (mode . latex-mode)
-		      (filename . ".Rnw")
-		      (name . "\*RefTex Select\*")
-		      (name . "\*toc\*")
-		      ))
 	 ("Dired" (or (mode . sr-mode)
 		      (mode . dired-mode)
 		      (mode . sr-virtual-mode)
 		      (mode . sr-tree-mode)
 		      (mode . sr-buttons-mode)
 		      ))
+	 ("LaTex" (or (mode . latex-mode)
+		      (filename . ".Rnw")
+		      (name . "\*RefTex Select\*")
+		      (name . "\*toc\*")
+		      ))
+	 ("Markdown" (or  (filename . ".Rmd")
+		     (filename . ".md")
+		     ))
 	 ("Org" (or  (filename . ".org")
 		     (filename . ".Org")
 		     (name .  "\*Org Agenda\*")
-		     ))
-	 ("R" (or  (mode . inferior-ess-mode)
-		   (mode . ess-mode)
-		   ))
-	 ("Markdown" (or  (filename . ".Rmd")
-		     (filename . ".md")
 		     ))
 	 ("Python" (or  (mode . inferior-python-mode)
 		   (mode . python-mode)
 		   ))
 	 ("EIN" (or  (name . "*ein")
+		   ))
+	 ("R" (or  (mode . inferior-ess-r-mode)
+		   (mode . ess-r-mode)
 		   ))
 	 ("Magit" (or  (mode . magit-mode)
 	               (mode . magit-process-mode)
@@ -500,14 +501,89 @@ Version 2017-01-15"
 (add-hook 'ibuffer-mode-hook
 	  '(lambda ()
 	     (ibuffer-switch-to-saved-filter-groups "home")))
+		 
 (setq ibuffer-expert t)
 (setq ibuffer-show-empty-filter-groups nil)
+
 (add-hook 'ibuffer-mode-hook
 	  '(lambda ()
 	     (ibuffer-auto-mode 1)
 	     (ibuffer-switch-to-saved-filter-groups "home")))
 ;;(use-package buff-menu+)
 
+;; 修改为左键打开buffer
+(setq ibuffer-name-map '(keymap
+ (down-mouse-3 . ibuffer-mouse-popup-menu)
+ (mouse-1 . ibuffer-mouse-visit-buffer)
+ (mouse-2 . ibuffer-mouse-toggle-mark)))
+ 
+
+;;-------------------all-the-icons-ibuffer----------------------
+(setq all-the-icons-ibuffer-formats '((mark modified read-only locked " "
+       (icon 2 2 :left :elide)
+       #(" " 0 1
+	 (display
+	  (space :align-to 8)))
+       (name 18 18 :left :elide)
+       " "
+       (size-h 9 -1 :right)
+       " "
+       (mode+ 16 16 :left :elide)
+	   " "
+	   (vc-status 10 10 :left)
+       " " filename-and-process+)
+ (mark " "
+       (name 16 -1)
+       " " filename)))
+	   
+(all-the-icons-ibuffer-mode 1)
+
+(setq ibuffer-sidebar-formats '((mark modified read-only locked " "
+       (icon 2 2 :left :elide)
+       #(" " 0 1
+	 (display
+	  (space :align-to 8)))
+       (name 18 18 :left :elide))))
+
+
+
+;;----------------ibuffer-projectile-----------------
+; (add-hook 'ibuffer-hook
+    ; (lambda ()
+      ; (ibuffer-projectile-set-filter-groups)
+      ; (unless (eq ibuffer-sorting-mode 'alphabetic)
+        ; (ibuffer-do-sort-by-alphabetic))))
+		
+; To display filenames relative to the project root, use project-relative-file in ibuffer-formats, e.g.:
+; (setq ibuffer-formats
+      ; '((mark modified read-only " "
+              ; (name 18 18 :left :elide)
+              ; " "
+              ; (size 9 -1 :right)
+              ; " "
+              ; (mode 16 16 :left :elide)
+              ; " "
+              ; project-relative-file)))
+
+;;;------------- ibuffer-vc-------------
+(define-key ibuffer-mode-map (kbd "C-c v") 'ibuffer-vc-set-filter-groups-by-vc-root)
+;;   (add-hook 'ibuffer-hook
+;;     (lambda ()
+;;       (ibuffer-vc-set-filter-groups-by-vc-root)
+;;       (unless (eq ibuffer-sorting-mode 'alphabetic)
+;;         (ibuffer-do-sort-by-alphabetic))))
+
+;; (setq ibuffer-formats
+;;       '((mark modified read-only vc-status-mini " "
+;;               (name 18 18 :left :elide)
+;;               " "
+;;               (size 9 -1 :right)
+;;               " "
+;;               (mode 16 16 :left :elide)
+;;               " "
+;;               (vc-status 16 16 :left)
+;;               " "
+;;               vc-relative-file)))
 
 ;;-----------------------------Control TAB buffer Cycling-----------------------------
 (global-set-key [(control tab)] 'bury-buffer)
