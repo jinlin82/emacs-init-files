@@ -41,10 +41,16 @@
 (set-face-attribute 'org-level-2 nil :height 1.1 :bold t)
 (set-face-attribute 'org-level-3 nil :height 1.0 :bold t)
 
-(require 'org-bullets)
-(setq org-bullets-bullet-list  '("" "●" "○" "◆" "◇" "▹"))
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+; (require 'org-bullets)
+; (setq org-bullets-bullet-list  '("" "●" "○" "◆" "◇" "▹"))
+; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 (add-hook 'org-mode-hook 'org-num-mode)
+
+(require 'org-superstar)
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+(setq org-superstar-headline-bullets-list '("" "●" "○" "◆" "◇" "▹"))
+(setq org-superstar-item-bullet-alist (quote ((42 . 8226) (43 . 8226) (45 . 8226))))
+(setq org-superstar-leading-bullet "  ")
 
 ;;----------------- 设置 auto fill width -----------------
 (add-hook 'org-mode-hook

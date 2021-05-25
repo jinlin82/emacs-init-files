@@ -144,7 +144,7 @@ map))
 )
 
 
-
+(add-hook 'markdown-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'markdown-mode-hook 'pandoc-md-html-setup t)
 
 ;;---支持LaTeX公式 ------

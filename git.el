@@ -225,7 +225,12 @@ With a prefix argument, amend to the commit at `HEAD' instead.
                                  (cons "LANG=utf-8" process-environment))))
        (apply 'process-file "hg" nil output nil args)))))
 
-
+;; 注意 git-timemachine 存在中文乱码问题，该包比较有用，但存在大量的中文编码问题，直接对git-timemachine.el做了很多修改
+(require 'git-timemachine)
+(global-set-key (kbd "C-c t") 'git-timemachine) 
+(define-key git-timemachine-mode-map (kbd "RET") 'git-timemachine--show-minibuffer-details-for-current)
+(define-key git-timemachine-mode-map (kbd "SPC") 'git-timemachine-show-current-revision)
+  
 "Init Git"
 (interactive)			
 			)

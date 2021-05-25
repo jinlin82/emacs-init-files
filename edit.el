@@ -52,6 +52,15 @@
 (show-smartparens-global-mode t))
 ; )
 
+(defun my-turn-on-pair-mode ()
+  (smartparens-global-mode 1)
+  (show-smartparens-global-mode 1)
+  ) ;; an argument of 1 will enable most modes
+
+(add-hook 'minibuffer-setup-hook 'my-turn-on-pair-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook 'my-turn-on-pair-mode)
+
+
 ; (if (version< emacs-version "24.3")
   ; (set-parens-24.2)
   ; (set-parens-24.5)
@@ -322,7 +331,6 @@ Version 2017-01-15"
 (volatile-highlights-mode t)
 (use-package mark-tools))
 ;;(global-set-key (kbd "C-x m") 'list-marks-other-window)
-
 
 
 ;;===============================================register Setup===============================================
@@ -727,7 +735,15 @@ This command is convenient when reading novel, documentation."
 ;----- goto-line-preview
 (global-set-key [remap goto-line] 'goto-line-preview)
 
+;; Redefine M-< and M-> (or any key bound to beginning-of-buffer or end-of-buffer) for some modes so that point moves to meaningful locations.
+(require 'beginend)
+(dolist (mode (cons 'beginend-global-mode (mapcar #'cdr beginend-modes)))
+        (diminish mode))
+(beginend-global-mode)
 
+(require 'mwim)
+(global-set-key (kbd "C-a") 'mwim-beginning)
+(global-set-key (kbd "C-e") 'mwim-end)
 
 ;;; ------------ imenu-list --------------------------
 (setq imenu-list-focus-after-activation t)
