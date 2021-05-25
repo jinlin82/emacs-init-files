@@ -41,8 +41,8 @@
 (setq dashboard-startup-banner 'logo)
 
 (setq dashboard-items '(
-						(projects . 8)
 						(recents  . 8)
+						(projects . 8)
 						(agenda . 8)
                         ; (bookmarks . 5)                                              
                         ; (registers . 5)
