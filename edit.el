@@ -19,6 +19,9 @@
 
 ;; 鼠标滚动行数  
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ))
+(setq mouse-wheel-progressive-speed nil)
+(setq mouse-wheel-follow-mouse 't)
+
 
 
 (require 'fast-scroll)
