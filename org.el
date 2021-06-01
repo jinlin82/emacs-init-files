@@ -504,6 +504,7 @@
   (define-key org-mode-map "\M-n\M-v" 'org-view-pdf)
   (define-key org-mode-map "\M-n\M-h" 'org-view-html)
   (define-key org-mode-map "\M-nl" 'org-view-latex)
+  (define-key org-mode-map "\M-n\M-l" 'helm-imenu)
   (define-key org-mode-map (kbd "C-c C-;") 'org-toggle-comment)
   (define-key org-mode-map (kbd "C-,") 'springboard)
 )

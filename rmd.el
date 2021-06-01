@@ -123,7 +123,7 @@ Not effective after loading the polymode library."
 		(define-key map "\M-b" 'org-emphasize-math)
 		(define-key map "\M-v" 'org-view-pdf)
 		(define-key map "l" 'org-view-latex)
-        (define-key map "\M-l" 'org-toggle-latex-fragment)
+        (define-key map "\M-l" 'helm-imenu)
         (define-key map "s" 'math-delimiter-add-space-inline)
 		(define-key map "\M-h" 'org-view-html)
 		(define-key map "\C-m" 'polymode-mark-or-extend-chunk)
