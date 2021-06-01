@@ -273,9 +273,9 @@ defaults to \"Eval region\"."
 (define-key orgalist-mode-map (kbd "M-S-<down>") 'orgalist-next-item)
 (define-key orgalist-mode-map (kbd "<M-RET>") 'markdown-insert-list-item)
 
+(add-hook 'org-mode-hook #'ws-butler-mode)
 
-
-;;========================================Markdown Mode Setup END=============================================
+;;=================================Markdown Mode Setup END===================================
 "Init Rmd"
 (interactive)			
 			)

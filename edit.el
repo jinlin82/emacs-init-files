@@ -758,6 +758,10 @@ This command is convenient when reading novel, documentation."
 
 (dumb-jump-mode)
 
+;; ws-butler -- an unobtrusive way to trim spaces from end of line
+(require 'ws-butler)
+(add-hook 'prog-mode-hook #'ws-butler-mode)
+
 "Init Edit"
 (interactive)			
 			)

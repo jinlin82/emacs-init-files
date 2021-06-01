@@ -359,7 +359,11 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 ;; (setq fci-rule-column 80)
 ;; (add-hook 'after-change-major-mode-hook 'fci-mode)
 
-				  
+
+;;Global minor mode that centers the text of the window. 
+(require 'centered-window)
+(centered-window-mode t)
+		
 
 "Init Face"
 (interactive)			

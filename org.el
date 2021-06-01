@@ -951,6 +951,7 @@ unwanted space when exporting org-mode to odt."
 (global-set-key (kbd "C-c p n") 'org-projectile-project-todo-completing-read)
 
 
+(add-hook 'org-mode-hook #'ws-butler-mode)
 
 ;;========================================Org Mode Setup END=============================================
 "Init Org"
