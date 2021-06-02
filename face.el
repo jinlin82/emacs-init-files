@@ -334,6 +334,7 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 (diminish 'auto-revert-mode) 
 (diminish 'auto-fill-mode)
 (diminish 'fast-scroll-minor-mode)
+(diminish 'ws-butler-mode)
 ;(diminish 'which-key-mode) ;; 不起作用
 (setq which-key-lighter "")
 ;(diminish 'wakatime-mode) ;; 要出现在加载wakatime-mode之后
