@@ -57,7 +57,7 @@
 
 (setq python-indent-guess-indent-offset t)  
 (setq python-indent-guess-indent-offset-verbose nil)
-(setq eldoc-idle-delay 1)
+(setq eldoc-idle-delay 2)
 (setq elpy-autodoc-delay 1)
 (setq elpy-eldoc-show-current-function t)
 (setq elpy-get-info-from-shell t)

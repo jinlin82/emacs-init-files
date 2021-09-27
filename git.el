@@ -158,7 +158,7 @@
 
 (defun gitee-browse ()
   (interactive)
-(browse-url (magit-git-string "remote" "get-url" (magit-get-remote)))
+(browse-url (magit-git-string "remote" "get-url" (if (magit-get-remote) (magit-get-remote) "Gitee")))
 (message (concat (magit-get-remote) " Website Opened" ))
 )
 
