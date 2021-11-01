@@ -402,7 +402,7 @@
   aboveskip=5pt,
   belowskip=0pt,
   language=R,
-  basicstyle=\\ttfamily\\footnotesize,
+  basicstyle=\\fontshape{sl}\\ttfamily\\footnotesize,
   columns=flexible,
   keepspaces=true,
   breaklines=true,

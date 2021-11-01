@@ -364,7 +364,25 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 ;;Global minor mode that centers the text of the window. 
 (require 'centered-window)
 (centered-window-mode t)
-		
+;; 修改窗口按列分栏时left-fringe 消失的问题
+;; https://github.com/anler/centered-window-mode/pull/39
+(defun cwm-calculate-appropriate-fringe-widths (window)
+  (let* ((mode-active-p (with-current-buffer (window-buffer window) centered-window-mode))
+         (pixel (frame-char-width (window-frame window)))
+         (window-width (window-total-width window))
+         (n  (if mode-active-p
+               (max
+                (/ (- window-width cwm-centered-window-width)
+                   2)
+                (if cwm-incremental-padding
+                    (/ (* window-width cwm-incremental-padding-%)
+                       100)
+                  0))
+               0))
+         (ratio (/ (* n cwm-left-fringe-ratio) 100))
+         (left-width (if (> n 0) (* pixel (+ n ratio)) nil))  ;; HACKED by JL
+         (right-width (if (> n 0) (* pixel (+ n ratio)) 0)))  ;; HACKED by JL
+    `(,left-width . ,right-width)))
 
 "Init Face"
 (interactive)			
