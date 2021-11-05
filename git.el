@@ -154,7 +154,44 @@
    ;:init (global-flycheck-mode)
    )
 
+
+;;;----------------------------- git-link browse remote ---------------------------------------------
+(require 'git-link)
+; (add-to-list 'git-link-remote-alist '("gitee" git-link-gitub))
+; (add-to-list 'git-link-commit-remote-alist '("gitee" git-link-commit-github))
+
+(setq git-link-open-in-browser t) 
+(setq git-link-commit-remote-alist
+   (quote
+    (("git.sr.ht" git-link-commit-github)
+     ("codeberg.org" git-link-commit-codeberg)
+     ("github" git-link-commit-github)
+     ("bitbucket" git-link-commit-bitbucket)
+     ("gitorious" git-link-commit-gitorious)
+     ("gitlab" git-link-commit-github)
+     ("git\\.\\(sv\\|savannah\\)\\.gnu\\.org" git-link-commit-savannah)
+     ("visualstudio\\|azure" git-link-commit-azure)
+     ("sourcegraph" git-link-commit-sourcegraph)
+     ("gitee" git-link-commit-github))))
+
+ (setq git-link-remote-alist
+   (quote
+    (("git.sr.ht" git-link-sourcehut)
+     ("codeberg.org" git-link-codeberg)
+     ("github" git-link-github)
+     ("bitbucket" git-link-bitbucket)
+     ("gitorious" git-link-gitorious)
+     ("gitlab" git-link-gitlab)
+     ("git\\.\\(sv\\|savannah\\)\\.gnu\\.org" git-link-savannah)
+     ("visualstudio\\|azure" git-link-azure)
+     ("sourcegraph" git-link-sourcegraph)
+     ("gitee" git-link-github))))
+	 
+(add-to-list 'git-link-homepage-remote-alist '("gitee" git-link-homepage-github))
+(global-set-key (kbd "C-c g l") 'git-link)
+	 
 (define-key magit-status-mode-map (kbd "C-c b") 'magithub-browse)
+(global-set-key (kbd "C-c g b") 'magithub-browse)
 
 (defun gitee-browse ()
   (interactive)
@@ -163,6 +200,7 @@
 )
 
 (define-key magit-status-mode-map (kbd "C-c t") 'gitee-browse)
+(global-set-key (kbd "C-c g t") 'gitee-browse)
 
 (defun magit-open-readme ()
   (interactive)
@@ -178,6 +216,9 @@
   )
 )
 (define-key magit-status-mode-map (kbd "C-c v") 'magit-open-readme)
+
+
+
 
 ;;;单独 gitee 项目中在 emacs中 COMMIT_EDITMSG 乱码，HACKed magit-commit-create 函数
 
