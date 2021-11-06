@@ -381,7 +381,7 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
                0))
          (ratio (/ (* n cwm-left-fringe-ratio) 100))
          (left-width (if (> n 0) (* pixel (+ n ratio)) nil))  ;; HACKED by JL
-         (right-width (if (> n 0) (* pixel (+ n ratio)) 0)))  ;; HACKED by JL
+         (right-width (if (> n 0) (* pixel (- n ratio)) 0)))  ;; HACKED by JL
     `(,left-width . ,right-width)))
 
 "Init Face"
