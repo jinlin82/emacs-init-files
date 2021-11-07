@@ -366,19 +366,19 @@
 (defun open-with-vim ()
     (interactive)
     (start-process-shell-command "Vim" "*Messages*"
-				 (concat "gvim -p --remote-tab-silent "
-					 (if buffer-file-name buffer-file-name default-directory)))
+				 (concat "gvim -p --remote-tab-silent " "\""
+					 (if buffer-file-name buffer-file-name default-directory) "\"" ))
     (message (concat (buffer-name) " Opened with Vim")))
 
 (defun open-with-vscode ()
   (interactive)
   (progn
     (start-process-shell-command "Vscode" "*Messages*"
-				 (concat "code "
-					(if (projectile-project-root)  (projectile-project-root) default-directory)))
+				 (concat "code ""\""
+					(if (projectile-project-root)  (projectile-project-root) default-directory)"\"" ))
     (start-process-shell-command "Vscode" "*Messages*"
-				 (concat "code "
-					 (if buffer-file-name buffer-file-name default-directory)))
+				 (concat "code ""\""
+					 (if buffer-file-name buffer-file-name default-directory)"\"" ))
     )
     (message (concat (buffer-name) " Opened with Vscode")))
 
