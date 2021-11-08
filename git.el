@@ -157,10 +157,16 @@
 
 ;;;----------------------------- git-link browse remote ---------------------------------------------
 (require 'git-link)
+(setq git-link-open-in-browser t)
+
+;; git-link 文件夹函数不支持中文，改用已有函数
+(defalias 'git-link--repo-root 'vc-root-dir)
+(defalias 'git-link--relative-filename 'magit-file-relative-name)
+
+;; 增加 Gitee 支持
 ; (add-to-list 'git-link-remote-alist '("gitee" git-link-gitub))
 ; (add-to-list 'git-link-commit-remote-alist '("gitee" git-link-commit-github))
 
-(setq git-link-open-in-browser t) 
 (setq git-link-commit-remote-alist
    (quote
     (("git.sr.ht" git-link-commit-github)
@@ -216,9 +222,7 @@
   )
 )
 (define-key magit-status-mode-map (kbd "C-c v") 'magit-open-readme)
-
-
-
+;; ----------------------------------------------------------------------------------
 
 ;;;单独 gitee 项目中在 emacs中 COMMIT_EDITMSG 乱码，HACKed magit-commit-create 函数
 
