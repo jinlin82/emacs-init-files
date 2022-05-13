@@ -124,6 +124,9 @@
   '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)
   )
 
+;;; python R 中无法起作用
+; (require 'company-box)
+; (add-hook 'company-mode-hook 'company-box-mode)
 
 
 ;;-------------在ess中使用 company-mode----------------

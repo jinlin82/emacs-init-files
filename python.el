@@ -6,23 +6,37 @@
 ;;================================== Python ==================================
 (require 'python)
 
-(setq
-  python-shell-interpreter "ipython"
-  python-shell-interpreter-args "-i"
-  ;python-shell-unbuffered nil
-  ;python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-  ;python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-)
+;; Use Jupyter console (recommended for interactive Python):
+; (setq python-shell-interpreter "jupyter"
+      ; python-shell-interpreter-args "console --simple-prompt"
+      ; python-shell-prompt-detect-failure-warning nil)
+; (add-to-list 'python-shell-completion-native-disabled-interpreters
+             ; "jupyter")
+
+;; Use IPython:
+(setq python-shell-interpreter "ipython"
+python-shell-interpreter-args "-i --simple-prompt")
+
+(defun ipython-or-jupyter-toggle ()
+  (interactive)
+  (cond ((string-equal "ipython" python-shell-interpreter)
+	 (progn
+	   (setq python-shell-interpreter "jupyter"
+		 python-shell-interpreter-args "console --simple-prompt"
+		 python-shell-prompt-detect-failure-warning nil)
+	   (add-to-list 'python-shell-completion-native-disabled-interpreters
+			"jupyter")
+	   ))
+	((string-equal "jupyter" python-shell-interpreter)
+	 (setq python-shell-interpreter "ipython"
+	       python-shell-interpreter-args "-i --simple-prompt")
+	 )))
+
+(python-shell-interpreter-toggle)
+
 
 (defun ipy ()
   (interactive)
-  (setq
-  python-shell-interpreter "ipython"
-  python-shell-interpreter-args "-i"
-  ;python-shell-unbuffered nil
-  ;python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-  ;python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-)
   (call-interactively 'run-python)
   (other-window 1)
 )
@@ -41,8 +55,10 @@
 
 
 ;;-------------- elpy ----------------
+;; 把 emacs elpa中的elpy 文件夹复制到C:\Anaconda3\Lib\site-packages\elpy下面
+;; 安装 elpy 新版本时要把.emacs.d中的elpy文件夹删掉重新安装生成
 ;; 特别注意：要把 elpy.el中的  (set (make-local-variable 'company-idle-delay)
-;;          0.5) ;; 需要从0.1修改为0.5才不卡
+;;          0.5) ;; 需要从0.1修改为0.5才不卡;;  新版本中不会
 ;; 注意：elpy 自动补全 需要 ("jedi" "flake8" "autopep8" "yapf" "black" "rope") 支持
 (add-hook 'python-mode-hook (lambda () (auto-complete-mode -1))) ;; 关闭auto-complete-mod 
 
@@ -62,7 +78,7 @@
 (setq elpy-eldoc-show-current-function t)
 (setq elpy-get-info-from-shell t)
 (setq elpy-shell-starting-directory (quote current-directory))
-
+(setq elpy-shell-display-buffer-after-send t)
 
 
 ;;------------ autopep8 -------------- 
@@ -71,9 +87,26 @@
 ;(setq py-autopep8-options '("--max-line-length=78" "--indent-size=3")) ;设置为3的原因是为4时在latex lstings 中显示有问题
 
 (add-hook 'python-mode-hook '(lambda () 
-(setq python-indent 3)))
+(setq python-indent 4)))
 
- 
+;;;; 定义一个行内区域发送函数
+(defun elpy-shell-send-region-no-expand (start end &optional send-main msg
+                                       no-cookie)
+  (interactive
+   (list (region-beginning) (region-end) current-prefix-arg t))
+  (let* ((process (python-shell-get-process-or-error msg))
+         (original-string (buffer-substring-no-properties start end))
+         (_ (string-match "\\`\n*\\(.*\\)" original-string)))
+    (message "Sent: %s..." (match-string 1 original-string))
+    (with-current-buffer (process-buffer process)
+      (compilation-forget-errors))
+	(elpy-shell--append-to-shell-output original-string)
+    (python-shell-send-string original-string process)
+    (deactivate-mark)))
+
+(define-key python-mode-map (kbd "<M-RET>") 'elpy-shell-send-region-no-expand)
+(define-key python-mode-map (kbd "C-c v c") 'elpy-shell-send-codecell-and-step)
+
  
 ;;;==================== EIN SETTINGS  startup to slow =====================
  ;(require 'ein)
@@ -90,7 +123,7 @@
 ;; ein-jupyter.el 中hack 函数 ein:jupyter-server-start
 
 (setq ein:jupyter-default-notebook-directory (concat prepath "Books/Statsoft/Python/ipynb"))
-(setq elpy-rpc-pythonpath "~/../Config/.emacs.d/elpa/elpy-20210328.1852/elpy")
+(setq elpy-rpc-pythonpath "~/../Config/.emacs.d/elpa/elpy-20220322.41/elpy")
 (add-hook 'ein:notebook-multilang-mode-hook 'poly-ein-mode)  ;; polymode 很慢，并且编辑时(jit-lock--run-functions 95 186)错误，目前可用于浏览
 (add-hook 'ein:notebook-multilang-mode-hook 'cdlatex-mode)
 (add-hook 'ein:notebook-multilang-mode-hook 'autopair-mode)
@@ -119,7 +152,19 @@
 ;;;================== EIN SETTINGS END ===================
 
 ;;;=================== python-x ==========================
-(python-x-setup)
+; (python-x-setup)
+
+;;; 使用 jupyter console 时 anaconda-mode 有问题，并且 jupyter console启动速度较慢
+;;; 使用 ipython 时优点速度较快，但画图使用 plt.show(block=False) 时窗口冻结
+
+(add-hook 'python-mode-hook 'anaconda-mode)
+(add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+
+(eval-after-load "anaconda-mode"
+  '(progn
+(define-key anaconda-mode-map (kbd "M-,") 'delete-window)))
+
+;;; python-cell
 
 "Init Python"
 (interactive)			

@@ -10,15 +10,16 @@
 					;(define-key isearch-mode-map "\e" 'isearch-abort)   ;; \e seems to work better for terminals
   (global-set-key  (kbd "M-z") 'keyboard-escape-quit)         ;; everywhere else
 
-
   (global-set-key (kbd "M-s") nil)
   (global-set-key (kbd "M-s") 'yank)
-  (global-set-key (kbd "M-k") 'kill-buffer)
+  (global-set-key (kbd "M-k") 'kill-current-buffer)
   (global-set-key (kbd "M-j") 'ibuffer)
   (global-set-key (kbd "M-a") 'delete-other-windows)
   (global-set-key (kbd "M-,") 'delete-window)
+  (global-set-key (kbd "C-z") 'delete-frame)
   (global-set-key (kbd "M-g l") 'goto-last-change)
   (global-set-key (kbd "M-g r") 'replace-string)
+  (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
 
 
   ; (global-set-key (kbd "M-c") 'search-map)
@@ -57,21 +58,21 @@
   ;;==================================Basic Config==================================
   ;;set the default text coding system
   (setq default-buffer-file-coding-system 'utf-8)
-					; (prefer-coding-system 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
-					;(setq coding-system-for-read 'utf-8)  ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
-					;(setq coding-system-for-write 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
+;; (prefer-coding-system 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
+;;(setq coding-system-for-read 'utf-8)  ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
+;;(setq coding-system-for-write 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
 					
-;;Set default encoding system for opening and saving					
-  ;; (set-language-environment "UTF-8") ;; 不能增加这句，会导致Rconsole乱码， 如代码中输入 "收敛率"
-; (set-language-environment 'Chinese-GB)
+;; Set default encoding system for opening and saving
+;; (set-language-environment "UTF-8") ;; 不能增加这句，会导致Rconsole乱码， 如代码中输入 "收敛率"
+;; (set-language-environment 'Chinese-GB)
 
   (set-default-coding-systems 'utf-8)
   (set-buffer-file-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
 
   (set-keyboard-coding-system 'utf-8)   ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"，2019 ess 中OK了
-					; (set-clipboard-coding-system 'utf-8)  ;; 不能增加，粘贴出现乱码
-					; (set-selection-coding-system 'utf-8)  ;; 不能增加，粘贴出现乱码
+ ; (set-clipboard-coding-system 'utf-8)  ;; 不能增加，粘贴出现乱码
+ ; (set-selection-coding-system 'utf-8)  ;; 不能增加，粘贴出现乱码
 
   (modify-coding-system-alist 'process "*" 'utf-8)
   ;; 下面要设置为 gb2312，否则message中出现乱码

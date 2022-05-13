@@ -44,7 +44,7 @@
 ; (require 'org-bullets)
 ; (setq org-bullets-bullet-list  '("" "●" "○" "◆" "◇" "▹"))
 ; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-(add-hook 'org-mode-hook 'org-num-mode)
+
 
 (require 'org-superstar)
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
@@ -792,6 +792,8 @@ unwanted space when exporting org-mode to odt."
 			     ;(concat prepath "Works/Org/Tasks.org")
 
 			     ))
+				 
+(add-hook 'org-mode-hook 'org-num-mode)				 
 (require 'todoist)
 (find-file-noselect (concat prepath "Works/Org/Todoist.org"))
 (with-current-buffer "Todoist.org"
@@ -886,12 +888,13 @@ unwanted space when exporting org-mode to odt."
 ;; Automatically toggle org-mode latex fragment previews  
 (defalias #'org-latex-preview #'math-preview-at-point)
 (defalias #'org-clear-latex-preview #'math-preview-clear-region)
-(setq math-preview-inline-style nil)
+(setq math-preview-inline-style t)
 (setq math-preview-margin (quote (2 . 1)))
-(setq math-preview-raise 0.25)
+(setq math-preview-raise 0.20)
 (setq math-preview-relief 0)
-(setq math-preview-scale 2.5)
+(setq math-preview-scale 1.0)
 (setq math-preview-scale-increment 0.1)
+
 
 
 (require 'org-fragtog)
@@ -953,6 +956,7 @@ unwanted space when exporting org-mode to odt."
 
 
 (add-hook 'org-mode-hook #'ws-butler-mode)
+
 
 ;;========================================Org Mode Setup END=============================================
 "Init Org"

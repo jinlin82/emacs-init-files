@@ -1,11 +1,17 @@
 (defun init-face ()
 ;;-========================================界面配置  ===============================
+;; (desktop-save-mode 1)
 
 ;; ------------- rainbow-delimiters-mode -------------------
 (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'ess-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'inferior-ess-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+;;------------------------- tab bar mode -----------------------------------------
+(setq tab-bar-show 1)
+(tab-bar-history-mode)
+(setq tab-bar-new-tab-choice 'recentf-open-files)
 
 
 ;; ==================================== 字体设置 ===================================
@@ -139,6 +145,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;;------------------Only open one emacs window-----------------------------------------
+(server-force-delete)  ;; WARNING: Kills any existing edit server
 (server-start)
 
 ;; ===================================== MODE LINE ====================================
@@ -183,7 +190,8 @@
      ((selection-info
 	   buffer-encoding-abbrev
        point-position
-       line-column)
+       ; line-column
+	   )
       :separator " | ")  
       (buffer-position hud :separator "")
 	 (battery :when active)  ;; 修改在mode line 中的位置
@@ -230,15 +238,15 @@
 
 
 (setq config-alist
-            '(("*" all-the-icons-octicon "pencil" :height 1.0 :v-adjust -0.0 :face 'all-the-icons-dred)
-              ("-" all-the-icons-octicon "three-bars" :height 1.0 :v-adjust -0.05 :face 'all-the-icons-green)
-              ("%" all-the-icons-octicon "lock" :height 1.0 :v-adjust -0.1 :face 'all-the-icons-purple)
+            '(("*" all-the-icons-faicon "circle" :height 0.5 :v-adjust -0.03 :face '(:foreground "red4"))
+              ("-" all-the-icons-faicon "check-circle" :height 0.6 :v-adjust -0.03 :face '(:foreground "DarkGreen"))
+              ("%" all-the-icons-faicon "times-circle" :height 0.6 :v-adjust -0.03 :face 'all-the-icons-purple)
 	      ))
 
 
 (spaceline-define-segment buffer-modified
   "Buffer modified marker."
-  (propertize (format (eval (cdr (assoc (format-mode-line "%*") config-alist))) "%s") )
+
   )
 
 (defface my-file-face
@@ -247,11 +255,42 @@
       ))
   "face for user defined variables."
 )  
-  
+
+(setq all-the-icons-ibuffer-icon-v-adjust -0.1)
 (spaceline-define-segment buffer-id
   "Name of buffer."
-  (propertize (powerline-buffer-id) 'face 'my-file-face)
-  )
+
+(let ((icon (cond ((and (buffer-file-name) (all-the-icons-auto-mode-match?))
+                     (all-the-icons-icon-for-file (file-name-nondirectory (buffer-file-name))
+                                                  :height all-the-icons-ibuffer-icon-size
+                                                  :v-adjust all-the-icons-ibuffer-icon-v-adjust))
+                    ((eq major-mode 'dired-mode)
+                     (all-the-icons-icon-for-dir (buffer-name)
+                                                 :height all-the-icons-ibuffer-icon-size
+                                                 :v-adjust all-the-icons-ibuffer-icon-v-adjust
+                                                 :face 'all-the-icons-ibuffer-dir-face))
+                    (t (all-the-icons-icon-for-mode major-mode
+                                                    :height all-the-icons-ibuffer-icon-size
+                                                    :v-adjust all-the-icons-ibuffer-icon-v-adjust)))))
+    (if (or (null icon) (symbolp icon))
+        (setq icon (all-the-icons-faicon "file-o"
+                                         :face (if all-the-icons-ibuffer-color-icon
+                                                   'all-the-icons-dsilver
+                                                 'all-the-icons-ibuffer-icon-face)
+                                         :height (* 0.9 all-the-icons-ibuffer-icon-size)
+                                         :v-adjust all-the-icons-ibuffer-icon-v-adjust))
+      (let* ((props (get-text-property 0 'face icon))
+             (family (plist-get props :family))
+             (face (if all-the-icons-ibuffer-color-icon
+                       (or (plist-get props :inherit) props)
+                     'all-the-icons-ibuffer-icon-face))
+             (new-face `(:inherit ,face :family ,family)))
+        (concat
+     (propertize icon 'face new-face)
+	(propertize (powerline-buffer-id) 'face 'my-file-face)
+	" " 
+    (propertize (format (eval (cdr (assoc (format-mode-line "%*") config-alist))) "%s"))	
+  )))))
 
 
 (declare-function pdf-view-current-page 'pdf-view)
@@ -270,29 +309,12 @@
   )
 
 (defface my-size-face
-  '((t :foreground "DarkGreen"
+  '((t :foreground "purple"
        :weight bold
       ))
   "face for user defined variables."
 )    
-  
-(spaceline-define-segment buffer-size
-  "Size of buffer."
-  (propertize (powerline-buffer-size) 'face 'my-size-face))  
 
-(defface my-major-face
-  '((t :foreground "SkyBlue1"
-       :weight bold
-      ))
-  "face for user defined variables.")
-
-
-  
-(spaceline-define-segment major-mode
-  "The name of the major mode."
-  (propertize (powerline-major-mode) 'face 'my-major-face)  
-  )  
-  
 ;; pdf-tools page
 (defface my-page-face
   '((t :foreground "SeaGreen"
@@ -311,33 +333,42 @@ currently displayed pdf file in `pdf-view-mode'."
           (eval `(pdf-view-current-page))
           (pdf-cache-number-of-pages)))
 
-(spaceline-define-segment line-column
+(global-total-lines-mode)
+
+(spaceline-define-segment buffer-size
   "The current line and column numbers, or `(current page/number of pages)`
 in pdf-view mode (enabled by the `pdf-tools' package)."
-  (propertize (if (eq major-mode 'pdf-view-mode)
-      (spaceline--pdfview-page-number) 
-    "%l:%2c")'face 'my-page-face))
+ (concat (cond ((eq major-mode 'pdf-view-mode) (spaceline--pdfview-page-number)) 
+			    ((bound-and-true-p total-lines-mode) (concat 
+				(propertize "%l(" 'face '(:foreground "purple" :weight bold)) 
+				(propertize (format "%d" total-lines) 'face '(:foreground "red4" :weight bold)) 
+				(propertize "):%c" 'face '(:foreground "purple" :weight bold))
+				))
+			    (t (propertize "%l:%c" 'face '(:foreground "purple" :weight bold)))) 
+				(propertize "|" 'face '(:foreground "tan4")) 
+				(propertize (powerline-buffer-size) 'face '(:foreground "DarkGreen" :slant italic)) 
+				)
+  )
+
+(defface my-major-face
+  '((t :foreground "SkyBlue1"
+       :weight bold
+      ))
+  "face for user defined variables.")
 
 
-	
-(global-anzu-mode +1)
-(diminish 'undo-tree-mode)
-(diminish 'guide-key-mode)
-(diminish 'anzu-mode)
-(diminish 'smartparens-mode)
-(diminish 'volatile-highlights-mode)
-(diminish 'org-cdlatex-mode)
-(diminish 'auto-complete-mode)
-(diminish 'helm-mode)
-(diminish 'company-mode)
-(diminish 'abbrev-mode)
-(diminish 'auto-revert-mode) 
-(diminish 'auto-fill-mode)
-(diminish 'fast-scroll-minor-mode)
-(diminish 'ws-butler-mode)
-;(diminish 'which-key-mode) ;; 不起作用
-(setq which-key-lighter "")
-;(diminish 'wakatime-mode) ;; 要出现在加载wakatime-mode之后
+  
+(spaceline-define-segment major-mode
+  "The name of the major mode."
+  (propertize (powerline-major-mode) 'face 'my-major-face)  
+  )  
+  
+
+
+
+
+
+
 
 
 ;;===================================== MODE LINE END =======================================
@@ -383,6 +414,31 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
          (left-width (if (> n 0) (* pixel (+ n ratio)) nil))  ;; HACKED by JL
          (right-width (if (> n 0) (* pixel (- n ratio)) 0)))  ;; HACKED by JL
     `(,left-width . ,right-width)))
+
+(beacon-mode 1)
+(setq beacon-blink-duration 0.08)
+(setq beacon-size 25)
+
+(global-anzu-mode +1)
+(diminish 'undo-tree-mode)
+(diminish 'guide-key-mode)
+(diminish 'anzu-mode)
+(diminish 'smartparens-mode)
+(diminish 'volatile-highlights-mode)
+(diminish 'org-cdlatex-mode)
+(diminish 'auto-complete-mode)
+(diminish 'helm-mode)
+(diminish 'company-mode)
+(diminish 'abbrev-mode)
+(diminish 'auto-revert-mode) 
+(diminish 'auto-fill-mode)
+(diminish 'fast-scroll-minor-mode)
+(diminish 'ws-butler-mode)
+(diminish 'beacon-mode)
+(diminish 'centered-window-mode)
+;(diminish 'which-key-mode) ;; 不起作用
+(setq which-key-lighter "")
+;(diminish 'wakatime-mode) ;; 要出现在加载wakatime-mode之后
 
 "Init Face"
 (interactive)			

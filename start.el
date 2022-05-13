@@ -7,7 +7,7 @@
 (normal-top-level-add-subdirs-to-load-path))
 (add-to-list 'load-path "~/.emacs.d/elpa/")
 (setq custom-file "~/.emacs.d/init-files/custom.el")
-(package-initialize)
+;; (package-initialize)
 
 (if (eq system-type 'windows-nt)
 (setq prepath "~/../../")

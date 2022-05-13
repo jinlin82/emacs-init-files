@@ -217,8 +217,8 @@
 
 ;; ---------------------- shell -----------------------
 ;;shell-pop
-(global-set-key (kbd "\C-x t") 'shell-pop) 
-(setq shell-pop-universal-key "C-x t")
+(global-set-key (kbd "\C-x t s") 'shell-pop)
+(setq shell-pop-universal-key "C-x t s")
 (setq shell-pop-window-size 30)
 (setq shell-pop-full-span t)
 (setq shell-pop-window-position "bottom")

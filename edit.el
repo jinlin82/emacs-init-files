@@ -1,7 +1,8 @@
 (defun init-edit ()
 
 
-;; ----------- CTRLF-mode --------------------------------
+  ;; ----------- CTRLF-mode --------------------------------
+  (require 'ctrlf)
   (ctrlf-mode +1)
   ; (define-key global-map "\C-t" 'ctrlf-forward-literal)
   ; (define-key esc-map "\C-t" 'ctrlf-forward-regexp)
@@ -21,7 +22,6 @@
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ))
 (setq mouse-wheel-progressive-speed nil)
 (setq mouse-wheel-follow-mouse 't)
-
 
 
 (require 'fast-scroll)
@@ -492,6 +492,9 @@ Version 2017-01-15"
 		     (filename . ".Org")
 		     (name .  "\*Org Agenda\*")
 		     ))
+	 ("Elisp" (or  (filename . ".el")
+		     (filename . ".elc")
+		     ))
 	 ("Python" (or  (mode . inferior-python-mode)
 		   (mode . python-mode)
 		   ))
@@ -507,6 +510,7 @@ Version 2017-01-15"
 		   ))		   
 	 ("Help" (or (name . "\*Help\*")
 		     (name . "\*Apropos\*")
+		     (mode . help-mode)
 		     (name . "\*info\*"))))))
 
 (add-hook 'ibuffer-mode-hook
@@ -530,6 +534,8 @@ Version 2017-01-15"
  
 
 ;;-------------------all-the-icons-ibuffer----------------------
+(add-hook 'ibuffer-mode-hook #'all-the-icons-ibuffer-mode)
+
 (setq all-the-icons-ibuffer-formats '((mark modified read-only locked " "
        (icon 2 2 :left :elide)
        #(" " 0 1
@@ -761,6 +767,10 @@ This command is convenient when reading novel, documentation."
 ;; ws-butler -- an unobtrusive way to trim spaces from end of line
 (require 'ws-butler)
 (add-hook 'prog-mode-hook #'ws-butler-mode)
+
+(require 'everything)
+(setq everything-cmd "C:/Worktools/Everything-1.4.1.935.x64/ES-1.1.0.23/es.exe")
+(global-set-key (kbd "C-c C-f") 'everything)
 
 "Init Edit"
 (interactive)			
