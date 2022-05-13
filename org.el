@@ -894,6 +894,14 @@ unwanted space when exporting org-mode to odt."
 (setq math-preview-relief 0)
 (setq math-preview-scale 1.0)
 (setq math-preview-scale-increment 0.1)
+(setq math-preview-marks '(("\\begin{equation}" . "\\end{equation}")
+                        ("\\begin{equation*}" . "\\end{equation*}")
+                        ("\\[" . "\\]")
+                        ("\\(" . "\\)")
+                        ("$$" . "$$")
+                        ("$" . "$")))
+(setq math-preview-preprocess-functions '((lambda (s)
+                                         (concat "{\\Large\\color{blue}" s "}"))))
 
 
 
