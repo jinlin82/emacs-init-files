@@ -32,8 +32,6 @@ python-shell-interpreter-args "-i --simple-prompt")
 	       python-shell-interpreter-args "-i --simple-prompt")
 	 )))
 
-(python-shell-interpreter-toggle)
-
 
 (defun ipy ()
   (interactive)
