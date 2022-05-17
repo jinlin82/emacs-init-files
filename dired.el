@@ -53,7 +53,7 @@
 	    (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-quick-look)
 	    (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
 	    (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
-(global-set-key (kbd "C-c f") 'neotree-toggle)
+(global-set-key (kbd "C-x C-f") 'neotree-toggle)
 (setq neo-smart-open t)
 (setq neo-window-fixed-size nil)
 (setq neo-window-width 15)

@@ -26,6 +26,9 @@
 (require 'org-install)
 (require 'org)
 
+(setq org-startup-numerated t)
+
+
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (define-key global-map "\C-cr" 'remember)
@@ -507,6 +510,7 @@
   (define-key org-mode-map "\M-n\M-l" 'helm-imenu)
   (define-key org-mode-map (kbd "C-c C-;") 'org-toggle-comment)
   (define-key org-mode-map (kbd "C-,") 'springboard)
+  (define-key org-mode-map (kbd "C-'") 'imenu-list)
 )
   
 (add-hook 'org-mode-hook 'my-org-setup t)
@@ -793,7 +797,8 @@ unwanted space when exporting org-mode to odt."
 
 			     ))
 				 
-(add-hook 'org-mode-hook 'org-num-mode)				 
+
+
 (require 'todoist)
 (find-file-noselect (concat prepath "Works/Org/Todoist.org"))
 (with-current-buffer "Todoist.org"
@@ -965,6 +970,9 @@ unwanted space when exporting org-mode to odt."
 
 (add-hook 'org-mode-hook #'ws-butler-mode)
 
+(require 'peg)
+(require 'org-ql)
+(require 'org-sidebar)
 
 ;;========================================Org Mode Setup END=============================================
 "Init Org"

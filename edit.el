@@ -240,7 +240,7 @@ Version 2017-01-15"
 :bind
 (("C-c n" . thing-copy-line)
 ;;(global-set-key (kbd "C-c e")  'thing-copy-to-line-end)
-("C-c b" . thing-copy-to-line-beginning)
+;; ("C-c b" . thing-copy-to-line-beginning)
 ("C-c f" . thing-copy-defun)
 ("C-c s" . thing-copy-sentence)))
 
@@ -470,6 +470,8 @@ Version 2017-01-15"
 (setq ibuffer-use-other-window t)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
+
+(global-set-key (kbd "C-c b") 'ivy-switch-buffer-other-window)
 
 
 (setq ibuffer-saved-filter-groups
@@ -769,8 +771,44 @@ This command is convenient when reading novel, documentation."
 (add-hook 'prog-mode-hook #'ws-butler-mode)
 
 (require 'everything)
-(setq everything-cmd "C:/Worktools/Everything-1.4.1.935.x64/ES-1.1.0.23/es.exe")
+(setq everything-cmd "./../Everything-1.4.1.935.x64/ES-1.1.0.23/es.exe")
 (global-set-key (kbd "C-c C-f") 'everything)
+
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if filename
+        (if (y-or-n-p (concat "Really DELETE File "
+			      (propertize (buffer-name) 'face '(:foreground "red" :weight bold))
+			      " ?"))
+            (progn
+              (delete-file filename)
+              (message "Deleted file %s." filename)
+              (kill-buffer)))
+      (message "Not a file visiting buffer!"))))
+
+
+(global-set-key (kbd "C-c C-k") 'delete-file-and-buffer)
+
+(defun rename-current-buffer-file ()
+    "Renames current buffer and file it is visiting."
+    (interactive)
+    (let ((name (buffer-name))
+          (filename (buffer-file-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (error "Buffer '%s' is not visiting a file!" name)
+        (let ((new-name (read-file-name "New name: " filename)))
+          (if (get-buffer new-name)
+              (error "A buffer named '%s' already exists!" new-name)
+            (rename-file filename new-name 1)
+            (rename-buffer new-name)
+            (set-visited-file-name new-name)
+            (set-buffer-modified-p nil)
+            (message "File '%s' successfully renamed to '%s'"
+                     name (file-name-nondirectory new-name)))))))
+
+(global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
 
 "Init Edit"
 (interactive)			

@@ -165,7 +165,7 @@
 (setq helm-buffers-fuzzy-matching t
       helm-recentf-fuzzy-match    t)
 	  
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-C f") 'helm-find-files)
 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
 (helm-descbinds-mode)
 (require 'helm-describe-modes)

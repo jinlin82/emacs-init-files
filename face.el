@@ -78,7 +78,10 @@
 ;; --------------------------- all the icons -----------------------
 (require 'all-the-icons)
 (setq inhibit-compacting-font-caches t)
+
+;; neotree HACK: icons 模式中行距太高
 (setq neo-theme 'icons)
+
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 (all-the-icons-ivy-setup)
 
@@ -363,13 +366,6 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
   (propertize (powerline-major-mode) 'face 'my-major-face)  
   )  
   
-
-
-
-
-
-
-
 
 ;;===================================== MODE LINE END =======================================
 
