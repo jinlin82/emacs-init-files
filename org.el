@@ -912,7 +912,8 @@ unwanted space when exporting org-mode to odt."
 
 (require 'org-fragtog)
 (add-hook 'org-mode-hook 'org-fragtog-mode)
-(add-hook 'markdown-mode-hook 'org-fragtog-mode)
+
+
 
 ;;---- org-latex-impatient
 ; (require 'org-latex-impatient)

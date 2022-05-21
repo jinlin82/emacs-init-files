@@ -115,11 +115,13 @@ Not effective after loading the polymode library."
     (define-key map "h" 'pandoc-rmd-html)
     (define-key map "a" 'pandoc-rmd-pdf)
     (define-key map "b" 'pandoc-rmd-beamer)
+    (define-key map "c" 'math-preview-clear-all)
     (define-key map "o" 'pandoc-rmd-org)
     (define-key map "d" 'pandoc-rmd-doc)
     (define-key map "p" 'pandoc-rmd-ppt)
     (define-key map "P" 'pandoc-bookdown-pdf)
-    (define-key map "m" 'org-emphasize-math-word)
+    (define-key map "m" 'math-preview-all)
+    (define-key map "n" 'org-emphasize-math-word)
     (define-key map "\M-b" 'org-emphasize-math)
     (define-key map "\M-v" 'org-view-pdf)
     (define-key map "l" 'org-view-latex)
@@ -151,7 +153,7 @@ Not effective after loading the polymode library."
 ;;---支持LaTeX公式 ------
 ; (setq markdown-enable-math t) ;; 在这里设置无效，要在custom.el 设置，不知道原因
 (add-hook 'markdown-mode-hook 'cdlatex-mode)
-(add-hook 'markdown-mode-hook 'org-fragtog-mode)  ;;性能问题，需要时打开
+; (add-hook 'markdown-mode-hook 'org-fragtog-mode)  ;; 有bug，从下面返回到yaml中直接卡死，手动打开
 
 
 ;;支持文献引用，注意 rmd 文件中需使用注释行：[//]: # (\bibliography{bibfile})
