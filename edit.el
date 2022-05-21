@@ -55,14 +55,15 @@
 (show-smartparens-global-mode t))
 ; )
 
-(defun my-turn-on-pair-mode ()
-  (smartparens-global-mode 1)
-  (show-smartparens-global-mode 1)
-  ) ;; an argument of 1 will enable most modes
+;; (defun my-turn-on-pair-mode ()
+;;   (smartparens-global-mode 1)
+;;   (show-smartparens-global-mode 1)
+;;   ) ;; an argument of 1 will enable most modes
 
-(add-hook 'minibuffer-setup-hook 'my-turn-on-pair-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook 'my-turn-on-pair-mode)
+;; (add-hook 'minibuffer-setup-hook 'my-turn-on-pair-mode)
+;; (add-hook 'eval-expression-minibuffer-setup-hook 'my-turn-on-pair-mode)
 
+(setq sp-ignore-modes-list nil)  ;;在minibuffer 中启用配对
 
 ; (if (version< emacs-version "24.3")
   ; (set-parens-24.2)
@@ -771,7 +772,7 @@ This command is convenient when reading novel, documentation."
 (add-hook 'prog-mode-hook #'ws-butler-mode)
 
 (require 'everything)
-(setq everything-cmd "./../Everything-1.4.1.935.x64/ES-1.1.0.23/es.exe")
+(setq everything-cmd "~/../Everything-1.4.1.935.x64/ES-1.1.0.23/es.exe")
 (global-set-key (kbd "C-c C-f") 'everything)
 
 (defun delete-file-and-buffer ()
