@@ -431,6 +431,7 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 (diminish 'fast-scroll-minor-mode)
 (diminish 'ws-butler-mode)
 (diminish 'beacon-mode)
+(diminish 'ivy-mode)
 (diminish 'centered-window-mode)
 ;(diminish 'which-key-mode) ;; 不起作用
 (setq which-key-lighter "")

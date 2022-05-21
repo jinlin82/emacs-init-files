@@ -32,18 +32,18 @@
   (global-set-key (kbd "C-x ,") 'springboard)
   )
 (setq springboard-directories (list (concat prepath "" ) 
-				      (concat prepath "works") 
-				      (concat prepath "works/teaching") 
-				      (concat prepath "Works/2013.7-中南财经政法大学统数学院") 
-				      (concat prepath "works/learning") 
-				      (concat prepath "works/temp") 
-				      (concat prepath "works/working_paper") 
-				      "~/.." 
-				      "~" 
-				      "~/.emacs.d" 
-				      "~/.emacs.d/init-files" 
-				      "~/.emacs.d/elpa" 
-				      (concat prepath "books")))
+				      (concat prepath "works/")
+				      (concat prepath "works/teaching/")
+				      (concat prepath "Works/2013.7-中南财经政法大学统数学院/")
+				      (concat prepath "works/learning/")
+				      (concat prepath "works/temp/")
+				      (concat prepath "works/working_paper/")
+				      "~/../"
+				      "~/"
+				      "~/.emacs.d/"
+				      "~/.emacs.d/init-files/"
+				      "~/.emacs.d/elpa/"
+				      (concat prepath "books/")))
 
 
 ;;----------------- neotree ---------------------------------------------------
