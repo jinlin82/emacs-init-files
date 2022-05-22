@@ -613,14 +613,14 @@ Version 2017-01-15"
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 ; (global-set-key [(shift tab)] 'switch-to-previous-buffer)
+;;==================================Frame Window and Buffer Setup END===============================
 
 
-;;===================================Frame Window and Buffer Setup END==================================
-
-
-;;===============================================Bookmarks Setup==============================================
+;;=====================================Bookmarks Setup==============================================
+(require 'bookmark+)
 (setq bmkp-last-as-first-bookmark-file "~/.emacs.d/user-files/bookmarks")
 (setq bookmark-default-file "~/.emacs.d/user-files/bookmarks")
+(setq bookmark-save-flag 1)
 
 ;;在新窗口中打开bookmark list 和 register list
 (defun get-bookmarks-in-new-frame ()
@@ -630,14 +630,8 @@ Version 2017-01-15"
 
 (global-set-key (kbd "C-x r l") 'get-bookmarks-in-new-frame)
 
-(setq recentf-exclude '("/Works/org/" "/Worktools/Config/")
-)
-			 
-(recentf-mode 1) ; keep a list of recently opened files
-(global-set-key (kbd "C-x f") 'recentf-open-files)
-
-(require 'bookmark+)
-
+(define-key bookmark-bmenu-mode-map "A" 'bookmark-bmenu-show-all-annotations)
+(define-key bookmark-bmenu-mode-map "\M-a" 'delete-other-windows)
 ;;-------------------------------browse-kill-ring----------------------------
 ;; Ever feel that 'C-y M-y M-y M-y ...' is not a great way of trying
 ;; to find that piece of text you know you killed a while back?  Then

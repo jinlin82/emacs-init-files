@@ -47,12 +47,12 @@
 (setq dashboard-startup-banner 'logo)
 
 (setq dashboard-items '(
-						(recents  . 8)
-						(projects . 8)
-						(agenda . 8)
-                        ; (bookmarks . 5)                                              
-                        ; (registers . 5)
-						))
+			(recents  . 8)
+			(projects . 8)
+			(agenda . 8)
+		      ; (bookmarks . 5)
+		      ; (registers . 5)
+			))
 
 (global-set-key (kbd "C-c d") 'dashboard-refresh-buffer)
 

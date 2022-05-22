@@ -25,6 +25,11 @@
 (global-set-key (kbd "C-x n m") #'create-new-rmd-buffer-untitled)
 (global-set-key (kbd "C-x n o") #'create-new-org-buffer-untitled)
 
+;; ------------------------- recentf-mode ----------------------------
+(setq recentf-exclude '("/Works/org/" "/Worktools/Config/"))
+(recentf-mode 1) ; keep a list of recently opened files
+(global-set-key (kbd "C-x f") 'recentf-open-files)
+
 ;; --------------------- springboard ------------------------
 ;; 注意：对springboard.el 进行了 hack
 (if (eq system-type 'windows-nt)
