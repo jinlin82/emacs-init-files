@@ -124,12 +124,12 @@ python-shell-interpreter-args "-i --simple-prompt")
 (setq elpy-rpc-pythonpath "~/../Config/.emacs.d/elpa/elpy-20220322.41/elpy")
 (add-hook 'ein:notebook-multilang-mode-hook 'poly-ein-mode)  ;; polymode 很慢，并且编辑时(jit-lock--run-functions 95 186)错误，目前可用于浏览
 (add-hook 'ein:notebook-multilang-mode-hook 'cdlatex-mode)
-(add-hook 'ein:notebook-multilang-mode-hook 'autopair-mode)
+; (add-hook 'ein:notebook-multilang-mode-hook 'autopair-mode)
 
 
 (setq ein:completion-backend (quote ein:use-company-backend))
-(setq ein:jupyter-default-kernel
-   (quote python37464bitbaseconda87bad30cbe814876802293fd365e8fe0))
+; (setq ein:jupyter-default-kernel
+   ; (quote python37464bitbaseconda87bad30cbe814876802293fd365e8fe0))
 
 ;; '_xsrf' argument missing from POST issue, Cannot save notebook in ein
 ;;This can be solved by adding    c.NotebookApp.disable_check_xsrf = True    in jupyter_notebook_config.py.
@@ -147,6 +147,70 @@ python-shell-interpreter-args "-i --simple-prompt")
    ;(setq request-backend (quote curl))
  ;)
 
+(defun pandoc-ipynb-setup ()
+(defun execute-commands (buffer &rest commands)
+  "Execute a list of shell commands sequentially"
+  (with-current-buffer buffer
+    (set (make-local-variable 'commands-list) commands)
+    (start-next-command)))
+
+(defun start-next-command ()
+  "Run the first command in the list"
+  (if (null commands-list)
+      (insert "\nDone.")
+    (let ((command  (car commands-list)))
+      (setq commands-list (cdr commands-list))
+      (insert (format ">>> %s\n" command))
+      (let ((process (start-process-shell-command command (current-buffer) command)))
+        (set-process-sentinel process 'sentinel)))))
+
+(defun sentinel (p e)
+  "After a process exited, call `start-next-command' again"
+  (let ((buffer (process-buffer p)))
+    (when (not (null buffer))
+      (with-current-buffer buffer
+        ;(insert (format "Command `%s' %s" p e) )
+        (start-next-command)))))
+
+(defun pandoc-ipynb-html ()
+  (interactive)
+  (with-current-buffer (get-buffer-create "*ipynb-Compile*") (erase-buffer))
+  (progn
+    (save-buffer)
+    (execute-commands "*ipynb-Compile*"
+		      (concat "ipynb-html.bat " default-directory (f-base (buffer-name))  ".ipynb")
+		      (concat "open " default-directory (f-base (buffer-name)) ".html"))
+    (message (concat "ipynb-html.bat " (buffer-name) ))
+    ))
+
+(defun pandoc-ipynb-doc ()
+  (interactive)
+  (with-current-buffer (get-buffer-create "*ipynb-Compile*") (erase-buffer))
+  (progn
+    (save-buffer)
+    (execute-commands "*ipynb-Compile*"
+		      (concat "ipynb-doc.bat " default-directory (f-base (buffer-name))  ".ipynb")
+		      (concat "open " default-directory (f-base (buffer-name)) ".docx"))
+    (message (concat "ipynb-doc.bat " (buffer-name) ))
+    ))
+
+(defun pandoc-ipynb-pdf ()
+  (interactive)
+  (with-current-buffer (get-buffer-create "*ipynb-Compile*") (erase-buffer))
+  (progn
+    (save-buffer)
+    (execute-commands "*ipynb-Compile*"
+		      (concat "ipynb-pdf.bat " default-directory (f-base (buffer-name))  ".ipynb")
+		      (concat "open " default-directory (f-base (buffer-name)) ".pdf"))
+    (message (concat "ipynb-pdf.bat " (buffer-name) ))
+    ))
+
+(define-key ein:notebook-mode-map (kbd "C-c v h") 'pandoc-ipynb-html)
+(define-key ein:notebook-mode-map (kbd "C-c v d") 'pandoc-ipynb-doc)
+(define-key ein:notebook-mode-map (kbd "C-c v p") 'pandoc-ipynb-pdf)
+)
+
+(add-hook 'ein:notebook-mode-hook 'pandoc-ipynb-setup t)
 ;;;================== EIN SETTINGS END ===================
 
 ;;;=================== python-x ==========================

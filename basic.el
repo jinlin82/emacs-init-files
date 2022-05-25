@@ -232,6 +232,18 @@
 	  search-ring
 	  regexp-search-ring))
   
+;;; ----------------------------------- help -------------------------------------
+;; Note that the built-in `describe-function' includes both functions
+;; and macros. `helpful-function' is functions only, so we provide
+;; `helpful-callable' as a drop-in replacement.
+(global-set-key (kbd "C-h f") #'helpful-callable)
+
+(global-set-key (kbd "C-h v") #'helpful-variable)
+(global-set-key (kbd "C-h k") #'helpful-key)
+
+;;elisp-demos
+(advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
+(advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update)
 
   ;;----------------------------------------- filesets------------------------------
 	; (require 'filesets)

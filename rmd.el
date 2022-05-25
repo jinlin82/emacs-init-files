@@ -142,6 +142,7 @@ Not effective after loading the polymode library."
 (define-key markdown-mode-map (kbd "<tab>") 'markdown-cycle)
 (define-key markdown-mode-map (kbd "C-c C-<left>") 'markdown-promote-subtree)
 (define-key markdown-mode-map (kbd "C-c C-<right>") 'markdown-demote-subtree)
+(define-key markdown-mode-map (kbd "C-c -") 'org-ctrl-c-minus)
 
 (define-key ess-mode-map (kbd "M-n f") 'vimish-fold-toggle)
 )
@@ -296,7 +297,11 @@ defaults to \"Eval region\"."
 
 (add-hook 'org-mode-hook #'ws-butler-mode)
 
-;;=================================Markdown Mode Setup END===================================
+;;; still don't work
+(require 'quarto-mode)
+(setq project-directory nil)
+
+;;===========================Markdown Mode Setup END============================
 "Init Rmd"
 (interactive)			
 			)
