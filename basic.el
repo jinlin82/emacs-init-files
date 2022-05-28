@@ -107,7 +107,9 @@
 (defun revert-buffer-with-coding-system-no-confirm-utf8 ()
 	(interactive)
 	(revert-buffer-with-coding-system-no-confirm 'utf-8)
-)
+	)
+
+(global-set-key (kbd "C-x <RET> u") 'revert-buffer-with-coding-system-no-confirm-utf8)
 
 
   (setq default-directory (concat prepath "Works/temp/"))
