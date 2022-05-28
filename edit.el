@@ -783,8 +783,7 @@ This command is convenient when reading novel, documentation."
               (kill-buffer)))
       (message "Not a file visiting buffer!"))))
 
-
-(global-set-key (kbd "C-c C-k") 'delete-file-and-buffer)
+(global-set-key (kbd "C-x x d") 'delete-file-and-buffer)
 
 (defun rename-current-buffer-file ()
     "Renames current buffer and file it is visiting."

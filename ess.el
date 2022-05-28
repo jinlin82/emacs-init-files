@@ -28,8 +28,6 @@
   )
 
 (define-key ess-mode-map (kbd "C-x w") 'ess-view-inspect-df)
-(define-key ess-mode-map (kbd "C-c C-k") 'delete-file-and-buffer) ;; 被ess覆盖
-
 
 
 ;;No .Rhistory file
