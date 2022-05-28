@@ -241,8 +241,8 @@ With a prefix argument, amend to the commit at `HEAD' instead.
       (magit-run-git-with-editor "commit" args))))
   
 	  
-(add-hook 'with-editor-post-cancel-hook '(lambda () (set-language-environment "Chinese-GBK")))
-(add-hook 'with-editor-post-finish-hook '(lambda () (set-language-environment "Chinese-GBK")))
+(add-hook 'with-editor-post-cancel-hook 'set-coding-config)
+(add-hook 'with-editor-post-finish-hook 'set-coding-config)
 
 ;;; git-messenger
 ;; git-messenger.el 中 (setq-local default-process-coding-system '(utf-8 . utf-8)) ;; Hacked by Jin Lin

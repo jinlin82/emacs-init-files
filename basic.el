@@ -56,23 +56,14 @@
 
 
   ;;==================================Basic Config==================================
+(defun set-coding-config ()
+	(interactive)
   ;;set the default text coding system
   (setq default-buffer-file-coding-system 'utf-8)
 ;; (prefer-coding-system 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
 ;;(setq coding-system-for-read 'utf-8)  ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
 ;;(setq coding-system-for-write 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
-; (defun append-to-list (list-var elements)
-  ; "Append ELEMENTS to the end of LIST-VAR.
 
-; The return value is the new value of LIST-VAR."
-  ; (unless (consp elements)
-    ; (error "ELEMENTS must be a list"))
-  ; (let ((list (symbol-value list-var)))
-    ; (if list
-        ; (setcdr (last list) elements)
-      ; (set list-var elements)))
-  ; (symbol-value list-var))
-  ; (append-to-list 'file-coding-system-alist '("\\.*\\'" . utf-8));; 所有新文件以utf-8编码
 					
 ;; Set default encoding system for opening and saving
 ;; (set-language-environment "UTF-8") ;; 不能增加这句，会导致Rconsole乱码， 如代码中输入 "收敛率"
@@ -98,8 +89,9 @@
   (set-file-name-coding-system 'gb2312)
   (set-file-name-coding-system 'utf-8)
   )
+)
 
-
+(set-coding-config)
 
   ;; ----------------------------------------------------------
   (setq ansi-color-for-comint-mode t)
