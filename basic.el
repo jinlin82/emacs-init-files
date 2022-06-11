@@ -1,5 +1,10 @@
 (defun init-basic ()
 
+(setq gc-cons-threshold-original gc-cons-threshold)
+(setq gc-cons-threshold (* 1024 1024 100))
+
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+
   (require 'keyfreq)
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)

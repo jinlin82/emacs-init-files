@@ -6,6 +6,11 @@
 ;;================================== Python ==================================
 (require 'python)
 
+(setq python-indent-guess-indent-offset t)  
+(setq python-indent-guess-indent-offset-verbose nil)
+(add-hook 'python-mode-hook '(lambda () (setq python-indent 4)))
+(add-hook 'python-mode-hook (lambda () (auto-complete-mode -1))) ;; 关闭auto-complete-mode
+
 ;; Use Jupyter console (recommended for interactive Python):
 ; (setq python-shell-interpreter "jupyter"
       ; python-shell-interpreter-args "console --simple-prompt"
@@ -51,6 +56,12 @@ python-shell-interpreter-args "-i --simple-prompt")
   (call-interactively 'run-python)
 )
 
+;;------------ autopep8 -------------- 
+;(require 'py-autopep8)
+;(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+;(setq py-autopep8-options '("--max-line-length=78" "--indent-size=3")) ;设置为3的原因是为4时在latex lstings 中显示有问题
+
+
 
 ;;-------------- elpy ----------------
 ;; 把 emacs elpa中的elpy 文件夹复制到C:\Anaconda3\Lib\site-packages\elpy下面
@@ -58,34 +69,34 @@ python-shell-interpreter-args "-i --simple-prompt")
 ;; 特别注意：要把 elpy.el中的  (set (make-local-variable 'company-idle-delay)
 ;;          0.5) ;; 需要从0.1修改为0.5才不卡;;  新版本中不会
 ;; 注意：elpy 自动补全 需要 ("jedi" "flake8" "autopep8" "yapf" "black" "rope") 支持
-(add-hook 'python-mode-hook (lambda () (auto-complete-mode -1))) ;; 关闭auto-complete-mod 
-
 (if (eq system-type 'windows-nt) (package-initialize))
 (elpy-enable)
-(remove-hook 'elpy-modules 'elpy-module-flymake)
+
+; (remove-hook 'elpy-modules '(elpy-module-flymake))
+
+(setq elpy-modules '(elpy-module-sane-defaults
+                          ; elpy-module-company  ;; 不开启，开启后有bug，卡，使用 python-mode自带的补全，缺点是必须打开inferior python,并且在inferior python中运行一下补全
+                          elpy-module-eldoc
+                          ; elpy-module-flymake
+                          ; elpy-module-highlight-indentation
+                          ; elpy-module-pyvenv
+                          elpy-module-yasnippet
+                          ; elpy-module-django
+			  ; elpy-module-autodoc
+						  ))
 
 (if (eq system-type 'windows-nt)
 (setq elpy-rpc-python-command "~/../../Anaconda3/pythonw.exe")
 (setq elpy-rpc-python-command "~/../usr/bin/python")
 )
 
-(setq python-indent-guess-indent-offset t)  
-(setq python-indent-guess-indent-offset-verbose nil)
-(setq eldoc-idle-delay 2)
+
 (setq elpy-autodoc-delay 1)
 (setq elpy-eldoc-show-current-function t)
 (setq elpy-get-info-from-shell t)
 (setq elpy-shell-starting-directory (quote current-directory))
 (setq elpy-shell-display-buffer-after-send t)
 
-
-;;------------ autopep8 -------------- 
-;(require 'py-autopep8)
-;(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
-;(setq py-autopep8-options '("--max-line-length=78" "--indent-size=3")) ;设置为3的原因是为4时在latex lstings 中显示有问题
-
-(add-hook 'python-mode-hook '(lambda () 
-(setq python-indent 4)))
 
 ;;;; 定义一个行内区域发送函数
 (defun elpy-shell-send-region-no-expand (start end &optional send-main msg
@@ -194,6 +205,7 @@ python-shell-interpreter-args "-i --simple-prompt")
 
 (add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+(setq eldoc-idle-delay 0.5)
 
 (eval-after-load "anaconda-mode"
   '(progn

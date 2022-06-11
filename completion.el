@@ -101,8 +101,6 @@
 						 ))
 
 (add-hook 'after-init-hook 'global-company-mode)
-(define-key company-mode-map (kbd "C-c /") 'company-files)
-(define-key company-mode-map (kbd "C-c C-/") 'company-files)
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
@@ -117,9 +115,13 @@
 (define-key company-active-map (kbd "TAB") #'company-complete-common-or-cycle)
 (define-key company-active-map [tab] #'company-complete-common-or-cycle)
 
+(define-key company-mode-map (kbd "C-c /") 'company-files)
+(define-key company-mode-map (kbd "C-c C-/") 'company-files)
 )
 
 (company-quickhelp-mode)
+(setq company-quickhelp-delay 2)
+
 (eval-after-load 'company
   '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)
   )
@@ -307,13 +309,13 @@
      )))
 
 
-(yas-reload-all)
 (add-hook 'markdown-mode-hook #'yas-minor-mode)
 (add-hook 'org-mode-hook #'yas-minor-mode)    ;; yas-trigger-key
 
 (add-hook 'yas-minor-mode-hook '(lambda ()
 	(define-key yas-minor-mode-map (kbd "C-x a s") 'yas-insert-snippet)
         (define-key yas-minor-mode-map (kbd "C-x a v") 'ivy-yasnippet)
+		(yas-reload-all)
 	))
 
 	
