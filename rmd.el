@@ -51,7 +51,6 @@
   (defun pandoc-rmd-html ()
     (interactive)
 	(save-buffer)
-
 	(start-process-shell-command "nil" "*Markdown-Compile*"  (concat "rmd-html.bat " (f-base (buffer-name)) ))
     (message (concat "rmd-html.bat " (buffer-name) )))
 	
@@ -100,7 +99,38 @@
   (insert (concat "\n```{r eval=T}\n\n```")) 
   (forward-line -1)
   (save-buffer))
+  
+  ;;------------------------------------qmd render----------------------
+    (defun pandoc-qmd-html ()
+    (interactive)
+	(save-buffer)
+	(start-process-shell-command "nil" "*Markdown-Compile*"  (concat "qmd-html.bat " (buffer-name) ))
+    (message (concat "qmd-html.bat " (buffer-name) )))
+	
+  (defun pandoc-qmd-doc ()
+    (interactive)
+	(save-buffer)
+    (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "qmd-doc.bat " (buffer-name) ))
+    (message (concat "qmd-doc.bat " (buffer-name) )))
 
+  (defun pandoc-qmd-ppt ()
+    (interactive)
+	(save-buffer)
+    (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "qmd-ppt.bat " (buffer-name) ))
+    (message (concat "qmd-ppt.bat " (buffer-name) )))
+
+  (defun pandoc-qmd-pdf ()
+    (interactive)
+	(save-buffer)
+    (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "qmd-pdf.bat " (buffer-name) ))
+    (message (concat "qmd-pdf.bat " (buffer-name) )))
+
+  (defun pandoc-qmd-beamer ()
+    (interactive)
+	(save-buffer)
+    (start-process-shell-command "nil" "*Markdown-Compile*"  (concat "qmd-beamer.bat " (buffer-name) ))
+    (message (concat "qmd-beamer.bat " (buffer-name) )))
+;;------------------------------------------------------
   
 ;; 添加 prefix 键
 (defcustom markdownmode-prefix-key "\M-n"
@@ -113,12 +143,17 @@ Not effective after loading the polymode library."
   (let ((map (make-sparse-keymap)))
     (define-key map "i" 'rmarkdown-insert-r-chunk)
     (define-key map "h" 'pandoc-rmd-html)
+    (define-key map "\C-h" 'pandoc-qmd-html)
     (define-key map "a" 'pandoc-rmd-pdf)
+    (define-key map "\C-a" 'pandoc-qmd-pdf)
     (define-key map "b" 'pandoc-rmd-beamer)
+    (define-key map "\C-b" 'pandoc-qmd-beamer)
     (define-key map "c" 'math-preview-clear-all)
     (define-key map "o" 'pandoc-rmd-org)
     (define-key map "d" 'pandoc-rmd-doc)
+    (define-key map "\C-d" 'pandoc-qmd-doc)
     (define-key map "p" 'pandoc-rmd-ppt)
+    (define-key map "\C-p" 'pandoc-qmd-ppt)
     (define-key map "P" 'pandoc-bookdown-pdf)
     (define-key map "m" 'math-preview-all)
     (define-key map "n" 'org-emphasize-math-word)
@@ -145,6 +180,7 @@ Not effective after loading the polymode library."
 (define-key markdown-mode-map (kbd "C-c -") 'org-ctrl-c-minus)
 
 (define-key ess-mode-map (kbd "M-n f") 'vimish-fold-toggle)
+
 )
 
 
@@ -300,6 +336,8 @@ defaults to \"Eval region\"."
 ;;; still don't work
 (require 'quarto-mode)
 (setq project-directory nil)
+
+
 
 ;;===========================Markdown Mode Setup END============================
 "Init Rmd"
