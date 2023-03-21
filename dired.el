@@ -402,7 +402,7 @@
     (message (concat (buffer-name) " Opened with default")))
 
 (global-set-key (kbd "C-x v d") 'default-totalcmd)						  
-(global-set-key (kbd "C-x v v") 'open-with-vscode-dir)
+(global-set-key (kbd "C-x v v") 'open-with-vscode-file)
 (global-set-key (kbd "C-x v c") 'open-with-vscode-dir)
 (global-set-key (kbd "C-x v e") 'open-with-default)
 
