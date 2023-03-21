@@ -375,7 +375,7 @@
 					 (if buffer-file-name buffer-file-name default-directory) "\"" ))
     (message (concat (buffer-name) " Opened with Vim")))
 
-(defun open-with-vscode ()
+(defun open-with-vscode-dir ()
   (interactive)
   (progn
     (start-process-shell-command "Vscode" "*Messages*"
@@ -385,7 +385,15 @@
 				 (concat "code ""\""
 					 (if buffer-file-name buffer-file-name default-directory)"\"" ))
     )
-    (message (concat (buffer-name) " Opened with Vscode")))
+  (message (concat (buffer-name) " Opened with Vscode dir")))
+
+(defun open-with-vscode-file ()
+  (interactive)
+    (start-process-shell-command "Vscode" "*Messages*"
+				 (concat "code ""\""
+					 (if buffer-file-name buffer-file-name default-directory)"\"" ))
+  (message (concat (buffer-name) " Opened with Vscode file")))
+
 
 (defun open-with-default ()
     (interactive)
@@ -394,8 +402,8 @@
     (message (concat (buffer-name) " Opened with default")))
 
 (global-set-key (kbd "C-x v d") 'default-totalcmd)						  
-(global-set-key (kbd "C-x v v") 'open-with-vim)
-(global-set-key (kbd "C-x v c") 'open-with-vscode)
+(global-set-key (kbd "C-x v v") 'open-with-vscode-dir)
+(global-set-key (kbd "C-x v c") 'open-with-vscode-dir)
 (global-set-key (kbd "C-x v e") 'open-with-default)
 
 
