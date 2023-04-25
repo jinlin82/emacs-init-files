@@ -4,6 +4,7 @@
 (require 'ess-site)
 (setq ess-eval-visibly nil)
 (setq ess-ask-for-ess-directory nil)
+(setq ess-startup-directory 'default-directory)
 (setq ess-use-flymake nil)
 
 ;; auto completion 设置在 completion.el 中

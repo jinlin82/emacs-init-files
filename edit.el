@@ -12,11 +12,12 @@
   ; (define-key ctrlf-mode-map (kbd "M-z") 'ctrlf-cancel)   ;; isearch
 
 
-(require 'move-dup)
-(global-set-key (kbd "M-g <up>") 'md-move-lines-up)
-(global-set-key (kbd "M-g <down>") 'md-move-lines-down)
-(global-set-key (kbd "M-g <M-up>") 'md-duplicate-up)
-(global-set-key (kbd "M-g <M-down>") 'md-duplicate-down)
+  (require 'move-dup)
+(define-key global-map (kbd "M-g M-g") nil)
+(global-set-key (kbd "M--") 'md-move-lines-up)
+(global-set-key (kbd "M-=") 'md-move-lines-down)
+(global-set-key (kbd "M-+") 'md-duplicate-up)
+(global-set-key (kbd "M-_") 'md-duplicate-down)
 
 ;; 鼠标滚动行数  
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ))
@@ -87,6 +88,9 @@
 (use-package undo-tree
 :config
 (global-undo-tree-mode))
+(define-key undo-tree-map (kbd "M-_") nil)
+(define-key undo-tree-map (kbd "C-x M-r") 'undo-tree-redo)
+
 
 ;;------------------------------binding revert to F5-----------------------
 (global-auto-revert-mode t)
