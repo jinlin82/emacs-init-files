@@ -36,6 +36,12 @@
   (setq ess-history-file (concat prepath "Books/Statsoft/R/Code/.Rhistory")))
 
 (add-hook 'inferior-ess-mode-hook 'ei-no-rhistory)
+(add-hook 'inferior-ess-mode-hook
+	  '(lambda ()
+	     (progn
+	       ;; 由于在git中修改了coding,所以这里要改回来
+	     (setq-local default-process-coding-system '(gb2312 . gb2312))
+	     )))
 
 ;;---------------------------------------SPLUS-------------------------------------------
 (setq-default inferior-S+6-program-name
@@ -112,6 +118,9 @@
 
 (add-hook 'ess-mode-hook
 	  '(lambda ()
+	     (progn
+	       ;; 由于在git中修改了coding,所以这里要改回来
+	     (setq-local default-process-coding-system '(gb2312 . gb2312))
 	     (outline-minor-mode)
 	     (setq outline-regexp "\\(^#\\{4,5\\} \\)\\|\\(^[a-zA-Z0-9_\.]+ ?<- ?function(.*{\\)")
 	     (defun outline-level ()
@@ -120,7 +129,7 @@
 		     ((looking-at "^### ") 3)
 		     ((looking-at "^[a-zA-Z0-9_\.]+ ?<- ?function(.*{") 4)
 		     (t 1000)))
-	     ))
+	     )))
 
 ;; Simpler keybindings with the win key: (global for now, FIXME!!)
 ;; probably some might not work right on actual windows...
