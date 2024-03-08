@@ -116,7 +116,22 @@ python-shell-interpreter-args "-i --simple-prompt")
 (define-key python-mode-map (kbd "<M-RET>") 'elpy-shell-send-region-no-expand)
 (define-key python-mode-map (kbd "C-c v c") 'elpy-shell-send-codecell-and-step)
 
- 
+
+;;; 在Emacs外部cmd窗口中运行python文件
+(defun run-python-file-in-external-cmd()
+  "Open an external Windows cmd in the current directory"
+  (interactive)
+  (let ((default-directory
+      (if (buffer-file-name)
+               (file-name-directory (buffer-file-name))
+               default-directory))))
+          (start-process-shell-command "nil"  nil
+				   (concat "start cmd /k python " "\"" default-directory (f-base (buffer-name))  ".py" "\""))
+				   (message (concat "Run in CMD:" (buffer-name) ))
+	)
+
+(define-key python-mode-map (kbd "C-c v r") 'run-python-file-in-external-cmd)
+
 ;;;==================== EIN SETTINGS  startup to slow =====================
  ;(require 'ein)
  ;(require 'ein-loaddefs)
