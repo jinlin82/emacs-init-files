@@ -390,6 +390,7 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 
 ;;Global minor mode that centers the text of the window. 
 (require 'centered-window)
+(setq cwm-centered-window-width 120)
 (centered-window-mode t)
 ;; 修改窗口按列分栏时left-fringe 消失的问题
 ;; https://github.com/anler/centered-window-mode/pull/39

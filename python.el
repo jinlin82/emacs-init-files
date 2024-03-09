@@ -127,7 +127,7 @@ python-shell-interpreter-args "-i --simple-prompt")
                default-directory))))
           (start-process-shell-command "nil"  nil
 				   (concat "start cmd /k python " "\"" default-directory (f-base (buffer-name))  ".py" "\""))
-				   (message (concat "Run in CMD:" (buffer-name) ))
+				   (message (concat "Run in CMD: " (buffer-name) ))
 	)
 
 (define-key python-mode-map (kbd "C-c v r") 'run-python-file-in-external-cmd)
