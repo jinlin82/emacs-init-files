@@ -126,23 +126,27 @@
 
 ;;============================= Weather =============================
 ;; -------------- sunshine ---------------
-(require 'sunshine)
-(setq sunshine-location "Wuhan, China")
-(setq sunshine-appid "29e41ab31b23e473a5aebafd93348235")
-(setq sunshine-show-icons t)
-(setq sunshine-units (quote metric))
+;; API 更新，有问题
+;; (require 'sunshine)
+;; (setq sunshine-location "Wuhan, China")
+;; (setq sunshine-appid "29e41ab31b23e473a5aebafd93348235")
+;; (setq sunshine-show-icons t)
+;; (setq sunshine-units (quote metric))
 
-(defun sunshine-forecast-wuhan ()
-  "The main entry into Sunshine; display the forecast in a window."
-  (interactive)
-  ;(sunshine-prepare-window)
-  (sunshine-get-forecast "Wuhan, China" sunshine-units 'full sunshine-appid))
+;; (defun sunshine-forecast-wuhan ()
+;;   "The main entry into Sunshine; display the forecast in a window."
+;;   (interactive)
+;;   ;(sunshine-prepare-window)
+;;   (sunshine-get-forecast "Wuhan, China" sunshine-units 'full sunshine-appid))
 
-(global-set-key (kbd "C-c C-w") 'sunshine-forecast)  
-  
+;; (global-set-key (kbd "C-c C-w") 'sunshine-forecast)
+
 ;; -------------- wttrin --------------
-(setq wttrin-default-cities '("Wuhan" "Glasgow"))
+(setq wttrin-default-locations '("Wuhan"))
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
+(setq wttrin-font-name "Consolas-with-Yahei")
+(setq wttrin-font-height 100)
+(global-set-key (kbd "C-c C-w") 'wttrin)
 
 ;; ---------- Yahoo weather ----------- Yahoo查阅网站打不开了
 ; (defface my-weather-face
@@ -170,43 +174,63 @@
 
 ;; ================ Translate =======================
 ;; ----------- google translate --------------------
-(setq google-translate-default-source-language "en")
-(setq google-translate-default-target-language "zh-CN")
-(setq google-translate-output-destination nil)
-(setq google-translate-show-phonetic t)
- 
-(setq google-translate-base-url
-  "http://translate.google.cn/translate_a/single")	 
-(setq google-translate-listen-url
-  "http://translate.google.cn/translate_tts")	
+;; (setq google-translate-default-source-language "en")
+;; (setq google-translate-default-target-language "zh-CN")
+;; (setq google-translate-output-destination nil)
+;; (setq google-translate-show-phonetic t)
 
-(setq google-translate--tkk-url
-  "http://translate.google.cn/")
+;; (setq google-translate-base-url
+;;   "http://translate.google.cn/translate_a/single")
+;; (setq google-translate-listen-url
+;;   "http://translate.google.cn/translate_tts")
 
-;; -------------------  youdao -----------------------
-(require 'youdao-dictionary)
-(setq url-automatic-caching t)
-
-;; Example Key binding
-(global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point+)
-
-;; Integrate with popwin-el (https://github.com/m2ym/popwin-el)
-(push "*Youdao Dictionary*" popwin:special-display-config)
+;; (setq google-translate--tkk-url
+;;   "http://translate.google.cn/")
 
 
-(defun youdao-pdf-translate ()
-(interactive)
-(pdf-view-kill-ring-save)
-  (let ((word (car kill-ring)))
-(if word
-      (youdao-dictionary--pos-tip (youdao-dictionary--format-result word))
-      (message "Nothing to look up"))))
+(require 'go-translate)
 
-(defun pdf-set-youdao-key ()
-(define-key pdf-view-mode-map "y" 'youdao-pdf-translate)                     ;第一页
-)
+(setq gts-translate-list '(("en" "zh")))
 
-(add-hook 'pdf-view-mode-hook 'pdf-set-youdao-key)	  
+;; (setq gts-default-translator (gts-translator :engines (gts-bing-engine)))
+
+(setq gts-default-translator
+      (gts-translator
+       :picker (gts-noprompt-picker)
+       :engines (list (gts-bing-engine))
+       :render (gts-posframe-pop-render :backcolor "#333333" :forecolor "#ffffff")))
+
+(global-set-key (kbd "C-c y") 'gts-do-translate)
+
+;; ------------------- youdao ----------------------- Youdao
+;; discontinued the free API earlier this year (2023), so this
+;; package is no longer ready to use out of the box. You will need
+;; to apply for an API on your own.
+
+;; (require 'youdao-dictionary)
+;; (setq url-automatic-caching t)
+
+;; ;; Example Key binding
+;; (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point+)
+
+;; ;; Integrate with popwin-el (https://github.com/m2ym/popwin-el)
+;; (push "*Youdao Dictionary*" popwin:special-display-config)
+
+
+;; (defun youdao-pdf-translate ()
+;; (interactive)
+;; (pdf-view-kill-ring-save)
+;;   (let ((word (car kill-ring)))
+;; (if word
+;;       (youdao-dictionary--pos-tip (youdao-dictionary--format-result word))
+;;       (message "Nothing to look up"))))
+
+;; (defun pdf-set-youdao-key ()
+;; (define-key pdf-view-mode-map "y" 'youdao-pdf-translate)                     ;第一页
+;; )
+
+;; (add-hook 'pdf-view-mode-hook 'pdf-set-youdao-key)
+
 
 ;; ---------------------- CSV Mode -------------------
 ; (use-package csv-mode)
