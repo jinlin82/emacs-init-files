@@ -149,11 +149,8 @@
 
 ;;------------------Only open one emacs window-----------------------------------------
 (server-force-delete)  ;; WARNING: Kills any existing edit server
-(when (and (>= emacs-major-version 23)
-           (equal window-system 'w32))
-  (defun server-ensure-safe-dir (dir) "Noop" t)) ; Suppress error "directory
-                                                 ; ~/.emacs.d/server is unsafe"
-                                                 ; on windows.
+;; Suppress error "directory ~/.emacs.d/server is unsafe" on windows.
+;; 通过 emacs_daemon.bat 增加 takeown /f ..\..\Config\.emacs.d\server 修改 server 的 owner
 (server-start)
 
 ;; ===================================== MODE LINE ====================================
