@@ -287,12 +287,13 @@ Columns: date,work,overwork,break,total"
 (if (not (string-equal (downcase (substring (expand-file-name "~") 0 1)) (downcase "H")))
     (progn 
       (global-wakatime-mode)
-;; 默认位置就是 ~/.wakatime/wakatime-cli.exe， 但如果设置要使用绝对路径，否则会出错
-;; (setq wakatime-cli-path "~/.wakatime/wakatime-cli.exe")
-(setq wakatime-api-key "5bf23cc2-69da-406a-ab9c-81a85fe06d22")
-(diminish 'wakatime-mode)
-)
-)
+      ;; 默认位置就是 C:/Users/JL/.wakatime/wakatime-cli.exe， 但如果设置要使用绝对路径，否则会出错
+      ;; (setq wakatime-cli-path "~/.wakatime/wakatime-cli.exe")
+      (setq wakatime-cli-path "C:/Worktools/Config/.wakatime/wakatime-cli-windows-amd64.exe")
+      (setq wakatime-api-key "5bf23cc2-69da-406a-ab9c-81a85fe06d22")
+      (diminish 'wakatime-mode)
+      )
+  )
 
 
 ;; tabs
