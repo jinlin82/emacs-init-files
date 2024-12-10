@@ -19,22 +19,22 @@
              ; "jupyter")
 
 ;; Use IPython:
-(setq python-shell-interpreter "ipython"
-python-shell-interpreter-args "-i --simple-prompt")
+(setq python-shell-interpreter "ipython" python-shell-interpreter-args "-i")
+; (setq python-shell-interpreter "ipython" python-shell-interpreter-args "-i --simple-prompt")
 
 (defun ipython-or-jupyter-toggle ()
   (interactive)
   (cond ((string-equal "ipython" python-shell-interpreter)
 	 (progn
 	   (setq python-shell-interpreter "jupyter"
-		 python-shell-interpreter-args "console --simple-prompt"
+		 python-shell-interpreter-args "console"
 		 python-shell-prompt-detect-failure-warning nil)
 	   (add-to-list 'python-shell-completion-native-disabled-interpreters
 			"jupyter")
 	   ))
 	((string-equal "jupyter" python-shell-interpreter)
 	 (setq python-shell-interpreter "ipython"
-	       python-shell-interpreter-args "-i --simple-prompt")
+	       python-shell-interpreter-args "-i")
 	 )))
 
 
@@ -227,6 +227,15 @@ python-shell-interpreter-args "-i --simple-prompt")
 (define-key anaconda-mode-map (kbd "M-,") 'delete-window)))
 
 ;;; python-cell
+
+
+;;;======================== LSP ==========================
+(require 'lsp-mode)
+(add-hook 'python-mode-hook #'lsp)
+(setq lsp-diagnostics-provider :none)
+
+(require 'lsp-pyright)
+
 
 "Init Python"
 (interactive)			
