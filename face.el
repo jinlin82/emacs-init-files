@@ -393,7 +393,7 @@ in pdf-view mode (enabled by the `pdf-tools' package)."
 ;;Global minor mode that centers the text of the window. 
 (require 'centered-window)
 (centered-window-mode t)
-(setq cwm-centered-window-width (ceiling (* 1.95 (display-pixel-width))))
+;; (setq cwm-centered-window-width (ceiling (* 0.0618 (x-display-pixel-width)))) ;;要启动后设置才起作用，故放入了init.el中
 
 ;; 修改窗口按列分栏时left-fringe 消失的问题
 ;; https://github.com/anler/centered-window-mode/pull/39
