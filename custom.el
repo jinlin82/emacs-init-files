@@ -119,7 +119,7 @@
       (color . "orange"))
      (strike-out
       (color . "red"))))
- '(server-visit-hook '(toggle-frame-fullscreen))
+ ;; '(server-visit-hook '(toggle-frame-fullscreen))
  '(treemacs-user-mode-line-format 'none)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
