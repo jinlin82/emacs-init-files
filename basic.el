@@ -61,18 +61,20 @@
 
 
   ;;==================================Basic Config==================================
+  ;; Rconsole乱码， 如输入 "收敛率" 问题 在 R 4.2 + 中已解决，因为R 4.2 +默认使用 UTF-8编码
 (defun set-coding-config ()
 	(interactive)
   ;;set the default text coding system
   (setq default-buffer-file-coding-system 'utf-8)
-;; (prefer-coding-system 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
+(prefer-coding-system 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
 ;;(setq coding-system-for-read 'utf-8)  ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
 ;;(setq coding-system-for-write 'utf-8) ;; 不能增加这句，会导致Rconsole乱码， 如输入 "收敛率"
 
 					
 ;; Set default encoding system for opening and saving
 ;; (set-language-environment "UTF-8") ;; 不能增加这句，会导致Rconsole乱码， 如代码中输入 "收敛率"
-;; (set-language-environment 'Chinese-GB)
+  ; (set-language-environment 'Chinese-GB)
+  ; (set-language-environment 'Chinese-GB18030)
 
   (set-default-coding-systems 'utf-8)
   (set-buffer-file-coding-system 'utf-8)
@@ -84,10 +86,11 @@
 
   (modify-coding-system-alist 'process "*" 'utf-8)
   ;; 下面要设置为 gb2312，否则message中出现乱码
-  (if (eq system-type 'windows-nt) 
-  (setq default-process-coding-system '(gb2312 . gb2312)) 
+  ; (if (eq system-type 'windows-nt) 
+  ; (setq default-process-coding-system '(gb2312 . gb2312)) 
+  ; (setq default-process-coding-system '(utf-8 . utf-8)) 
+  ; )
   (setq default-process-coding-system '(utf-8 . utf-8)) 
-  )
   (setq-default pathname-coding-system 'utf-8)
   ;; 下面不能设置为UTF-8，会导致中文路径和文件名乱码
   (if (eq system-type 'windows-nt) 
