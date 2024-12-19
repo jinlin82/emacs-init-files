@@ -2,6 +2,7 @@
 
 ;;===============================================ESS SETUP===============================================
 (require 'ess-site)
+(setq inferior-R-args "--no-save")
 (setq ess-eval-visibly nil)
 (setq ess-ask-for-ess-directory nil)
 (setq ess-startup-directory 'default-directory)
@@ -40,7 +41,7 @@
 	  '(lambda ()
 	     (progn
 	       ;; 由于在git中修改了coding,所以这里要改回来
-	     (setq-local default-process-coding-system '(gb2312 . gb2312))
+	     (setq-local default-process-coding-system '(utf-8 . utf-8))
 	     )))
 
 ;;---------------------------------------SPLUS-------------------------------------------
@@ -120,7 +121,7 @@
 	  '(lambda ()
 	     (progn
 	       ;; 由于在git中修改了coding,所以这里要改回来
-	     (setq-local default-process-coding-system '(gb2312 . gb2312))
+	     (setq-local default-process-coding-system '(utf-8 . utf-8))
 	     (outline-minor-mode)
 	     (setq outline-regexp "\\(^#\\{4,5\\} \\)\\|\\(^[a-zA-Z0-9_\.]+ ?<- ?function(.*{\\)")
 	     (defun outline-level ()
